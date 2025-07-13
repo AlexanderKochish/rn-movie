@@ -1,4 +1,5 @@
-import { FontAwesome } from '@expo/vector-icons'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import { MaterialIcons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
 import React from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
@@ -7,7 +8,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#000',
+        tabBarActiveTintColor: Colors.dark.background,
         headerShown: false,
         // tabBarButton: HapticTab,
         // tabBarBackground: TabBarBackground,
@@ -21,6 +22,7 @@ export default function TabLayout() {
             elevation: 0,
             height: 80,
             paddingTop: 10,
+            paddingBottom: 10,
           },
         }),
       }}
@@ -30,10 +32,10 @@ export default function TabLayout() {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={focused ? styles.focusedTab : undefined}>
-              <FontAwesome
+              <MaterialIcons
                 size={32}
                 name="home"
-                color={focused ? '#000' : color}
+                color={focused ? BaseColors.orange : color}
               />
             </View>
           ),
@@ -42,14 +44,14 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="search"
+        name="search/index"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={focused ? styles.focusedTab : undefined}>
-              <FontAwesome
+              <MaterialIcons
                 size={32}
                 name="search"
-                color={focused ? '#000' : color}
+                color={focused ? BaseColors.orange : color}
               />
             </View>
           ),
@@ -58,14 +60,14 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="bookmarks"
+        name="bookmarks/index"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={focused ? styles.focusedTab : undefined}>
-              <FontAwesome
+              <MaterialIcons
                 size={32}
                 name="bookmark"
-                color={focused ? '#000' : color}
+                color={focused ? BaseColors.orange : color}
               />
             </View>
           ),
@@ -73,14 +75,14 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="profile/index"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={focused ? styles.focusedTab : undefined}>
-              <FontAwesome
+              <MaterialIcons
                 size={32}
-                name="user"
-                color={focused ? '#000' : color}
+                name="account-circle"
+                color={focused ? BaseColors.orange : color}
               />
             </View>
           ),

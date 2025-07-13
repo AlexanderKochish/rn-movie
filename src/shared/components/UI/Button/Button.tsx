@@ -1,76 +1,105 @@
-import { Colors } from '@/src/shared/styles/Colors'
-import { Typography } from '@/src/shared/styles/Typography'
 import React from 'react'
 import {
   ActivityIndicator,
+  GestureResponderEvent,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  ViewStyle,
+  View,
 } from 'react-native'
 
-type ButtonProps = {
+import { Colors } from '@/src/shared/styles/Colors'
+import { Typography } from '@/src/shared/styles/Typography'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+
+type ButtonVariant = 'primary' | 'secondary' | 'text'
+
+type CustomButtonProps = {
   title: string
-  onPress: () => void
-  variant?: 'primary' | 'secondary' | 'text'
+  onPress?: (event: GestureResponderEvent) => void
+  variant?: ButtonVariant
   loading?: boolean
   disabled?: boolean
   fullWidth?: boolean
-  style?: ViewStyle
+  icon?: keyof typeof MaterialCommunityIcons.glyphMap
 }
 
-const CustomButton = ({
+const CustomButton: React.FC<CustomButtonProps> = ({
   title,
   onPress,
   variant = 'primary',
   loading = false,
   disabled = false,
   fullWidth = true,
-  style,
-}: ButtonProps) => {
-  const getBackgroundColor = () => {
-    if (variant === 'primary') return Colors.dark.btn
-    if (variant === 'secondary') return Colors.dark.disabled
-    return 'transparent'
-  }
+  icon,
+}) => {
+  const backgroundColor = {
+    primary: Colors.dark.btn,
+    secondary: Colors.dark.disabled,
+    text: 'transparent',
+  }[variant]
 
-  const getTextColor = () => {
-    if (variant === 'text') return Colors.dark.btn
-    return '#fff'
-  }
+  const textColor = variant === 'text' ? Colors.dark.btn : '#fff'
 
   return (
     <TouchableOpacity
       onPress={onPress}
+      activeOpacity={0.8}
       disabled={disabled || loading}
       style={[
+        styles.button,
         {
-          backgroundColor: getBackgroundColor(),
-          paddingVertical: 12,
-          paddingHorizontal: 24,
-          borderRadius: 10,
-          alignItems: 'center',
-          justifyContent: 'center',
+          backgroundColor,
           opacity: disabled ? 0.5 : 1,
           width: fullWidth ? '100%' : undefined,
         },
-        style,
+        variant === 'text' && styles.textButton,
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={getTextColor()} />
+        <ActivityIndicator color={textColor} />
       ) : (
-        <Text
-          style={{
-            color: getTextColor(),
-            fontSize: Typography.body.fontSize,
-            fontFamily: Typography.body.fontFamily,
-          }}
-        >
-          {title}
-        </Text>
+        <View style={styles.content}>
+          {icon && (
+            <MaterialCommunityIcons
+              name={icon}
+              size={18}
+              color={textColor}
+              style={{ marginRight: 6 }}
+            />
+          )}
+          <Text
+            style={{
+              color: textColor,
+              fontFamily: Typography.body.fontFamily,
+              fontSize: Typography.body.fontSize,
+              fontWeight: 'bold',
+            }}
+          >
+            {title}
+          </Text>
+        </View>
       )}
     </TouchableOpacity>
   )
 }
+
+const styles = StyleSheet.create({
+  button: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textButton: {
+    backgroundColor: 'transparent',
+    paddingVertical: 8,
+  },
+})
 
 export default CustomButton

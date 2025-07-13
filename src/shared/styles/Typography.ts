@@ -1,6 +1,6 @@
 export const Typography = {
   header1: {
-    fontSize: 32,
+    fontSize: 36,
     lineHeight: 40,
     fontWeight: '700',
     fontFamily: 'System',
