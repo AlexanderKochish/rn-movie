@@ -1,13 +1,21 @@
 import CustomButton from '@/src/shared/components/UI/Button/Button'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
-import { Image, ImageBackground, StyleSheet, View } from 'react-native'
+import { useRouter } from 'expo-router'
+import {
+  Image,
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native'
 import { Text } from 'react-native-paper'
 
 const AuthTitleImage = require('../../../assets/images/auth-image.png')
 const Logo = require('../../../assets/images/logo-white.png')
 
 export default function AuthIndex() {
+  const router = useRouter()
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -26,9 +34,16 @@ export default function AuthIndex() {
       </ImageBackground>
 
       <View style={styles.bottomContainer}>
-        <CustomButton title="Sign Up" fullWidth variant="primary" />
+        <CustomButton
+          title="Sign Up"
+          fullWidth
+          variant="primary"
+          onPress={() => router.replace('/auth/sign-up')}
+        />
 
-        <Text style={styles.bottomText}>I already have an account</Text>
+        <Pressable onPress={() => router.replace('/auth/sign-in')}>
+          <Text style={styles.bottomText}>I already have an account</Text>
+        </Pressable>
       </View>
     </View>
   )
