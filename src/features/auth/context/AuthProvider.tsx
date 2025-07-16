@@ -4,6 +4,8 @@ import {
   onAuthStateChanged,
 } from '@react-native-firebase/auth'
 import { ReactNode, useEffect, useState } from 'react'
+import { View } from 'react-native'
+import { ActivityIndicator } from 'react-native-paper'
 import { AuthContext } from './AuthContext'
 
 type Props = {
@@ -24,6 +26,14 @@ export const AuthProvider = ({ children }: Props) => {
 
     return unsbscribe
   }, [])
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
 
   return (
     <AuthContext.Provider value={{ user, loading, isLogged }}>
