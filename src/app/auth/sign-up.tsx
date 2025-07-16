@@ -5,6 +5,7 @@ import PseudoElement from '@/src/shared/components/PseudoElement/PseudoElement'
 import TermsCheckbox from '@/src/shared/components/TermsCheckbox/TermsCheckbox'
 import { auth } from '@/src/shared/services/firebase'
 import { Colors } from '@/src/shared/styles/Colors'
+import { createUserWithEmailAndPassword } from '@react-native-firebase/auth'
 import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'
@@ -16,9 +17,9 @@ const SignUpScreen = () => {
   const [username, setUsername] = useState('')
 
   const signUp = async () => {
-    const user = await auth.createUserWithEmailAndPassword(email, password)
+    const { user } = await createUserWithEmailAndPassword(auth, email, password)
 
-    await user.user.updateProfile({
+    await user.updateProfile({
       displayName: username,
     })
   }

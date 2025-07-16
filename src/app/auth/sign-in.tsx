@@ -4,6 +4,10 @@ import AppLogo from '@/src/shared/components/AppLogo/AppLogo'
 import PseudoElement from '@/src/shared/components/PseudoElement/PseudoElement'
 import { auth } from '@/src/shared/services/firebase'
 import { Colors } from '@/src/shared/styles/Colors'
+import {
+  getIdToken,
+  signInWithEmailAndPassword,
+} from '@react-native-firebase/auth'
 import { Link, useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { Alert, StyleSheet, Text, View } from 'react-native'
@@ -16,13 +20,13 @@ const SignInScreen = () => {
   const router = useRouter()
 
   const signIn = async () => {
-    const { user } = await auth.signInWithEmailAndPassword(email, password)
+    await signInWithEmailAndPassword(auth, email, password)
 
-    const token = await user.getIdToken()
+    const token = await getIdToken(auth.currentUser!)
     if (!token) {
       Alert.alert('User not found')
     } else {
-      router.push('/')
+      router.replace('/(tabs)/profile')
     }
   }
 
