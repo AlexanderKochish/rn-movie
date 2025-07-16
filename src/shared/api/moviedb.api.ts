@@ -1,5 +1,10 @@
 import axios from 'axios'
-import { MovieCredits, MovieDetails, MoviesResponse } from '../types/types'
+import {
+  Genres,
+  MovieCredits,
+  MovieDetails,
+  MoviesResponse,
+} from '../types/types'
 
 const tmdb = axios.create({
   baseURL: process.env.EXPO_PUBLIC_BASE_URL,
@@ -70,6 +75,45 @@ export const getMovieCredits = async (id: number) => {
         params: { language: 'en-US' },
       }
     )
+
+    if (status !== 200) {
+      throw new Error('Some issues with getting movies')
+    }
+
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message)
+    }
+  }
+}
+
+export const getGenres = async () => {
+  try {
+    const { data, status } = await tmdb.get<{ genres: Genres[] }>(
+      `genre/movie/list`,
+      {
+        params: { language: 'en-US' },
+      }
+    )
+
+    if (status !== 200) {
+      throw new Error('Some issues with getting movies')
+    }
+
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message)
+    }
+  }
+}
+
+export const getMoviesByName = async (search: string) => {
+  try {
+    const { data, status } = await tmdb.get<MoviesResponse>(`search/movie`, {
+      params: { language: 'en-US', query: search },
+    })
 
     if (status !== 200) {
       throw new Error('Some issues with getting movies')

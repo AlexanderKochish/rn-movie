@@ -9,6 +9,7 @@ export const BaseColors = {
   red: '#EB2247',
   black: '#121216',
   white: '#FBFAF5',
+  lightBlack: '#1F1F1F',
 }
 
 export const Colors = {
@@ -21,6 +22,8 @@ export const Colors = {
     bgModal: BaseColors.darkGray,
     bookmark: BaseColors.orangeLight,
     text: BaseColors.white,
+    input: BaseColors.lightBlack,
+    genreBtn: BaseColors.darkGray,
   },
   light: {
     background: BaseColors.white,
@@ -31,5 +34,7 @@ export const Colors = {
     bgModal: BaseColors.darkGray,
     bookmark: BaseColors.orangeLight,
     text: BaseColors.black,
+    input: BaseColors.lightBlack,
+    genreBtn: BaseColors.darkGray,
   },
 }

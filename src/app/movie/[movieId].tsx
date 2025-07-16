@@ -1,10 +1,10 @@
-import { getMovieById, getMovieCredits } from '@/src/shared/api/moviedb.api'
-import { Colors } from '@/src/shared/styles/Colors'
+import { useCredits } from '@/src/features/movie/hooks/useCredits'
+import { useMovieDetails } from '@/src/features/movie/hooks/useMovieDetails'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { CrewMember } from '@/src/shared/types/types'
-import { useQuery } from '@tanstack/react-query'
 // import { LinearGradient } from 'expo-linear-gradient'
-import { useLocalSearchParams } from 'expo-router'
-import React from 'react'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import React, { useMemo } from 'react'
 import {
   Dimensions,
   FlatList,
@@ -20,18 +20,16 @@ const ITEM_WIDTH = (Dimensions.get('window').width - ITEM_MARGIN * 3) / 2
 
 const MovieDetails = () => {
   const { movieId } = useLocalSearchParams()
+  const router = useRouter()
 
-  const { data } = useQuery({
-    queryKey: ['details', movieId],
-    queryFn: () => getMovieById(+movieId),
-  })
+  const { data } = useMovieDetails(+movieId)
 
-  const { data: credits } = useQuery({
-    queryKey: ['credits', movieId],
-    queryFn: () => getMovieCredits(+movieId),
-  })
+  const { credits } = useCredits(+movieId)
 
-  const producer = credits?.crew.find((item) => item.job === 'Producer')
+  const producer = useMemo(
+    () => credits?.crew.find((item) => item.job === 'Producer'),
+    [credits]
+  )
 
   const renderCrewItem = ({ item }: { item: CrewMember }) => (
     <View style={styles.crewItem}>
@@ -62,7 +60,7 @@ const MovieDetails = () => {
               icon="arrow-left"
               iconColor="#fff"
               style={styles.backButton}
-              onPress={() => {}}
+              onPress={() => router.back()}
             />
             <ImageBackground
               source={{
@@ -146,8 +144,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderBottomColor: '#4C1C00',
-    borderTopColor: '#4C1C00',
+    borderBottomColor: BaseColors.brown,
+    borderTopColor: BaseColors.brown,
     padding: 15,
     marginHorizontal: 15,
     marginBottom: 10,
@@ -190,7 +188,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   text: {
-    color: '#fff',
+    color: Colors.dark.text,
   },
   crewItem: {
     width: ITEM_WIDTH,
@@ -207,6 +205,6 @@ const styles = StyleSheet.create({
     height: 58,
     width: 58,
     borderRadius: 4,
-    backgroundColor: '#444',
+    backgroundColor: Colors.dark.bgModal,
   },
 })
