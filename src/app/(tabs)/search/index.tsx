@@ -1,7 +1,8 @@
 import SearchItemCard from '@/src/features/movie/components/SearchItemCard/SearchItemCard'
 import { useGenres } from '@/src/features/movie/hooks/useGenres'
+import { useMoviesByGenres } from '@/src/features/movie/hooks/useMoviesByGenres'
 import { useSearchMovies } from '@/src/features/movie/hooks/useSearchMovies'
-import { Colors } from '@/src/shared/styles/Colors'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'
@@ -10,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 const SearchScreen = () => {
   const { genres } = useGenres()
   const { movies, search, setSearch } = useSearchMovies()
+  const { handleGenre, moviesByGenres, genreIds } = useMoviesByGenres()
 
   return (
     <SafeAreaView style={styles.container}>
@@ -33,9 +35,13 @@ const SearchScreen = () => {
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
             <Button
-              contentStyle={{
-                backgroundColor: Colors.dark.genreBtn,
-              }}
+              onPress={() => handleGenre(item.id)}
+              buttonColor={
+                genreIds?.includes(item.id)
+                  ? BaseColors.orange
+                  : Colors.dark.genreBtn
+              }
+              mode="contained"
               textColor={Colors.dark.text}
             >
               {item.name}
@@ -44,9 +50,9 @@ const SearchScreen = () => {
         />
       </View>
       <FlatList
-        contentContainerStyle={{ gap: 10 }}
+        contentContainerStyle={{ gap: 10, padding: 0 }}
         showsVerticalScrollIndicator={false}
-        data={movies?.results}
+        data={movies?.results || moviesByGenres}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <SearchItemCard

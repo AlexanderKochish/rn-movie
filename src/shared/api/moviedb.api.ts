@@ -126,3 +126,21 @@ export const getMoviesByName = async (search: string) => {
     }
   }
 }
+
+export const getMoviesByGenre = async (genreIds: number[]) => {
+  try {
+    const { data, status } = await tmdb.get<MoviesResponse>(`discover/movie`, {
+      params: { language: 'en-US', with_genres: genreIds.join(',') },
+    })
+
+    if (status !== 200) {
+      throw new Error('Some issues with getting movies')
+    }
+
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message)
+    }
+  }
+}
