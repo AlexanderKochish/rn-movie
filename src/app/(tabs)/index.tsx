@@ -1,23 +1,19 @@
 import MovieRow from '@/src/features/movie/components/MovieRow/MovieRow'
-import { getTrendigMovies } from '@/src/shared/api/moviedb.api'
+import { useTrendingMovies } from '@/src/features/movie/hooks/useTrandingMovies'
 import CustomCarousel from '@/src/shared/components/CustomCarousel/CustomCarousel'
 import { Colors } from '@/src/shared/styles/Colors'
-import { useQuery } from '@tanstack/react-query'
 import { ScrollView, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function HomeScreen() {
-  const { data } = useQuery({
-    queryKey: ['trending'],
-    queryFn: getTrendigMovies,
-  })
+  const { trending } = useTrendingMovies()
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={{ flex: 1 }}>
-        <CustomCarousel items={data?.results} />
+        <CustomCarousel items={trending} />
         <ScrollView style={styles.row}>
-          <MovieRow items={data?.results} title="Top Trending Movies" />
+          <MovieRow items={trending} title="Top Trending Movies" />
         </ScrollView>
       </ScrollView>
     </SafeAreaView>

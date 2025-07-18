@@ -4,11 +4,8 @@ import AppLogo from '@/src/shared/components/AppLogo/AppLogo'
 import PseudoElement from '@/src/shared/components/PseudoElement/PseudoElement'
 import { auth } from '@/src/shared/services/firebase'
 import { Colors } from '@/src/shared/styles/Colors'
-import {
-  getIdToken,
-  signInWithEmailAndPassword,
-} from '@react-native-firebase/auth'
 import { Link, useRouter } from 'expo-router'
+import { getIdToken, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'

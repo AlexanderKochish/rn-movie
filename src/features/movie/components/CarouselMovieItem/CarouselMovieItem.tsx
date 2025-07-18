@@ -25,7 +25,12 @@ const CarouselItem = ({ item }: Props) => {
             colors={['rgba(0,0,0,0.8)', 'transparent']}
             style={[styles.gradient, { top: 0, height: 80 }]}
           /> */}
-          <AppLogo text="Watcher" />
+          <AppLogo
+            text="Watcher"
+            size="small"
+            variant="horizontal"
+            color="orange"
+          />
           <View style={styles.detailsWrapper}>
             <Text
               variant="headlineSmall"

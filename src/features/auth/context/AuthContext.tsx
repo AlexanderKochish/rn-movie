@@ -1,8 +1,8 @@
-import { FirebaseAuthTypes } from '@react-native-firebase/auth'
+import { User } from 'firebase/auth'
 import { createContext, useContext } from 'react'
 
 type AuthContextType = {
-  user: FirebaseAuthTypes.User | null
+  user: User | null
   loading: boolean
   isLogged: boolean
 }

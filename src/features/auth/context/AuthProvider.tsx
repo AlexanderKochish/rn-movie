@@ -1,19 +1,13 @@
 import { auth } from '@/src/shared/services/firebase'
-import {
-  FirebaseAuthTypes,
-  onAuthStateChanged,
-} from '@react-native-firebase/auth'
-import { ReactNode, useEffect, useState } from 'react'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
+import { onAuthStateChanged, User } from 'firebase/auth'
+import { PropsWithChildren, useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 import { AuthContext } from './AuthContext'
 
-type Props = {
-  children: ReactNode
-}
-
-export const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null)
+export const AuthProvider = ({ children }: PropsWithChildren) => {
+  const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [isLogged, setIsLogged] = useState<boolean>(false)
 
@@ -29,7 +23,7 @@ export const AuthProvider = ({ children }: Props) => {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={globalStyles.container}>
         <ActivityIndicator size="large" />
       </View>
     )

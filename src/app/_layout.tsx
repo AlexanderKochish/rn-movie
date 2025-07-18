@@ -61,7 +61,7 @@ export const RootStack = () => {
         <Stack.Screen name="(tabs)" />
       </Stack.Protected>
       <Stack.Protected guard={!isLogged}>
-        <Stack.Screen name="auth" />
+        <Stack.Screen name="auth/index" />
       </Stack.Protected>
     </Stack>
   )
