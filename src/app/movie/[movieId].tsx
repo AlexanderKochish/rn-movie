@@ -3,9 +3,10 @@ import { useMovieDetails } from '@/src/features/movie/hooks/useMovieDetails'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { CrewMember, MovieDetails } from '@/src/shared/types/types'
 
-// import { LinearGradient } from 'expo-linear-gradient'
 import { useAuth } from '@/src/features/auth/context/AuthContext'
 import { db } from '@/src/shared/services/firebase'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
+import { LinearGradient } from 'expo-linear-gradient'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { doc, setDoc } from 'firebase/firestore'
 import React, { useMemo } from 'react'
@@ -19,7 +20,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native'
-import { Icon, IconButton, Text } from 'react-native-paper'
+import { ActivityIndicator, Icon, IconButton, Text } from 'react-native-paper'
 
 const ITEM_MARGIN = 10
 const ITEM_WIDTH = (Dimensions.get('window').width - ITEM_MARGIN * 3) / 2
@@ -29,7 +30,7 @@ const MovieDetailsScreen = () => {
   const { movieId } = useLocalSearchParams()
   const router = useRouter()
 
-  const { data } = useMovieDetails(+movieId)
+  const { data, isLoading } = useMovieDetails(+movieId)
 
   const { credits } = useCredits(+movieId)
 
@@ -37,6 +38,19 @@ const MovieDetailsScreen = () => {
     () => credits?.crew.find((item) => item.job === 'Producer'),
     [credits]
   )
+
+  if (isLoading) {
+    return (
+      <View
+        style={[
+          globalStyles.container,
+          { backgroundColor: Colors.dark.background },
+        ]}
+      >
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
 
   const addToFavorite = async (movie?: MovieDetails) => {
     if (!user?.uid) return
@@ -105,18 +119,18 @@ const MovieDetailsScreen = () => {
                   </Pressable>
                 </View>
               </View>
-              {/* <LinearGradient
-                colors={['transparent', 'rgba(0,0,0,0.8)']}
-                style={[styles.gradient, { height: 100 }]}
-              /> */}
+              <LinearGradient
+                colors={['transparent', 'rgba(0,0,0,0.9)']}
+                style={[styles.gradient, { height: 250 }]}
+              />
             </View>
           </View>
 
           <View style={styles.infoContainer}>
-            <Text style={[styles.text, { color: '#FBFAF5' }]}>
+            <Text style={[styles.text, { color: BaseColors.white }]}>
               2024 | Directed by
             </Text>
-            <Text style={[styles.text, { color: '#FF8864' }]}>
+            <Text style={[styles.text, { color: BaseColors.orangeLight }]}>
               {producer?.name}
             </Text>
             <Text style={styles.overview}>{data?.overview}</Text>

@@ -5,6 +5,7 @@ import { useSharedValue } from 'react-native-reanimated'
 import Carousel, { Pagination } from 'react-native-reanimated-carousel'
 import { BaseColors, Colors } from '../../styles/Colors'
 import { Movie } from '../../types/types'
+import AppLogo from '../AppLogo/AppLogo'
 
 const SLIDER_WIDTH = Dimensions.get('window').width
 
@@ -15,7 +16,15 @@ type Props = {
 const CustomCarousel = ({ items }: Props) => {
   const progressValue = useSharedValue(0)
   return (
-    <View style={{ height: 500, position: 'relative' }}>
+    <View style={styles.wrapper}>
+      <View style={styles.logoWrapper}>
+        <AppLogo
+          text="Watcher"
+          size="small"
+          variant="horizontal"
+          color="orange"
+        />
+      </View>
       <Carousel
         testID={'xxx'}
         loop={true}
@@ -46,6 +55,17 @@ const CustomCarousel = ({ items }: Props) => {
 export default CustomCarousel
 
 const styles = StyleSheet.create({
+  wrapper: {
+    height: 500,
+    position: 'relative',
+  },
+  logoWrapper: {
+    width: '100%',
+    position: 'absolute',
+    top: 35,
+    zIndex: 50,
+    alignItems: 'center',
+  },
   activeDot: {
     backgroundColor: Colors.dark.background,
   },

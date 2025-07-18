@@ -1,7 +1,6 @@
-import AppLogo from '@/src/shared/components/AppLogo/AppLogo'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { Movie } from '@/src/shared/types/types'
-// import { LinearGradient } from 'expo-linear-gradient'
+import { LinearGradient } from 'expo-linear-gradient'
 import React from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
@@ -21,16 +20,11 @@ const CarouselItem = ({ item }: Props) => {
         resizeMode="cover"
       >
         <View style={styles.contentWrapper}>
-          {/* <LinearGradient
+          <LinearGradient
             colors={['rgba(0,0,0,0.8)', 'transparent']}
             style={[styles.gradient, { top: 0, height: 80 }]}
-          /> */}
-          <AppLogo
-            text="Watcher"
-            size="small"
-            variant="horizontal"
-            color="orange"
           />
+
           <View style={styles.detailsWrapper}>
             <Text
               variant="headlineSmall"
@@ -50,10 +44,10 @@ const CarouselItem = ({ item }: Props) => {
               Trailer
             </Button>
           </View>
-          {/* <LinearGradient
+          <LinearGradient
             colors={['transparent', 'rgba(0,0,0,0.8)']}
             style={[styles.gradient, { bottom: 0, height: 100 }]}
-          /> */}
+          />
         </View>
       </ImageBackground>
     </View>
@@ -81,6 +75,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   detailsWrapper: {
+    flex: 1,
+    justifyContent: 'flex-end',
     alignItems: 'center',
     gap: 10,
   },
@@ -93,7 +89,7 @@ const styles = StyleSheet.create({
   playBtn: {
     backgroundColor: BaseColors.brown,
     position: 'absolute',
-    bottom: 20,
+    bottom: 10,
     zIndex: 100,
   },
   label: {
