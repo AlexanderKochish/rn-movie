@@ -9,7 +9,7 @@ import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { doc, setDoc } from 'firebase/firestore'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import {
   Alert,
   Dimensions,
@@ -39,19 +39,6 @@ const MovieDetailsScreen = () => {
     [credits]
   )
 
-  if (isLoading) {
-    return (
-      <View
-        style={[
-          globalStyles.container,
-          { backgroundColor: Colors.dark.background },
-        ]}
-      >
-        <ActivityIndicator size="large" />
-      </View>
-    )
-  }
-
   const addToFavorite = async (movie?: MovieDetails) => {
     if (!user?.uid) return
     try {
@@ -68,20 +55,36 @@ const MovieDetailsScreen = () => {
     }
   }
 
-  const renderCrewItem = ({ item }: { item: CrewMember }) => (
-    <View style={styles.crewItem}>
-      <Image
-        source={{
-          uri: `${process.env.EXPO_PUBLIC_IMG_W300}${item?.profile_path}`,
-        }}
-        style={styles.crewImage}
-      />
-      <View style={{ justifyContent: 'space-around' }}>
-        <Text style={styles.text}>{item.name || item.original_name}</Text>
-        <Text style={styles.text}>{item.job.slice(0, 16)}...</Text>
+  const renderCrewItem = useCallback(
+    ({ item }: { item: CrewMember }) => (
+      <View style={styles.crewItem}>
+        <Image
+          source={{
+            uri: `${process.env.EXPO_PUBLIC_IMG_W300}${item?.profile_path}`,
+          }}
+          style={styles.crewImage}
+        />
+        <View style={{ justifyContent: 'space-around' }}>
+          <Text style={styles.text}>{item.name || item.original_name}</Text>
+          <Text style={styles.text}>{item.job.slice(0, 16)}...</Text>
+        </View>
       </View>
-    </View>
+    ),
+    []
   )
+
+  if (isLoading) {
+    return (
+      <View
+        style={[
+          globalStyles.container,
+          { backgroundColor: Colors.dark.background },
+        ]}
+      >
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
 
   return (
     <FlatList

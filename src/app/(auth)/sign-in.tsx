@@ -2,49 +2,44 @@ import AuthRedirectText from '@/src/features/auth/components/AuthRedirectLink/Au
 import SocialAuthButtons from '@/src/features/auth/components/SocialAuthButtons/SocialAuthButtons'
 import AppLogo from '@/src/shared/components/AppLogo/AppLogo'
 import PseudoElement from '@/src/shared/components/PseudoElement/PseudoElement'
-import TermsCheckbox from '@/src/shared/components/TermsCheckbox/TermsCheckbox'
 import { auth } from '@/src/shared/services/firebase'
 import { Colors } from '@/src/shared/styles/Colors'
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { Link, useRouter } from 'expo-router'
+import { getIdToken, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const SignUpScreen = () => {
+const SignInScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
+  const router = useRouter()
 
-  const signUp = async () => {
-    const { user } = await createUserWithEmailAndPassword(auth, email, password)
+  const signIn = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      )
 
-    await updateProfile(user, {
-      displayName: username,
-    })
+      const token = await getIdToken(userCredential.user)
+      if (!token) {
+        Alert.alert('User not found')
+      } else {
+        router.replace('/(tabs)/profile')
+      }
+    } catch (error: any) {
+      console.error('Login error:', error)
+      Alert.alert('Login failed', error.message)
+    }
   }
+
   return (
     <SafeAreaView style={styles.container}>
-      <AppLogo text="Create an account" />
+      <AppLogo text="Login" />
       <View style={styles.form}>
-        <TextInput
-          mode="outlined"
-          style={{ backgroundColor: '#1F1F1F', color: '#fff' }}
-          left={<TextInput.Icon icon={'account'} color={'#fff'} />}
-          textColor="#fff"
-          label={'Username'}
-          placeholderTextColor={'#fff'}
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-          theme={{
-            colors: {
-              primary: '#fff',
-              onSurface: '#fff',
-              placeholder: '#fff',
-              text: '#fff',
-            },
-          }}
-        />
         <TextInput
           mode="outlined"
           style={{ backgroundColor: '#1F1F1F', color: '#fff' }}
@@ -68,8 +63,6 @@ const SignUpScreen = () => {
           style={{ backgroundColor: '#1F1F1F', color: '#fff' }}
           keyboardType="visible-password"
           textColor="#fff"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
           theme={{
             colors: {
               primary: '#fff',
@@ -78,18 +71,22 @@ const SignUpScreen = () => {
               onSurface: '#fff',
             },
           }}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           mode="outlined"
           left={<TextInput.Icon icon={'lock'} color={'#fff'} />}
           label={'Password'}
         />
-        <TermsCheckbox text="Accept terms and condition" />
+        <Link style={styles.link} href={'/(auth)/sign-up'}>
+          Forgot password?
+        </Link>
         <Button
+          onPress={signIn}
           labelStyle={{ fontSize: 18 }}
           textColor="#fff"
           style={styles.btn}
-          onPress={signUp}
         >
-          Sign Up
+          Login
         </Button>
       </View>
       <PseudoElement
@@ -115,15 +112,15 @@ const SignUpScreen = () => {
       </PseudoElement>
       <SocialAuthButtons />
       <AuthRedirectText
-        link="/auth/sign-in"
-        text="Already have an account? "
-        linkTag="Log in"
+        link="/(auth)/sign-up"
+        text="Don`t have an account?"
+        linkTag="Sign Up"
       />
     </SafeAreaView>
   )
 }
 
-export default SignUpScreen
+export default SignInScreen
 
 const styles = StyleSheet.create({
   container: {

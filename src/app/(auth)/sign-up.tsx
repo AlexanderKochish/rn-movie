@@ -2,22 +2,32 @@ import AuthRedirectText from '@/src/features/auth/components/AuthRedirectLink/Au
 import SocialAuthButtons from '@/src/features/auth/components/SocialAuthButtons/SocialAuthButtons'
 import AppLogo from '@/src/shared/components/AppLogo/AppLogo'
 import PseudoElement from '@/src/shared/components/PseudoElement/PseudoElement'
+import TermsCheckbox from '@/src/shared/components/TermsCheckbox/TermsCheckbox'
 import { auth } from '@/src/shared/services/firebase'
 import { Colors } from '@/src/shared/styles/Colors'
-import { Link, useRouter } from 'expo-router'
-import { getIdToken, signInWithEmailAndPassword } from 'firebase/auth'
+import { useRouter } from 'expo-router'
+import {
+  createUserWithEmailAndPassword,
+  getIdToken,
+  updateProfile,
+} from 'firebase/auth'
 import React, { useState } from 'react'
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const SignInScreen = () => {
+const SignUpScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
   const router = useRouter()
 
-  const signIn = async () => {
-    await signInWithEmailAndPassword(auth, email, password)
+  const signUp = async () => {
+    const { user } = await createUserWithEmailAndPassword(auth, email, password)
+
+    await updateProfile(user, {
+      displayName: username,
+    })
 
     const token = await getIdToken(auth.currentUser!)
     if (!token) {
@@ -26,11 +36,28 @@ const SignInScreen = () => {
       router.replace('/(tabs)/profile')
     }
   }
-
   return (
     <SafeAreaView style={styles.container}>
-      <AppLogo text="Login" />
+      <AppLogo text="Create an account" />
       <View style={styles.form}>
+        <TextInput
+          mode="outlined"
+          style={{ backgroundColor: '#1F1F1F', color: '#fff' }}
+          left={<TextInput.Icon icon={'account'} color={'#fff'} />}
+          textColor="#fff"
+          label={'Username'}
+          placeholderTextColor={'#fff'}
+          value={username}
+          onChangeText={(text) => setUsername(text)}
+          theme={{
+            colors: {
+              primary: '#fff',
+              onSurface: '#fff',
+              placeholder: '#fff',
+              text: '#fff',
+            },
+          }}
+        />
         <TextInput
           mode="outlined"
           style={{ backgroundColor: '#1F1F1F', color: '#fff' }}
@@ -54,6 +81,8 @@ const SignInScreen = () => {
           style={{ backgroundColor: '#1F1F1F', color: '#fff' }}
           keyboardType="visible-password"
           textColor="#fff"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           theme={{
             colors: {
               primary: '#fff',
@@ -62,22 +91,18 @@ const SignInScreen = () => {
               onSurface: '#fff',
             },
           }}
-          value={password}
-          onChangeText={(text) => setPassword(text)}
           mode="outlined"
           left={<TextInput.Icon icon={'lock'} color={'#fff'} />}
           label={'Password'}
         />
-        <Link style={styles.link} href={'/auth/sign-up'}>
-          Forgot password?
-        </Link>
+        <TermsCheckbox text="Accept terms and condition" />
         <Button
-          onPress={signIn}
           labelStyle={{ fontSize: 18 }}
           textColor="#fff"
           style={styles.btn}
+          onPress={signUp}
         >
-          Login
+          Sign Up
         </Button>
       </View>
       <PseudoElement
@@ -103,15 +128,15 @@ const SignInScreen = () => {
       </PseudoElement>
       <SocialAuthButtons />
       <AuthRedirectText
-        link="/auth/sign-up"
-        text="Don`t have an account?"
-        linkTag="Sign Up"
+        link="/(auth)/sign-in"
+        text="Already have an account? "
+        linkTag="Log in"
       />
     </SafeAreaView>
   )
 }
 
-export default SignInScreen
+export default SignUpScreen
 
 const styles = StyleSheet.create({
   container: {

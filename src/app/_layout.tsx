@@ -1,11 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useCallback, useEffect, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { useAuth } from '../features/auth/context/AuthContext'
 import { AuthProvider } from '../features/auth/context/AuthProvider'
+import { RootStack } from '../shared/navigation/RootStack'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -50,19 +49,5 @@ export default function RootLayout() {
         </QueryClientProvider>
       </AuthProvider>
     </GestureHandlerRootView>
-  )
-}
-
-export const RootStack = () => {
-  const { isLogged } = useAuth()
-  return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={isLogged}>
-        <Stack.Screen name="(tabs)" />
-      </Stack.Protected>
-      <Stack.Protected guard={!isLogged}>
-        <Stack.Screen name="auth/index" />
-      </Stack.Protected>
-    </Stack>
   )
 }

@@ -14,8 +14,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const unsbscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser)
+      setIsLogged(!!firebaseUser)
       setLoading(false)
-      setIsLogged(true)
     })
 
     return unsbscribe

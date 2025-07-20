@@ -11,10 +11,10 @@ export const useMovieDetails = (movieId: number) => {
   })
 
   useEffect(() => {
-    if (!data) {
+    if (!rest.isLoading && !data) {
       router.replace('/+not-found')
     }
-  }, [data, router])
+  }, [data, router, rest.isLoading])
 
   return {
     data,

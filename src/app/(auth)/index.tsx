@@ -38,10 +38,10 @@ export default function AuthIndex() {
           title="Sign Up"
           fullWidth
           variant="primary"
-          onPress={() => router.replace('/auth/sign-up')}
+          onPress={() => router.replace('/(auth)/sign-up')}
         />
 
-        <Pressable onPress={() => router.replace('/auth/sign-in')}>
+        <Pressable onPress={() => router.replace('/(auth)/sign-in')}>
           <Text style={styles.bottomText}>I already have an account</Text>
         </Pressable>
       </View>
