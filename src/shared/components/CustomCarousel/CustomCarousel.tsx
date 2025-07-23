@@ -4,16 +4,16 @@ import { Dimensions, StyleSheet, View } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
 import Carousel, { Pagination } from 'react-native-reanimated-carousel'
 import { BaseColors, Colors } from '../../styles/Colors'
-import { Movie } from '../../types/types'
+import { MovieUnionType } from '../../types/types'
 import AppLogo from '../AppLogo/AppLogo'
 
 const SLIDER_WIDTH = Dimensions.get('window').width
 
-type Props = {
-  items?: Movie[]
+type Props<T extends MovieUnionType> = {
+  items?: T[]
 }
 
-const CustomCarousel = ({ items }: Props) => {
+const CustomCarousel = <T extends MovieUnionType>({ items }: Props<T>) => {
   const progressValue = useSharedValue(0)
   return (
     <View style={styles.wrapper}>
@@ -38,7 +38,9 @@ const CustomCarousel = ({ items }: Props) => {
         onProgressChange={(_, absoluteProgress) => {
           progressValue.value = absoluteProgress
         }}
-        renderItem={({ item }: { item: Movie }) => <CarouselItem item={item} />}
+        renderItem={({ item }: { item: MovieUnionType }) => (
+          <CarouselItem item={item} />
+        )}
       />
 
       <Pagination.Basic

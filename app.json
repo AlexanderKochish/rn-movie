@@ -7,18 +7,8 @@
     "icon": "./assets/images/icon.png",
     "scheme": "rnmovieapp",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
-    },
-    "android": {
-      "googleServicesFile": "./google-services.json",
-      "package": "com.kochish.movieapp",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
@@ -51,8 +41,11 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "6e5fd5cf-3329-4acc-918f-0a9f3543807e"
+        "projectId": "180e7155-a487-49ee-aea3-41dbea034907"
       }
+    },
+    "android": {
+      "package": "com.alexander888.rnmovieapp"
     }
   }
 }

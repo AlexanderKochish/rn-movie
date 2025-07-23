@@ -23,17 +23,26 @@ const SignUpScreen = () => {
   const router = useRouter()
 
   const signUp = async () => {
-    const { user } = await createUserWithEmailAndPassword(auth, email, password)
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      )
 
-    await updateProfile(user, {
-      displayName: username,
-    })
+      await updateProfile(user, {
+        displayName: username,
+      })
 
-    const token = await getIdToken(auth.currentUser!)
-    if (!token) {
-      Alert.alert('User not found')
-    } else {
-      router.replace('/(tabs)/profile')
+      const token = await getIdToken(auth.currentUser!)
+      if (!token) {
+        Alert.alert('User not found')
+      } else {
+        router.replace('/(tabs)/profile')
+      }
+    } catch (error: any) {
+      console.error('Login error:', error)
+      Alert.alert('Login failed', error.message)
     }
   }
   return (

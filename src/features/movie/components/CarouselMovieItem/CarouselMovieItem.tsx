@@ -1,12 +1,12 @@
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { Movie } from '@/src/shared/types/types'
+import { MovieUnionType } from '@/src/shared/types/types'
 import { LinearGradient } from 'expo-linear-gradient'
 import React from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
 
 type Props = {
-  item: Movie
+  item: MovieUnionType
 }
 
 const CarouselItem = ({ item }: Props) => {

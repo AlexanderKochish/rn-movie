@@ -1,19 +1,23 @@
-import MovieRow from '@/src/features/movie/components/MovieRow/MovieRow'
+import MoviesRow from '@/src/features/bookmarks/components/MoviesRow/MoviesRow'
 import { useTrendingMovies } from '@/src/features/movie/hooks/useTrandingMovies'
 import CustomCarousel from '@/src/shared/components/CustomCarousel/CustomCarousel'
 import { Colors } from '@/src/shared/styles/Colors'
 import { ScrollView, StyleSheet, View } from 'react-native'
 
 export default function HomeScreen() {
-  const { trending } = useTrendingMovies()
+  const { trending, isLoading } = useTrendingMovies()
 
   return (
     <View style={styles.container}>
       <ScrollView style={{ flex: 1 }}>
         <CustomCarousel items={trending} />
-        <ScrollView style={styles.row}>
-          <MovieRow items={trending} title="Top Trending Movies" />
-        </ScrollView>
+        <View style={styles.row}>
+          <MoviesRow
+            isLoading={isLoading}
+            items={trending}
+            title="Top Trending Movies"
+          />
+        </View>
       </ScrollView>
     </View>
   )

@@ -21,7 +21,7 @@ export type Movie = {
 
 export type MoviesResponse = {
   page: number
-  results: Movie[]
+  results: MovieUnionType[]
   total_pages: number
   total_results: number
 }
@@ -49,7 +49,7 @@ export type ProductionCountries = {
   name: string
 }
 
-export interface MovieDetails {
+export type MovieDetails = {
   adult: boolean
   backdrop_path: string | null
   belongs_to_collection: string | null
@@ -111,3 +111,5 @@ export type CrewMember = {
   department: string
   job: string
 }
+
+export type MovieUnionType = (Movie | MovieDetails) & { docId: string }

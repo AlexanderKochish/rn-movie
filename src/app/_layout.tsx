@@ -3,6 +3,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useCallback, useEffect, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { AuthProvider } from '../features/auth/context/AuthProvider'
 import { RootStack } from '../shared/navigation/RootStack'
 
@@ -41,13 +42,15 @@ export default function RootLayout() {
     return null
   }
   return (
-    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <StatusBar style="auto" />
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <RootStack />
-        </QueryClientProvider>
-      </AuthProvider>
+    <GestureHandlerRootView onLayout={onLayoutRootView}>
+      <SafeAreaProvider>
+        <StatusBar style="auto" />
+        <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <RootStack />
+          </QueryClientProvider>
+        </AuthProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   )
 }

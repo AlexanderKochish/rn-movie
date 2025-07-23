@@ -2,27 +2,24 @@ import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
 import React from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets()
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors.dark.background,
         headerShown: false,
-        tabBarStyle: Platform.select({
-          ios: {
-            position: 'absolute',
-          },
-          default: {
-            backgroundColor: Colors.dark.background,
-            borderTopWidth: 0,
-            elevation: 0,
-            height: 80,
-            paddingTop: 10,
-            paddingBottom: 10,
-          },
-        }),
+        tabBarStyle: {
+          backgroundColor: Colors.dark.background,
+          borderTopWidth: 0,
+          elevation: 0,
+          paddingTop: 10,
+          paddingBottom: insets.bottom + 10,
+          height: 60 + insets.bottom,
+        },
       }}
     >
       <Tabs.Screen

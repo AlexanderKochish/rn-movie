@@ -1,17 +1,15 @@
 import { useCredits } from '@/src/features/movie/hooks/useCredits'
 import { useMovieDetails } from '@/src/features/movie/hooks/useMovieDetails'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { CrewMember, MovieDetails } from '@/src/shared/types/types'
+import { CrewMember } from '@/src/shared/types/types'
 
-import { useAuth } from '@/src/features/auth/context/AuthContext'
-import { db } from '@/src/shared/services/firebase'
+import { useBookmark } from '@/src/features/movie/hooks/useBookmark'
+import { useFavorite } from '@/src/features/movie/hooks/useFavorite'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { doc, setDoc } from 'firebase/firestore'
 import React, { useCallback, useMemo } from 'react'
 import {
-  Alert,
   Dimensions,
   FlatList,
   Image,
@@ -26,9 +24,20 @@ const ITEM_MARGIN = 10
 const ITEM_WIDTH = (Dimensions.get('window').width - ITEM_MARGIN * 3) / 2
 
 const MovieDetailsScreen = () => {
-  const { user } = useAuth()
   const { movieId } = useLocalSearchParams()
   const router = useRouter()
+  const {
+    isItemToggled: isFavoriteToggled,
+    toggleItem: toggleFavorite,
+    isLoading: isLoadingFavorite,
+  } = useFavorite()
+  const {
+    isItemToggled: isBookmarkToggled,
+    toggleItem: toggleBookmark,
+    isLoading: isLoadingBookmark,
+  } = useBookmark()
+  const isActiveFavorite = isFavoriteToggled(+movieId)
+  const isActiveBookmark = isBookmarkToggled(+movieId)
 
   const { data, isLoading } = useMovieDetails(+movieId)
 
@@ -38,22 +47,6 @@ const MovieDetailsScreen = () => {
     () => credits?.crew.find((item) => item.job === 'Producer'),
     [credits]
   )
-
-  const addToFavorite = async (movie?: MovieDetails) => {
-    if (!user?.uid) return
-    try {
-      const ref = doc(db, 'users', user?.uid, 'favorite', String(movieId))
-
-      await setDoc(ref, {
-        data: movie,
-        createdAt: new Date().toISOString(),
-      })
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert('error', error.message)
-      }
-    }
-  }
 
   const renderCrewItem = useCallback(
     ({ item }: { item: CrewMember }) => (
@@ -114,11 +107,27 @@ const MovieDetailsScreen = () => {
                   {data?.original_title || data?.title}
                 </Text>
                 <View style={{ flexDirection: 'row', gap: 20 }}>
-                  <Pressable onPress={() => addToFavorite(data)}>
-                    <Icon source="star-outline" size={24} color="#fff" />
+                  <Pressable
+                    onPress={() => toggleFavorite(data)}
+                    disabled={!data || isLoadingFavorite}
+                  >
+                    <Icon
+                      source={isActiveFavorite ? 'star' : 'star-outline'}
+                      size={24}
+                      color={isActiveFavorite ? 'yellow' : '#fff'}
+                    />
                   </Pressable>
-                  <Pressable>
-                    <Icon source="bookmark-outline" size={24} color="#fff" />
+                  <Pressable
+                    onPress={() => toggleBookmark(data)}
+                    disabled={!data || isLoadingBookmark}
+                  >
+                    <Icon
+                      source={
+                        isActiveBookmark ? 'bookmark' : 'bookmark-outline'
+                      }
+                      size={24}
+                      color={isActiveBookmark ? 'yellow' : '#fff'}
+                    />
                   </Pressable>
                 </View>
               </View>
