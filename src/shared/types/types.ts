@@ -49,7 +49,7 @@ export type ProductionCountries = {
   name: string
 }
 
-export type MovieDetails = {
+export type MovieDetailsType = {
   adult: boolean
   backdrop_path: string | null
   belongs_to_collection: string | null
@@ -112,4 +112,4 @@ export type CrewMember = {
   job: string
 }
 
-export type MovieUnionType = (Movie | MovieDetails) & { docId: string }
+export type MovieUnionType = (Movie | MovieDetailsType) & { docId: string }
