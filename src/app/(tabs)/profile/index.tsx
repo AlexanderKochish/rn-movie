@@ -1,4 +1,4 @@
-import { useAuth } from '@/src/features/auth/context/AuthContext'
+import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import SettingItem from '@/src/features/profile/components/SettingItem/SettingItem'
 import CustomButton from '@/src/shared/components/UI/Button/Button'
 import { auth } from '@/src/shared/services/firebase'

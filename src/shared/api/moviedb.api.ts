@@ -2,7 +2,7 @@ import axios from 'axios'
 import {
   Genres,
   MovieCredits,
-  MovieDetails,
+  MovieDetailsType,
   MoviesResponse,
 } from '../types/types'
 
@@ -51,7 +51,7 @@ export const getTrendigMovies = async () => {
 
 export const getMovieById = async (id: number) => {
   try {
-    const { data, status } = await tmdb.get<MovieDetails>(`movie/${id}`, {
+    const { data, status } = await tmdb.get<MovieDetailsType>(`movie/${id}`, {
       params: { language: 'en-US' },
     })
 

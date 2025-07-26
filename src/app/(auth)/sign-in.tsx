@@ -1,55 +1,33 @@
 import AuthRedirectText from '@/src/features/auth/components/AuthRedirectLink/AuthRedirectLink'
 import SocialAuthButtons from '@/src/features/auth/components/SocialAuthButtons/SocialAuthButtons'
+import { useSignIn } from '@/src/features/auth/hooks/useSignIn'
 import AppLogo from '@/src/shared/components/AppLogo/AppLogo'
 import PseudoElement from '@/src/shared/components/PseudoElement/PseudoElement'
-import { auth } from '@/src/shared/services/firebase'
+import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
 import { Colors } from '@/src/shared/styles/Colors'
-import { Link, useRouter } from 'expo-router'
-import { getIdToken, signInWithEmailAndPassword } from 'firebase/auth'
-import React, { useState } from 'react'
-import { Alert, StyleSheet, Text, View } from 'react-native'
+import { Link } from 'expo-router'
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const SignInScreen = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const router = useRouter()
-
-  const signIn = async () => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      )
-
-      const token = await getIdToken(userCredential.user)
-      if (!token) {
-        Alert.alert('User not found')
-      } else {
-        router.replace('/(tabs)/profile')
-      }
-    } catch (error: any) {
-      console.error('Login error:', error)
-      Alert.alert('Login failed', error.message)
-    }
-  }
+  const { control, handleSubmit } = useSignIn()
 
   return (
     <SafeAreaView style={styles.container}>
       <AppLogo text="Login" />
       <View style={styles.form}>
-        <TextInput
+        <ControlledTextInput
+          control={control}
+          name="email"
           mode="outlined"
-          style={{ backgroundColor: '#1F1F1F', color: '#fff' }}
+          style={styles.input}
           left={<TextInput.Icon icon={'email'} color={'#fff'} />}
           textColor="#fff"
           keyboardType="email-address"
           label={'Email address'}
           placeholderTextColor={'#fff'}
-          value={email}
-          onChangeText={(text) => setEmail(text)}
           theme={{
             colors: {
               primary: '#fff',
@@ -59,8 +37,10 @@ const SignInScreen = () => {
             },
           }}
         />
-        <TextInput
-          style={{ backgroundColor: '#1F1F1F', color: '#fff' }}
+        <ControlledTextInput
+          control={control}
+          name="password"
+          style={styles.input}
           keyboardType="visible-password"
           textColor="#fff"
           theme={{
@@ -71,17 +51,16 @@ const SignInScreen = () => {
               onSurface: '#fff',
             },
           }}
-          value={password}
-          onChangeText={(text) => setPassword(text)}
           mode="outlined"
           left={<TextInput.Icon icon={'lock'} color={'#fff'} />}
           label={'Password'}
         />
+
         <Link style={styles.link} href={'/(auth)/sign-up'}>
           Forgot password?
         </Link>
         <Button
-          onPress={signIn}
+          onPress={handleSubmit}
           labelStyle={{ fontSize: 18 }}
           textColor="#fff"
           style={styles.btn}
@@ -155,5 +134,9 @@ const styles = StyleSheet.create({
     color: Colors.dark.text,
     borderRadius: 4,
     paddingVertical: 4,
+  },
+  input: {
+    backgroundColor: Colors.dark.input,
+    color: '#fff',
   },
 })

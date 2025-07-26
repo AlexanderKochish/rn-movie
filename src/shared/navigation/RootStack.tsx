@@ -1,4 +1,4 @@
-import { useAuth } from '@/src/features/auth/context/AuthContext'
+import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { Stack } from 'expo-router'
 
 export const RootStack = () => {

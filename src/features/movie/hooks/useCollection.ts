@@ -1,10 +1,10 @@
 import { db } from '@/src/shared/services/firebase'
-import { MovieDetails, MovieUnionType } from '@/src/shared/types/types'
+import { MovieDetailsType, MovieUnionType } from '@/src/shared/types/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore'
 import { useCallback } from 'react'
 import { Alert } from 'react-native'
-import { useAuth } from '../../auth/context/AuthContext'
+import { useAuth } from '../../auth/hooks/useAuth'
 
 export const useCollection = (collectionName: 'favorites' | 'bookmarks') => {
   const { user } = useAuth()
@@ -25,7 +25,7 @@ export const useCollection = (collectionName: 'favorites' | 'bookmarks') => {
 
         return snapshot.docs.map((doc) => ({
           docId: doc.id,
-          ...(doc.data().data as MovieDetails),
+          ...(doc.data().data as MovieDetailsType),
         }))
       } catch (error) {
         if (error instanceof Error) {
@@ -44,7 +44,7 @@ export const useCollection = (collectionName: 'favorites' | 'bookmarks') => {
   )
 
   const handleToggle = useMutation({
-    mutationFn: async (movie: MovieDetails | undefined) => {
+    mutationFn: async (movie: MovieDetailsType | undefined) => {
       if (!userId || !movie?.id) return
 
       const ref = doc(db, 'users', userId, collectionName, String(movie.id))

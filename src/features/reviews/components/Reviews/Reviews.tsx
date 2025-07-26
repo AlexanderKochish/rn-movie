@@ -1,4 +1,4 @@
-import { useAuth } from '@/src/features/auth/context/AuthContext'
+import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import CustomButton from '@/src/shared/components/UI/Button/Button'
 import { db } from '@/src/shared/services/firebase'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'

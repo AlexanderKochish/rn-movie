@@ -1,63 +1,32 @@
 import AuthRedirectText from '@/src/features/auth/components/AuthRedirectLink/AuthRedirectLink'
 import SocialAuthButtons from '@/src/features/auth/components/SocialAuthButtons/SocialAuthButtons'
+import { useSignUp } from '@/src/features/auth/hooks/useSignUp'
 import AppLogo from '@/src/shared/components/AppLogo/AppLogo'
 import PseudoElement from '@/src/shared/components/PseudoElement/PseudoElement'
 import TermsCheckbox from '@/src/shared/components/TermsCheckbox/TermsCheckbox'
-import { auth } from '@/src/shared/services/firebase'
+import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
 import { Colors } from '@/src/shared/styles/Colors'
-import { useRouter } from 'expo-router'
-import {
-  createUserWithEmailAndPassword,
-  getIdToken,
-  updateProfile,
-} from 'firebase/auth'
-import React, { useState } from 'react'
-import { Alert, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const SignUpScreen = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
-  const router = useRouter()
+  const { control, handleSubmit } = useSignUp()
 
-  const signUp = async () => {
-    try {
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      )
-
-      await updateProfile(user, {
-        displayName: username,
-      })
-
-      const token = await getIdToken(auth.currentUser!)
-      if (!token) {
-        Alert.alert('User not found')
-      } else {
-        router.replace('/(tabs)/profile')
-      }
-    } catch (error: any) {
-      console.error('Login error:', error)
-      Alert.alert('Login failed', error.message)
-    }
-  }
   return (
     <SafeAreaView style={styles.container}>
       <AppLogo text="Create an account" />
       <View style={styles.form}>
-        <TextInput
+        <ControlledTextInput
+          control={control}
+          name="username"
           mode="outlined"
-          style={{ backgroundColor: '#1F1F1F', color: '#fff' }}
+          style={styles.input}
           left={<TextInput.Icon icon={'account'} color={'#fff'} />}
           textColor="#fff"
           label={'Username'}
           placeholderTextColor={'#fff'}
-          value={username}
-          onChangeText={(text) => setUsername(text)}
           theme={{
             colors: {
               primary: '#fff',
@@ -67,16 +36,16 @@ const SignUpScreen = () => {
             },
           }}
         />
-        <TextInput
+        <ControlledTextInput
+          control={control}
+          name="email"
           mode="outlined"
-          style={{ backgroundColor: '#1F1F1F', color: '#fff' }}
+          style={styles.input}
           left={<TextInput.Icon icon={'email'} color={'#fff'} />}
           textColor="#fff"
           keyboardType="email-address"
           label={'Email address'}
           placeholderTextColor={'#fff'}
-          value={email}
-          onChangeText={(text) => setEmail(text)}
           theme={{
             colors: {
               primary: '#fff',
@@ -86,12 +55,12 @@ const SignUpScreen = () => {
             },
           }}
         />
-        <TextInput
-          style={{ backgroundColor: '#1F1F1F', color: '#fff' }}
+        <ControlledTextInput
+          control={control}
+          name="password"
+          style={styles.input}
           keyboardType="visible-password"
           textColor="#fff"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
           theme={{
             colors: {
               primary: '#fff',
@@ -109,7 +78,7 @@ const SignUpScreen = () => {
           labelStyle={{ fontSize: 18 }}
           textColor="#fff"
           style={styles.btn}
-          onPress={signUp}
+          onPress={handleSubmit}
         >
           Sign Up
         </Button>
@@ -180,5 +149,9 @@ const styles = StyleSheet.create({
     color: Colors.dark.text,
     borderRadius: 4,
     paddingVertical: 4,
+  },
+  input: {
+    backgroundColor: Colors.dark.input,
+    color: '#fff',
   },
 })
