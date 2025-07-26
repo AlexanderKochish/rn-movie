@@ -1,13 +1,12 @@
-import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import CustomButton from '@/src/shared/components/UI/Button/Button'
-import { db } from '@/src/shared/services/firebase'
+import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
-import React, { useState } from 'react'
-import { Alert, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import { useReview } from '../../hooks/useReview'
 import ReviewCard from '../ReviewCard/ReviewCard'
-import ReviewInput from '../ReviewInput/ReviewInput'
+import ReviewForm from '../ReviewForm/ReviewForm'
 
 type Props = {
   movieId: number | string
@@ -15,41 +14,40 @@ type Props = {
 }
 
 const Reviews = ({ movieId }: Props) => {
-  const { user } = useAuth()
-  const [review, setReview] = useState('')
-  const addReview = async (userId: string, rating: number) => {
-    if (!userId) return
-    try {
-      const ref = doc(db, 'moviesReviews', String(movieId), 'reviews', userId)
-      const snapshot = await getDoc(ref)
-      if (snapshot.exists()) {
-        Alert.alert('Message', 'You can leave only one review.')
-      } else {
-        await setDoc(
-          ref,
-          {
-            userId,
-            rating: rating || undefined,
-            review: review || undefined,
-            createdAt: serverTimestamp(),
-          },
-          { merge: true }
-        )
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert('Error', error.message)
-      }
-    }
+  const { reviews, isLoadingReviews } = useReview(+movieId)
+
+  if (isLoadingReviews) {
+    return <Preloader />
   }
+
   return (
-    <View style={{ padding: 10 }}>
+    <View style={{ flex: 1, padding: 10 }}>
       <View style={styles.titleWrapper}>
         <Text style={styles.title}>Reviews</Text>
-        <CustomButton title="See all" variant="secondary" fullWidth={false} />
+        <CustomButton
+          title="See all"
+          variant="secondary"
+          fullWidth={false}
+          size="small"
+        />
       </View>
-      <ReviewInput />
-      <ReviewCard review="ghghjgjhg" username="hgjgjhjh" />
+      <ReviewForm movieId={+movieId} />
+      <View style={{ gap: 10 }}>
+        {!reviews?.length && (
+          <Text style={{ color: Colors.dark.text }}>
+            No reviews at this moment
+          </Text>
+        )}
+        {reviews?.slice(-5).map((item) => (
+          <ReviewCard
+            key={item.id}
+            review={item.review}
+            username={item.displayName}
+            rating={item.rating}
+            avatar={item.photoUrl}
+          />
+        ))}
+      </View>
     </View>
   )
 }
@@ -63,6 +61,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingVertical: 8,
   },
   title: {
     color: Colors.dark.text,

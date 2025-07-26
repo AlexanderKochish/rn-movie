@@ -4,10 +4,10 @@ import { StyleSheet, View } from 'react-native'
 import { Icon } from 'react-native-paper'
 
 type Props = {
-  voteAverage: number | undefined
+  voteAverage?: number
 }
 
-const RetingResult = ({ voteAverage }: Props) => {
+const RatingResult = ({ voteAverage }: Props) => {
   return (
     <View style={styles.container}>
       {[...Array(5)].map((_, i) => {
@@ -26,7 +26,7 @@ const RetingResult = ({ voteAverage }: Props) => {
   )
 }
 
-export default RetingResult
+export default RatingResult
 
 const styles = StyleSheet.create({
   container: {

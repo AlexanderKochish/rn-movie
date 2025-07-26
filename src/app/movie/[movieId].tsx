@@ -5,11 +5,11 @@ import CastAndCrew from '@/src/features/cast-and-crew/components/CastAndCrew/Cas
 import MovieDetails from '@/src/features/movie/components/MovieDetails/MovieDetails'
 import Ratings from '@/src/features/rating/components/Ratings/Ratings'
 import Reviews from '@/src/features/reviews/components/Reviews/Reviews'
-import { globalStyles } from '@/src/shared/styles/globalStyles'
+import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { useLocalSearchParams } from 'expo-router'
 import React from 'react'
-import { ScrollView, View } from 'react-native'
-import { ActivityIndicator, PaperProvider } from 'react-native-paper'
+import { ScrollView } from 'react-native'
+import { PaperProvider } from 'react-native-paper'
 
 const MovieDetailsScreen = () => {
   const [rating, setRating] = React.useState(0)
@@ -17,16 +17,7 @@ const MovieDetailsScreen = () => {
   const { data, isLoading } = useMovieDetails(+movieId)
 
   if (isLoading) {
-    return (
-      <View
-        style={[
-          globalStyles.container,
-          { backgroundColor: Colors.dark.background },
-        ]}
-      >
-        <ActivityIndicator size="large" />
-      </View>
-    )
+    return <Preloader />
   }
 
   return (
@@ -40,6 +31,7 @@ const MovieDetailsScreen = () => {
         <MovieDetails movieId={+movieId} data={data} />
 
         <Ratings
+          movieId={+movieId}
           voteAverage={data?.vote_average}
           voteCount={data?.vote_count}
         />

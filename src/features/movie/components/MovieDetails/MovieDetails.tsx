@@ -18,7 +18,7 @@ import { MovieDetailsType } from '@/src/shared/types/types'
 
 type Props = {
   movieId: number
-  data: MovieDetailsType
+  data: MovieDetailsType | undefined
 }
 
 const MovieDetails = ({ movieId, data }: Props) => {

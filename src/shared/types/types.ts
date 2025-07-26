@@ -113,3 +113,14 @@ export type CrewMember = {
 }
 
 export type MovieUnionType = (Movie | MovieDetailsType) & { docId: string }
+
+export type ReviewType = {
+  id: string
+  userId: string
+  photoUrl: string | null
+  displayName: string | null
+  email: string
+  rating: number | null
+  review: string | null
+  updatedAt: string
+}

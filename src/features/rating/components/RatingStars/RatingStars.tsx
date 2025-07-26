@@ -1,18 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { Icon } from 'react-native-paper'
 
-const RatingStars = () => {
-  const [rating, setRating] = useState<number>(0)
+type Props = {
+  rating: number
+  onRate: (value: number | ((prev: number) => number)) => void
+}
+
+const RatingStars = ({ rating, onRate }: Props) => {
   return (
-    <Pressable style={{ flexDirection: 'row' }}>
+    <Pressable style={styles.btn}>
       {[...Array(5)].map((_, i) => {
         const starNumber = i + 1
         return (
           <Pressable
             key={i}
             onPress={() =>
-              setRating((prev) => (prev === starNumber ? 0 : starNumber))
+              onRate((prev) => (prev === starNumber ? 0 : starNumber))
             }
           >
             <Icon
@@ -29,4 +33,8 @@ const RatingStars = () => {
 
 export default RatingStars
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  btn: {
+    flexDirection: 'row',
+  },
+})

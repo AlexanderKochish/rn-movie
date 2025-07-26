@@ -13,6 +13,7 @@ const ControlledTextInput = <T extends FieldValues>({
   control,
   name,
   placeholder,
+  ...rest
 }: Props<T>) => {
   const {
     field,
@@ -27,6 +28,7 @@ const ControlledTextInput = <T extends FieldValues>({
         onChangeText={field.onChange}
         value={field.value}
         error={!!error}
+        {...rest}
       />
 
       {error?.message && <Text style={styles.error}>{error.message}</Text>}

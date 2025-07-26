@@ -13,6 +13,7 @@ import { Typography } from '@/src/shared/styles/Typography'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 type ButtonVariant = 'primary' | 'secondary' | 'text'
+type ButtonSize = 'small' | 'regular' | 'large'
 
 type CustomButtonProps = {
   title: string
@@ -22,6 +23,7 @@ type CustomButtonProps = {
   disabled?: boolean
   fullWidth?: boolean
   icon?: keyof typeof MaterialCommunityIcons.glyphMap
+  size?: ButtonSize
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -32,6 +34,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   disabled = false,
   fullWidth = true,
   icon,
+  size = 'regular',
 }) => {
   const backgroundColor = {
     primary: Colors.dark.btn,
@@ -40,6 +43,24 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   }[variant]
 
   const textColor = variant === 'text' ? Colors.dark.btn : '#fff'
+
+  const sizeStyle = {
+    small: {
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      fontSize: 12,
+    },
+    regular: {
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      fontSize: 14,
+    },
+    large: {
+      paddingVertical: 14,
+      paddingHorizontal: 24,
+      fontSize: 16,
+    },
+  }[size]
 
   return (
     <TouchableOpacity
@@ -50,8 +71,10 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         styles.button,
         {
           backgroundColor,
-          opacity: disabled ? 0.5 : 1,
+          opacity: disabled || loading ? 0.6 : 1,
           width: fullWidth ? '100%' : undefined,
+          paddingVertical: sizeStyle.paddingVertical,
+          paddingHorizontal: sizeStyle.paddingHorizontal,
         },
         variant === 'text' && styles.textButton,
       ]}
@@ -72,7 +95,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
             style={{
               color: textColor,
               fontFamily: Typography.body.fontFamily,
-              fontSize: Typography.body.fontSize,
+              fontSize: sizeStyle.fontSize,
               fontWeight: 'bold',
             }}
           >
@@ -84,10 +107,10 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   )
 }
 
+export default CustomButton
+
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -98,8 +121,5 @@ const styles = StyleSheet.create({
   },
   textButton: {
     backgroundColor: 'transparent',
-    paddingVertical: 8,
   },
 })
-
-export default CustomButton

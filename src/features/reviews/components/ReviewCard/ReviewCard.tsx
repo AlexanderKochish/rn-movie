@@ -1,3 +1,4 @@
+import RatingResult from '@/src/features/rating/components/RatingResult/RatingResult'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
 import { Image } from 'expo-image'
@@ -5,12 +6,13 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
 type Props = {
-  review: string
-  username: string
-  avatar?: string
+  review: string | null
+  username: string | null
+  avatar?: string | null
+  rating: number | null
 }
 
-const ReviewCard = ({ avatar, username, review }: Props) => {
+const ReviewCard = ({ avatar, username, review, rating }: Props) => {
   return (
     <View style={styles.card}>
       <Image
@@ -26,6 +28,7 @@ const ReviewCard = ({ avatar, username, review }: Props) => {
           {review}
         </Text>
         <Text style={styles.username}>{username}</Text>
+        <RatingResult voteAverage={rating} />
       </View>
     </View>
   )
@@ -41,6 +44,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'flex-start',
     gap: 10,
+    flex: 1,
   },
   avatar: {
     width: 40,
