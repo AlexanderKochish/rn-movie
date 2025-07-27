@@ -1,3 +1,4 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import { CrewMember } from '@/src/shared/types/types'
 import React from 'react'
@@ -11,8 +12,9 @@ const ITEM_MARGIN = 10
 const ITEM_WIDTH = (Dimensions.get('window').width - ITEM_MARGIN * 3) / 2
 
 const CastAndCrewCard = ({ person }: Props) => {
+  const { theme } = useTheme()
   return (
-    <View style={styles.crewItem}>
+    <View style={[styles.crewItem, { backgroundColor: Colors[theme].card }]}>
       <Image
         source={
           person.profile_path
@@ -26,8 +28,12 @@ const CastAndCrewCard = ({ person }: Props) => {
         style={styles.crewImage}
       />
       <View style={{ flex: 1, justifyContent: 'space-around' }}>
-        <Text style={styles.text}>{person.name || person.original_name}</Text>
-        <Text style={styles.text}>{person.job.slice(0, 12)}...</Text>
+        <Text style={{ color: Colors[theme].text }}>
+          {person.name || person.original_name}
+        </Text>
+        <Text style={{ color: Colors[theme].text }}>
+          {person.job.slice(0, 12)}...
+        </Text>
       </View>
     </View>
   )
@@ -41,7 +47,6 @@ const styles = StyleSheet.create({
     margin: ITEM_MARGIN,
     flexDirection: 'row',
     gap: 10,
-    backgroundColor: '#222',
     borderRadius: 8,
     padding: 10,
     overflow: 'hidden',
@@ -51,8 +56,5 @@ const styles = StyleSheet.create({
     width: 68,
     borderRadius: 4,
     backgroundColor: Colors.dark.bgModal,
-  },
-  text: {
-    color: Colors.dark.text,
   },
 })

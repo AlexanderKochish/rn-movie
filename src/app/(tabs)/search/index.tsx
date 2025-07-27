@@ -2,6 +2,7 @@ import SearchItemCard from '@/src/features/movie/components/SearchItemCard/Searc
 import { useGenres } from '@/src/features/movie/hooks/useGenres'
 import { useMoviesByGenres } from '@/src/features/movie/hooks/useMoviesByGenres'
 import { useSearchMovies } from '@/src/features/movie/hooks/useSearchMovies'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
@@ -12,19 +13,29 @@ const SearchScreen = () => {
   const { genres } = useGenres()
   const { movies, search, setSearch } = useSearchMovies()
   const { handleGenre, moviesByGenres, genreIds } = useMoviesByGenres()
+  const { theme } = useTheme()
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: Colors[theme].background }]}
+    >
       <TextInput
         value={search}
         onChangeText={(value) => setSearch(value)}
-        style={styles.searchInput}
+        style={{
+          backgroundColor: Colors[theme].input,
+          color: Colors[theme].text,
+        }}
         left={
-          <TextInput.Icon icon={'magnify'} size={24} color={Colors.dark.text} />
+          <TextInput.Icon
+            icon={'magnify'}
+            size={24}
+            color={theme === 'dark' ? Colors.dark.text : BaseColors.orange}
+          />
         }
         placeholder="Search here..."
-        placeholderTextColor={Colors.dark.text}
-        textColor={Colors.dark.text}
+        placeholderTextColor={Colors[theme].text}
+        textColor={Colors[theme].text}
       />
       <View>
         <FlatList
@@ -39,10 +50,10 @@ const SearchScreen = () => {
               buttonColor={
                 genreIds?.includes(item.id)
                   ? BaseColors.orange
-                  : Colors.dark.genreBtn
+                  : Colors[theme].chip
               }
               mode="contained"
-              textColor={Colors.dark.text}
+              textColor={Colors[theme].text}
             >
               {item.name}
             </Button>
@@ -74,11 +85,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 15,
-    backgroundColor: Colors.dark.background,
-  },
-  searchInput: {
-    backgroundColor: Colors.dark.input,
-    color: Colors.dark.text,
   },
   containerGenres: {
     columnGap: 10,

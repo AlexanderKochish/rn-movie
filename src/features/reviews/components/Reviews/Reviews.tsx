@@ -1,20 +1,19 @@
+import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import CustomButton from '@/src/shared/components/UI/Button/Button'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { Typography } from '@/src/shared/styles/Typography'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { useReview } from '../../hooks/useReview'
 import ReviewCard from '../ReviewCard/ReviewCard'
 import ReviewForm from '../ReviewForm/ReviewForm'
 
-type Props = {
-  movieId: number | string
-  rating: number | undefined
-}
-
-const Reviews = ({ movieId }: Props) => {
+const Reviews = () => {
+  const movieId = useMovieId()
   const { reviews, isLoadingReviews } = useReview(+movieId)
+  const { theme } = useTheme()
 
   if (isLoadingReviews) {
     return <Preloader />
@@ -23,7 +22,9 @@ const Reviews = ({ movieId }: Props) => {
   return (
     <View style={{ flex: 1, padding: 10 }}>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>Reviews</Text>
+        <Text style={[globalStyles.subTitle, { color: Colors[theme].text }]}>
+          Reviews
+        </Text>
         <CustomButton
           title="See all"
           variant="secondary"
@@ -34,7 +35,7 @@ const Reviews = ({ movieId }: Props) => {
       <ReviewForm movieId={+movieId} />
       <View style={{ gap: 10 }}>
         {!reviews?.length && (
-          <Text style={{ color: Colors.dark.text }}>
+          <Text style={{ color: Colors[theme].text }}>
             No reviews at this moment
           </Text>
         )}
@@ -62,9 +63,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 8,
-  },
-  title: {
-    color: Colors.dark.text,
-    fontSize: Typography.title.fontSize,
   },
 })

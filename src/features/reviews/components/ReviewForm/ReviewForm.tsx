@@ -1,5 +1,6 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
-import { Colors } from '@/src/shared/styles/Colors'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-paper'
@@ -11,13 +12,14 @@ type Props = {
 
 const ReviewForm = ({ movieId }: Props) => {
   const { control, handleSubmit, isPending } = useReview(+movieId)
+  const { theme } = useTheme()
   return (
     <View>
       <ControlledTextInput
         control={control}
         name="review"
         multiline
-        style={styles.primary}
+        style={[styles.primary, { backgroundColor: Colors[theme].input }]}
         numberOfLines={5}
         placeholder="Type your review here"
         mode="outlined"
@@ -28,8 +30,8 @@ const ReviewForm = ({ movieId }: Props) => {
         }}
         theme={{
           colors: {
-            text: Colors.dark.text,
-            placeholder: '#999',
+            text: Colors[theme].text,
+            placeholder: BaseColors.lightGray,
           },
         }}
       />
@@ -37,7 +39,7 @@ const ReviewForm = ({ movieId }: Props) => {
         mode="outlined"
         onPress={handleSubmit}
         style={{
-          backgroundColor: Colors.dark.btn,
+          backgroundColor: Colors[theme].btn,
           borderRadius: 10,
           width: 150,
           alignSelf: 'center',
@@ -48,7 +50,7 @@ const ReviewForm = ({ movieId }: Props) => {
           height: 38,
           justifyContent: 'center',
         }}
-        textColor={Colors.dark.text}
+        textColor={Colors[theme].text}
       >
         Send Review
       </Button>
@@ -60,7 +62,6 @@ export default ReviewForm
 
 const styles = StyleSheet.create({
   primary: {
-    backgroundColor: Colors.dark.input,
     height: 80,
     marginVertical: 8,
   },

@@ -10,10 +10,13 @@ export const BaseColors = {
   black: '#121216',
   white: '#FBFAF5',
   lightBlack: '#1F1F1F',
+  whiteDark: '#F5F5F5',
+  orangeOpacity: 'rgba(255, 60, 0, 0.13)',
+  dark: '#000000',
 }
-
 export const Colors = {
   dark: {
+    title: BaseColors.white,
     background: BaseColors.black,
     btn: BaseColors.orange,
     disabled: BaseColors.brown,
@@ -23,18 +26,21 @@ export const Colors = {
     bookmark: BaseColors.orangeLight,
     text: BaseColors.white,
     input: BaseColors.lightBlack,
-    genreBtn: BaseColors.darkGray,
+    chip: BaseColors.darkGray,
+    card: BaseColors.darkGray,
   },
   light: {
+    title: BaseColors.dark,
     background: BaseColors.white,
-    btn: BaseColors.orange,
+    btn: BaseColors.orangeLight,
     disabled: BaseColors.brown,
     ratingStar: BaseColors.yellow,
     dots: BaseColors.gray,
     bgModal: BaseColors.darkGray,
     bookmark: BaseColors.orangeLight,
     text: BaseColors.black,
-    input: BaseColors.lightBlack,
-    genreBtn: BaseColors.darkGray,
+    input: BaseColors.whiteDark,
+    chip: BaseColors.lightGray,
+    card: BaseColors.orangeOpacity,
   },
 }

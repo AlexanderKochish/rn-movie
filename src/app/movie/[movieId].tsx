@@ -3,20 +3,21 @@ import { Colors } from '@/src/shared/styles/Colors'
 
 import CastAndCrew from '@/src/features/cast-and-crew/components/CastAndCrew/CastAndCrew'
 import MovieDetails from '@/src/features/movie/components/MovieDetails/MovieDetails'
+import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
 import Ratings from '@/src/features/rating/components/Ratings/Ratings'
 import Reviews from '@/src/features/reviews/components/Reviews/Reviews'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
-import { useLocalSearchParams } from 'expo-router'
 import React from 'react'
 import { ScrollView } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 
 const MovieDetailsScreen = () => {
-  const [rating, setRating] = React.useState(0)
-  const { movieId } = useLocalSearchParams()
-  const { data, isLoading } = useMovieDetails(+movieId)
+  const movieId = useMovieId()
+  const { data, isLoading } = useMovieDetails(movieId)
+  const { theme } = useTheme()
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <Preloader />
   }
 
@@ -25,19 +26,18 @@ const MovieDetailsScreen = () => {
       <ScrollView
         contentContainerStyle={{
           paddingBottom: 40,
-          backgroundColor: Colors.dark.background,
+          backgroundColor: Colors[theme].background,
         }}
       >
-        <MovieDetails movieId={+movieId} data={data} />
+        <MovieDetails data={data} />
 
         <Ratings
-          movieId={+movieId}
           voteAverage={data?.vote_average}
           voteCount={data?.vote_count}
         />
-        <CastAndCrew movieId={+movieId} />
+        <CastAndCrew />
 
-        <Reviews movieId={+movieId} rating={rating} />
+        <Reviews />
       </ScrollView>
     </PaperProvider>
   )

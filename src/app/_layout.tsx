@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { AuthProvider } from '../features/auth/context/AuthProvider'
+import { ThemeProvider } from '../providers/ThemeProvider/ThemeProvider'
 import { RootStack } from '../shared/navigation/RootStack'
 
 SplashScreen.preventAutoHideAsync()
@@ -47,7 +48,9 @@ export default function RootLayout() {
         <StatusBar style="auto" />
         <AuthProvider>
           <QueryClientProvider client={queryClient}>
-            <RootStack />
+            <ThemeProvider>
+              <RootStack />
+            </ThemeProvider>
           </QueryClientProvider>
         </AuthProvider>
       </SafeAreaProvider>

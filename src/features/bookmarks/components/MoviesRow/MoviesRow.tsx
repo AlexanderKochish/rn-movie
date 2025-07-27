@@ -1,6 +1,7 @@
 import MovieCard from '@/src/features/movie/components/MovieCard/MovieCard'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { Typography } from '@/src/shared/styles/Typography'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { MovieUnionType } from '@/src/shared/types/types'
 import React from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
@@ -19,11 +20,16 @@ const MoviesRow = <T extends MovieUnionType>({
   icon,
   isLoading,
 }: Props<T>) => {
+  const { theme } = useTheme()
   return (
-    <View>
+    <View style={{ paddingHorizontal: 15 }}>
       <View style={styles.titleWrapper}>
-        {icon && <Icon source={icon} size={24} color={Colors.dark.text} />}
-        {title && <Text style={styles.title}>{title}</Text>}
+        {icon && <Icon source={icon} size={24} color={Colors[theme].text} />}
+        {title && (
+          <Text style={[globalStyles.subTitle, { color: Colors[theme].text }]}>
+            {title}
+          </Text>
+        )}
       </View>
       {isLoading && (
         <View style={{ flex: 1 }}>
@@ -49,7 +55,7 @@ const MoviesRow = <T extends MovieUnionType>({
         )}
       />
       {!items?.length && (
-        <Text style={{ color: Colors.dark.text, paddingVertical: 10 }}>
+        <Text style={{ color: Colors[theme].text, paddingVertical: 10 }}>
           List is empty
         </Text>
       )}
@@ -64,9 +70,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-  },
-  title: {
-    color: Colors.dark.text,
-    fontSize: Typography.title.fontSize,
   },
 })

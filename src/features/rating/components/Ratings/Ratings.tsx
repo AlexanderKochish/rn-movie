@@ -1,4 +1,7 @@
+import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { adaptOnChange } from '@/src/shared/utils/adaptOnChange'
 import React, { useState } from 'react'
 import { Controller } from 'react-hook-form'
@@ -10,14 +13,15 @@ import RetingResult from '../RatingResult/RatingResult'
 import RatingStars from '../RatingStars/RatingStars'
 
 type Props = {
-  movieId: number
   voteAverage?: number
   voteCount?: number
 }
 
-const Ratings = ({ voteAverage, voteCount, movieId }: Props) => {
+const Ratings = ({ voteAverage, voteCount }: Props) => {
   const [visible, setVisible] = useState(false)
+  const movieId = useMovieId()
   const { control, handleSubmit, isPending } = useRating(movieId)
+  const { theme } = useTheme()
 
   const showDialog = () => setVisible(true)
 
@@ -26,13 +30,15 @@ const Ratings = ({ voteAverage, voteCount, movieId }: Props) => {
   return (
     <>
       <View style={styles.rating}>
-        <Text style={styles.headerTitle}>Ratings</Text>
+        <Text style={[globalStyles.subTitle, { color: Colors[theme].text }]}>
+          Ratings
+        </Text>
         <View style={{ gap: 15 }}>
           <Pressable onPress={showDialog} style={{ flexDirection: 'row' }}>
             <RetingResult voteAverage={voteAverage} />
           </Pressable>
           <View>
-            <Text style={styles.text}>
+            <Text style={{ color: Colors[theme].text }}>
               {voteAverage} IMDB | {voteCount} RATE
             </Text>
           </View>
@@ -75,16 +81,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: BaseColors.brown,
     borderTopColor: BaseColors.brown,
-    padding: 15,
+    paddingVertical: 15,
     marginHorizontal: 15,
     marginBottom: 10,
     gap: 10,
-  },
-  headerTitle: {
-    fontSize: 18,
-    color: Colors.dark.text,
-  },
-  text: {
-    color: Colors.dark.text,
   },
 })

@@ -1,3 +1,4 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
 import React from 'react'
@@ -11,13 +12,16 @@ type Props = {
 }
 
 const SettingItem = ({ settingName, onPress, icon }: Props) => {
+  const { theme } = useTheme()
   return (
     <Pressable style={styles.wrapper} onPress={onPress}>
       <View style={styles.titleWrapper}>
-        <Icon source={icon} size={24} color={Colors.dark.text} />
-        <Text style={styles.title}>{settingName}</Text>
+        <Icon source={icon} size={24} color={Colors[theme].text} />
+        <Text style={[styles.title, { color: Colors[theme].text }]}>
+          {settingName}
+        </Text>
       </View>
-      <Icon source={'chevron-right'} size={24} color={Colors.dark.text} />
+      <Icon source={'chevron-right'} size={24} color={Colors[theme].text} />
     </Pressable>
   )
 }
@@ -37,7 +41,6 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   title: {
-    color: Colors.dark.text,
     fontSize: Typography.title.fontSize,
   },
 })

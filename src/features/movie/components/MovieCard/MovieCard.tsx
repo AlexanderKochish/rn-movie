@@ -1,3 +1,4 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
@@ -13,6 +14,7 @@ type Props = {
 }
 
 const MovieCard = ({ imageUrl, title, vote_average, id }: Props) => {
+  const { theme } = useTheme()
   return (
     <View style={styles.card}>
       <Link href={{ pathname: `/movie/[movieId]`, params: { movieId: id } }}>
@@ -24,16 +26,16 @@ const MovieCard = ({ imageUrl, title, vote_average, id }: Props) => {
           contentFit="cover"
         />
       </Link>
-      <Text style={{ color: Colors.dark.text }}>
+      <Text style={{ color: Colors[theme].text }}>
         {title && title?.length > 16
           ? `${title?.slice(0, 16)}...`
           : title || 'No Title'}
       </Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View style={styles.content}>
         <Text style={{ color: 'gray' }}>167 mins</Text>
-        <View style={{ flexDirection: 'row', gap: 5 }}>
+        <View style={styles.voteAverage}>
           <Icon source="star" size={20} color="yellow" />
-          <Text style={{ color: Colors.dark.text }}>
+          <Text style={{ color: Colors[theme].text }}>
             {vote_average?.toFixed(1)}
           </Text>
         </View>
@@ -51,5 +53,10 @@ const styles = StyleSheet.create({
     height: 210,
     marginRight: 12,
     borderRadius: 10,
+  },
+  content: { flexDirection: 'row', justifyContent: 'space-between' },
+  voteAverage: {
+    flexDirection: 'row',
+    gap: 5,
   },
 })

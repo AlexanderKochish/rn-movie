@@ -1,3 +1,4 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
@@ -7,13 +8,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets()
+  const { theme } = useTheme()
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.dark.background,
+        tabBarActiveTintColor: Colors[theme].background,
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: Colors.dark.background,
+          backgroundColor: Colors[theme].background,
           borderTopWidth: 0,
           elevation: 0,
           paddingTop: 10,

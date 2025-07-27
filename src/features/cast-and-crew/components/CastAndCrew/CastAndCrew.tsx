@@ -1,16 +1,17 @@
 import { useCredits } from '@/src/features/movie/hooks/useCredits'
+import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { CrewMember } from '@/src/shared/types/types'
 import React, { useCallback } from 'react'
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Text, View } from 'react-native'
 import CastAndCrewCard from '../CastAndCrewCard/CastAndCrewCard'
 
-type Props = {
-  movieId: number
-}
-
-const CastAndCrew = ({ movieId }: Props) => {
+const CastAndCrew = () => {
+  const movieId = useMovieId()
   const { credits } = useCredits(movieId)
+  const { theme } = useTheme()
 
   const renderCrewItem = useCallback(
     ({ item }: { item: CrewMember }) => <CastAndCrewCard person={item} />,
@@ -18,7 +19,9 @@ const CastAndCrew = ({ movieId }: Props) => {
   )
   return (
     <View style={{ paddingHorizontal: 15 }}>
-      <Text style={styles.headerTitle}>Cast & Crew</Text>
+      <Text style={[globalStyles.subTitle, { color: Colors[theme].text }]}>
+        Cast & Crew
+      </Text>
       <FlatList
         data={credits?.crew || []}
         keyExtractor={(item) => String(item.id + item.credit_id)}
@@ -32,10 +35,3 @@ const CastAndCrew = ({ movieId }: Props) => {
 }
 
 export default CastAndCrew
-
-const styles = StyleSheet.create({
-  headerTitle: {
-    fontSize: 18,
-    color: Colors.dark.text,
-  },
-})

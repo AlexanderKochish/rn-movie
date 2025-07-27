@@ -124,3 +124,5 @@ export type ReviewType = {
   review: string | null
   updatedAt: string
 }
+
+export type ThemeColorType = 'dark' | 'light'

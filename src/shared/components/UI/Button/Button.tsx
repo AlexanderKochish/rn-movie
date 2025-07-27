@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native'
 
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -36,13 +37,14 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   icon,
   size = 'regular',
 }) => {
+  const { theme } = useTheme()
   const backgroundColor = {
-    primary: Colors.dark.btn,
-    secondary: Colors.dark.disabled,
+    primary: Colors[theme].btn,
+    secondary: Colors[theme].disabled,
     text: 'transparent',
   }[variant]
 
-  const textColor = variant === 'text' ? Colors.dark.btn : '#fff'
+  const textColor = variant === 'text' ? Colors[theme].btn : '#fff'
 
   const sizeStyle = {
     small: {

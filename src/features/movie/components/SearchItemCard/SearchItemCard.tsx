@@ -1,3 +1,4 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
 import { Link } from 'expo-router'
@@ -20,6 +21,7 @@ const SearchItemCard = ({
   voteAverage,
   id,
 }: Props) => {
+  const { theme } = useTheme()
   return (
     <View style={styles.card}>
       <Link
@@ -32,19 +34,27 @@ const SearchItemCard = ({
         />
       </Link>
       <View style={styles.content}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={[styles.title, { color: Colors[theme].text }]}>
+          {title}
+        </Text>
         <Text style={styles.release}>{releaseYear.slice(0, 4)} - Action</Text>
         <View style={styles.bottomInfo}>
           <View style={styles.timeBlock}>
-            <Icon source={'clock-outline'} size={24} color={Colors.dark.text} />
-            <Text style={styles.time}>120 mins</Text>
+            <Icon
+              source={'clock-outline'}
+              size={24}
+              color={Colors[theme].text}
+            />
+            <Text style={[styles.time, { color: Colors[theme].text }]}>
+              120 mins
+            </Text>
           </View>
 
           <View style={styles.voteAverage}>
-            <Text style={{ color: Colors.dark.text }}>
+            <Text style={{ color: Colors[theme].text }}>
               {voteAverage.toFixed(1)}
             </Text>
-            <Icon source={'star'} size={24} color={Colors.dark.ratingStar} />
+            <Icon source={'star'} size={24} color={Colors[theme].ratingStar} />
           </View>
         </View>
       </View>
@@ -71,7 +81,6 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   title: {
-    color: Colors.dark.text,
     fontSize: Typography.title.fontSize,
     flexShrink: 1,
     flexWrap: 'wrap',
@@ -91,7 +100,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   time: {
-    color: Colors.dark.text,
     alignItems: 'center',
   },
   voteAverage: {

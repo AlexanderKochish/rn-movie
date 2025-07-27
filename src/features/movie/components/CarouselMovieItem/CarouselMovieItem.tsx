@@ -1,3 +1,4 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { MovieUnionType } from '@/src/shared/types/types'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -10,6 +11,7 @@ type Props = {
 }
 
 const CarouselItem = ({ item }: Props) => {
+  const { theme } = useTheme()
   return (
     <View style={{ position: 'relative' }}>
       <ImageBackground
@@ -20,19 +22,21 @@ const CarouselItem = ({ item }: Props) => {
         resizeMode="cover"
       >
         <View style={styles.contentWrapper}>
-          <LinearGradient
-            colors={['rgba(0,0,0,0.8)', 'transparent']}
-            style={[styles.gradient, { top: 0, height: 80 }]}
-          />
-
           <View style={styles.detailsWrapper}>
             <Text
               variant="headlineSmall"
-              style={{ color: Colors.dark.text, fontWeight: '700' }}
+              style={{
+                color: Colors[theme].title,
+                fontWeight: '700',
+                fontSize: 28,
+              }}
             >
               {item.title || item.original_title}
             </Text>
-            <Text variant="bodyLarge" style={styles.overview}>
+            <Text
+              variant="bodyLarge"
+              style={[styles.overview, { color: Colors[theme].text }]}
+            >
               {item.overview}
             </Text>
             <Button
@@ -45,8 +49,11 @@ const CarouselItem = ({ item }: Props) => {
             </Button>
           </View>
           <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0.8)']}
-            style={[styles.gradient, { bottom: 0, height: 100 }]}
+            colors={[
+              'transparent',
+              `${theme === 'dark' ? 'rgba(0,0,0,0.8)' : 'rgba(255, 255, 255, 0.95)'}`,
+            ]}
+            style={[styles.gradient, { bottom: 0, height: 250 }]}
           />
         </View>
       </ImageBackground>
@@ -61,7 +68,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    zIndex: 5,
   },
   bgImage: {
     flex: 1,
@@ -79,10 +85,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     gap: 10,
+    zIndex: 1,
   },
   overview: {
     textAlign: 'center',
-    color: Colors.dark.text,
+    fontWeight: '600',
     height: 75,
     marginBottom: 70,
   },

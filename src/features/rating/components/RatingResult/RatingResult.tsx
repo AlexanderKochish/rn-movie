@@ -1,13 +1,15 @@
-import { BaseColors } from '@/src/shared/styles/Colors'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon } from 'react-native-paper'
 
 type Props = {
-  voteAverage?: number
+  voteAverage?: number | null
 }
 
 const RatingResult = ({ voteAverage }: Props) => {
+  const { theme } = useTheme()
   return (
     <View style={styles.container}>
       {[...Array(5)].map((_, i) => {
@@ -18,7 +20,9 @@ const RatingResult = ({ voteAverage }: Props) => {
             key={i}
             source={startRating <= rating ? 'star' : 'star-outline'}
             size={24}
-            color={startRating <= rating ? BaseColors.yellow : BaseColors.white}
+            color={
+              startRating <= rating ? BaseColors.yellow : Colors[theme].text
+            }
           />
         )
       })}
