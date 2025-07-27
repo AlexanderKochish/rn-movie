@@ -1,9 +1,8 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import { BaseColors } from '@/src/shared/styles/Colors'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
 
 type Props = {
   overview: string | undefined

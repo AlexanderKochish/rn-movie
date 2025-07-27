@@ -22,7 +22,7 @@ const MoviesRow = <T extends MovieUnionType>({
 }: Props<T>) => {
   const { theme } = useTheme()
   return (
-    <View style={{ paddingHorizontal: 15 }}>
+    <View style={{ flex: 1, gap: 15 }}>
       <View style={styles.titleWrapper}>
         {icon && <Icon source={icon} size={24} color={Colors[theme].text} />}
         {title && (
@@ -31,6 +31,11 @@ const MoviesRow = <T extends MovieUnionType>({
           </Text>
         )}
       </View>
+      {!items && (
+        <Text style={{ color: Colors[theme].text, paddingVertical: 10 }}>
+          List is empty
+        </Text>
+      )}
       {isLoading && (
         <View style={{ flex: 1 }}>
           <ActivityIndicator
@@ -54,11 +59,6 @@ const MoviesRow = <T extends MovieUnionType>({
           />
         )}
       />
-      {!items?.length && (
-        <Text style={{ color: Colors[theme].text, paddingVertical: 10 }}>
-          List is empty
-        </Text>
-      )}
     </View>
   )
 }

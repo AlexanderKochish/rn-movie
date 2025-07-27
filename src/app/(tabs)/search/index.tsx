@@ -3,6 +3,7 @@ import { useGenres } from '@/src/features/movie/hooks/useGenres'
 import { useMoviesByGenres } from '@/src/features/movie/hooks/useMoviesByGenres'
 import { useSearchMovies } from '@/src/features/movie/hooks/useSearchMovies'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
@@ -12,8 +13,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 const SearchScreen = () => {
   const { genres } = useGenres()
   const { movies, search, setSearch } = useSearchMovies()
-  const { handleGenre, moviesByGenres, genreIds } = useMoviesByGenres()
+  const { handleGenre, moviesByGenres, genreIds, isLoading } =
+    useMoviesByGenres()
   const { theme } = useTheme()
+
+  if (isLoading) {
+    return <Preloader />
+  }
 
   return (
     <SafeAreaView

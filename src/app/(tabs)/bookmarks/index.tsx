@@ -4,7 +4,7 @@ import { useFavorite } from '@/src/features/movie/hooks/useFavorite'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const BookmarksScreen = () => {
@@ -15,18 +15,20 @@ const BookmarksScreen = () => {
     <SafeAreaView
       style={[styles.container, { backgroundColor: Colors[theme].background }]}
     >
-      <MoviesRow
-        isLoading={isLoadingFavorite}
-        items={items}
-        icon="star-outline"
-        title="Stars"
-      />
-      <MoviesRow
-        isLoading={isLoadingBookmark}
-        items={bookmarks}
-        icon="bookmark-outline"
-        title="Bookmark"
-      />
+      <ScrollView>
+        <MoviesRow
+          isLoading={isLoadingFavorite}
+          items={items}
+          icon="star-outline"
+          title="Stars"
+        />
+        <MoviesRow
+          isLoading={isLoadingBookmark}
+          items={bookmarks}
+          icon="bookmark-outline"
+          title="Bookmark"
+        />
+      </ScrollView>
     </SafeAreaView>
   )
 }
@@ -35,7 +37,6 @@ export default BookmarksScreen
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingHorizontal: 15,
+    flex: 3,
   },
 })

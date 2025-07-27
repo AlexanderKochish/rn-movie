@@ -1,12 +1,12 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import IconToggleButton from '@/src/shared/components/UI/IconToggleButton/IconToggleButton'
+import { Colors } from '@/src/shared/styles/Colors'
 import { MovieDetailsType } from '@/src/shared/types/types'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
 import { useBookmark } from '../../hooks/useBookmark'
 import { useFavorite } from '../../hooks/useFavorite'
 
