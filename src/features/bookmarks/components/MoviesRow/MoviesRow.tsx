@@ -3,15 +3,17 @@ import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { MovieUnionType } from '@/src/shared/types/types'
+import { Href, useRouter } from 'expo-router'
 import React from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import { ActivityIndicator, Icon } from 'react-native-paper'
+import { ActivityIndicator, Icon, IconButton } from 'react-native-paper'
 
 type Props<T extends MovieUnionType> = {
   items: T[] | undefined
   title?: string
   icon?: string
   isLoading: boolean
+  link?: Href
 }
 
 const MoviesRow = <T extends MovieUnionType>({
@@ -19,16 +21,30 @@ const MoviesRow = <T extends MovieUnionType>({
   title,
   icon,
   isLoading,
+  link,
 }: Props<T>) => {
   const { theme } = useTheme()
+  const router = useRouter()
   return (
-    <View style={{ flex: 1, gap: 15 }}>
+    <View style={{ flex: 1 }}>
       <View style={styles.titleWrapper}>
-        {icon && <Icon source={icon} size={24} color={Colors[theme].text} />}
-        {title && (
-          <Text style={[globalStyles.subTitle, { color: Colors[theme].text }]}>
-            {title}
-          </Text>
+        <View style={styles.title}>
+          {icon && <Icon source={icon} size={24} color={Colors[theme].text} />}
+          {title && (
+            <Text
+              style={[globalStyles.subTitle, { color: Colors[theme].text }]}
+            >
+              {title}
+            </Text>
+          )}
+        </View>
+        {link && (
+          <IconButton
+            icon={'chevron-right'}
+            size={24}
+            iconColor={Colors[theme].text}
+            onPress={() => router.push(link)}
+          />
         )}
       </View>
       {!items && (
@@ -67,6 +83,11 @@ export default MoviesRow
 
 const styles = StyleSheet.create({
   titleWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  title: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,

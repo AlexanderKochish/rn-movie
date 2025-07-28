@@ -9,7 +9,7 @@ import { Icon } from 'react-native-paper'
 type Props = {
   title?: string
   source: string | undefined
-  releaseYear: string
+  releaseYear: string | undefined
   voteAverage: number
   id: number
 }
@@ -30,14 +30,14 @@ const SearchItemCard = ({
       >
         <Image
           style={styles.poster}
-          source={{ uri: source || `${process.env.EXPO_PUBLIC_POSTER_HOLDER}` }}
+          source={{ uri: source ?? `${process.env.EXPO_PUBLIC_POSTER_HOLDER}` }}
         />
       </Link>
       <View style={styles.content}>
         <Text style={[styles.title, { color: Colors[theme].text }]}>
           {title}
         </Text>
-        <Text style={styles.release}>{releaseYear.slice(0, 4)} - Action</Text>
+        <Text style={styles.release}>{releaseYear?.slice(0, 4)} - Action</Text>
         <View style={styles.bottomInfo}>
           <View style={styles.timeBlock}>
             <Icon

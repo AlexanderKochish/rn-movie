@@ -1,6 +1,7 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
 
@@ -9,11 +10,12 @@ type Props = {
 }
 
 const Preloader = ({ size = 'large' }: Props) => {
+  const { theme } = useTheme()
   return (
     <View
       style={[
         globalStyles.container,
-        { backgroundColor: Colors.dark.background },
+        { backgroundColor: Colors[theme].background },
       ]}
     >
       <ActivityIndicator size={size} />
@@ -22,5 +24,3 @@ const Preloader = ({ size = 'large' }: Props) => {
 }
 
 export default Preloader
-
-const styles = StyleSheet.create({})

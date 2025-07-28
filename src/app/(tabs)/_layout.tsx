@@ -57,7 +57,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="bookmarks/index"
+        name="bookmarks"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={focused ? styles.focusedTab : undefined}>
