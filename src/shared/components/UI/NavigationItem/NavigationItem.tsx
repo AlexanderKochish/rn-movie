@@ -1,18 +1,21 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
+import { Href, useRouter } from 'expo-router'
 import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { Icon } from 'react-native-paper'
+import { Icon, IconButton } from 'react-native-paper'
 
 type Props = {
   icon?: string
-  onPress: () => void
-  settingName: string
+  onPress?: () => void
+  settingName?: string
+  link?: Href
 }
 
-const SettingItem = ({ settingName, onPress, icon }: Props) => {
+const NavigationItem = ({ settingName, onPress, icon, link }: Props) => {
   const { theme } = useTheme()
+  const router = useRouter()
   return (
     <Pressable style={styles.wrapper} onPress={onPress}>
       <View style={styles.titleWrapper}>
@@ -21,12 +24,19 @@ const SettingItem = ({ settingName, onPress, icon }: Props) => {
           {settingName}
         </Text>
       </View>
-      <Icon source={'chevron-right'} size={24} color={Colors[theme].text} />
+      {link && (
+        <IconButton
+          icon={'chevron-right'}
+          size={24}
+          iconColor={Colors[theme].text}
+          onPress={() => router.push(link)}
+        />
+      )}
     </Pressable>
   )
 }
 
-export default SettingItem
+export default NavigationItem
 
 const styles = StyleSheet.create({
   wrapper: {

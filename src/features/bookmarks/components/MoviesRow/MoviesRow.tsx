@@ -1,12 +1,12 @@
 import MovieCard from '@/src/features/movie/components/MovieCard/MovieCard'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import NavigationItem from '@/src/shared/components/UI/NavigationItem/NavigationItem'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { MovieUnionType } from '@/src/shared/types/types'
-import { Href, useRouter } from 'expo-router'
+import { Href } from 'expo-router'
 import React from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import { ActivityIndicator, Icon, IconButton } from 'react-native-paper'
+import { ActivityIndicator } from 'react-native-paper'
 
 type Props<T extends MovieUnionType> = {
   items: T[] | undefined
@@ -24,36 +24,16 @@ const MoviesRow = <T extends MovieUnionType>({
   link,
 }: Props<T>) => {
   const { theme } = useTheme()
-  const router = useRouter()
   return (
-    <View style={{ flex: 1 }}>
-      <View style={styles.titleWrapper}>
-        <View style={styles.title}>
-          {icon && <Icon source={icon} size={24} color={Colors[theme].text} />}
-          {title && (
-            <Text
-              style={[globalStyles.subTitle, { color: Colors[theme].text }]}
-            >
-              {title}
-            </Text>
-          )}
-        </View>
-        {link && (
-          <IconButton
-            icon={'chevron-right'}
-            size={24}
-            iconColor={Colors[theme].text}
-            onPress={() => router.push(link)}
-          />
-        )}
-      </View>
+    <View style={styles.container}>
+      <NavigationItem icon={icon} settingName={title} link={link} />
       {!items && (
         <Text style={{ color: Colors[theme].text, paddingVertical: 10 }}>
           List is empty
         </Text>
       )}
       {isLoading && (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, height: 210 }}>
           <ActivityIndicator
             size={'small'}
             animating={true}
@@ -82,14 +62,7 @@ const MoviesRow = <T extends MovieUnionType>({
 export default MoviesRow
 
 const styles = StyleSheet.create({
-  titleWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  title: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
+  container: {
+    flex: 1,
   },
 })
