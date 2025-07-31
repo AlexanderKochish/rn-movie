@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore'
 import { useCallback } from 'react'
 import { Alert } from 'react-native'
+import Toast from 'react-native-toast-message'
 import { useAuth } from '../../auth/hooks/useAuth'
 
 export const useCollection = (collectionName: 'favorites' | 'bookmarks') => {
@@ -51,10 +52,18 @@ export const useCollection = (collectionName: 'favorites' | 'bookmarks') => {
 
       if (isItemToggled(movie.id)) {
         await deleteDoc(ref)
+        Toast.show({
+          type: 'customRemoved',
+          text1: 'Removed from the saved',
+        })
       } else {
         await setDoc(ref, {
           data: movie,
           createdAt: new Date().toISOString(),
+        })
+        Toast.show({
+          type: 'customSuccess',
+          text1: 'Saved successfully',
         })
       }
     },

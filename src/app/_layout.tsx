@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { AuthProvider } from '../features/auth/context/AuthProvider'
 import { ThemeProvider } from '../providers/ThemeProvider/ThemeProvider'
+import CustomToast from '../shared/components/UI/CustomToast/CustomToast'
 import { RootStack } from '../shared/navigation/RootStack'
 
 SplashScreen.preventAutoHideAsync()
@@ -50,6 +51,7 @@ export default function RootLayout() {
           <QueryClientProvider client={queryClient}>
             <ThemeProvider>
               <RootStack />
+              <CustomToast />
             </ThemeProvider>
           </QueryClientProvider>
         </AuthProvider>
