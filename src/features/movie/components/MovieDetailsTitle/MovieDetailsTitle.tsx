@@ -1,12 +1,11 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import GoBackButton from '@/src/shared/components/GoBackButton/GoBackButton'
 import IconToggleButton from '@/src/shared/components/UI/IconToggleButton/IconToggleButton'
 import { Colors } from '@/src/shared/styles/Colors'
 import { MovieDetailsType } from '@/src/shared/types/types'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useRouter } from 'expo-router'
 import React from 'react'
 import { ImageBackground, StyleSheet, Text, View } from 'react-native'
-import { IconButton } from 'react-native-paper'
 import { useBookmark } from '../../hooks/useBookmark'
 import { useFavorite } from '../../hooks/useFavorite'
 
@@ -17,7 +16,6 @@ type Props = {
 
 const MovieDetailsTitle = ({ movieId, data }: Props) => {
   const { theme } = useTheme()
-  const router = useRouter()
 
   const {
     isItemToggled: isFavoriteToggled,
@@ -34,12 +32,7 @@ const MovieDetailsTitle = ({ movieId, data }: Props) => {
 
   return (
     <View style={styles.wrapper}>
-      <IconButton
-        icon="arrow-left"
-        iconColor="#fff"
-        style={styles.backButton}
-        onPress={() => router.back()}
-      />
+      <GoBackButton />
       <ImageBackground
         source={{
           uri: `${process.env.EXPO_PUBLIC_IMG_W500}${data?.poster_path || data?.backdrop_path}`,
@@ -91,12 +84,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     height: 500,
   },
-  backButton: {
-    position: 'absolute',
-    top: 40,
-    left: 15,
-    zIndex: 5,
-  },
+
   imageBackground: {
     height: 500,
     flex: 1,

@@ -145,3 +145,25 @@ export type PersonDetailsResponse = {
 }
 
 export type Params = Record<string, string | number | boolean | undefined>
+
+export type MovieCreditCommon = Omit<
+  Movie,
+  'media_type' | 'first_air_date' | 'original_name' | 'name'
+>
+
+export type MovieCastCredit = MovieCreditCommon & {
+  character: string
+  credit_id: string
+  order: number
+}
+
+export type MovieCrewCredit = MovieCreditCommon & {
+  credit_id: string
+  department: string
+  job: string
+}
+
+export type PersonMovieCreditsResponse = {
+  cast: MovieCastCredit[]
+  crew: MovieCrewCredit[]
+}

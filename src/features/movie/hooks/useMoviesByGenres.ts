@@ -9,7 +9,6 @@ export const useMoviesByGenres = () => {
   const { data: moviesByGenres, ...rest } = useQuery<MoviesResponse, Error>({
     queryKey: ['moviesByGenres', genreIds],
     queryFn: () => getMoviesByGenre(genreIds),
-    enabled: !!genreIds.length,
   })
 
   const handleGenre = useCallback(
