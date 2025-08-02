@@ -1,4 +1,4 @@
-import { getTrendigMovies } from '@/src/shared/api/moviedb.api'
+import { getTrendigMovies } from '@/src/shared/api'
 import { useQuery } from '@tanstack/react-query'
 
 export const useTrendingMovies = () => {

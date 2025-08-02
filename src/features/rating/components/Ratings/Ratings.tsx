@@ -3,7 +3,7 @@ import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { adaptOnChange } from '@/src/shared/utils/adaptOnChange'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-paper'
@@ -20,12 +20,18 @@ type Props = {
 const Ratings = ({ voteAverage, voteCount }: Props) => {
   const [visible, setVisible] = useState(false)
   const movieId = useMovieId()
-  const { control, handleSubmit, isPending } = useRating(movieId)
+  const { control, handleSubmit, isPending, isSuccess } = useRating(movieId)
   const { theme } = useTheme()
 
   const showDialog = () => setVisible(true)
 
   const hideDialog = () => setVisible(false)
+
+  useEffect(() => {
+    if (isSuccess) {
+      hideDialog()
+    }
+  }, [isSuccess])
 
   return (
     <>
@@ -54,14 +60,16 @@ const Ratings = ({ voteAverage, voteCount }: Props) => {
             <Controller
               control={control}
               name="rating"
-              render={({ field: { onChange, value } }) => (
+              disabled={isPending}
+              render={({ field: { onChange, value, disabled } }) => (
                 <RatingStars
+                  disabled={disabled}
                   rating={value}
                   onRate={adaptOnChange(value, onChange)}
                 />
               )}
             />
-            <Button mode="text" onPress={handleSubmit}>
+            <Button disabled={isPending} mode="text" onPress={handleSubmit}>
               Send
             </Button>
           </>

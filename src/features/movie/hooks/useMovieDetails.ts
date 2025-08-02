@@ -1,13 +1,16 @@
-import { getMovieById } from '@/src/shared/api/moviedb.api'
+import { getMovieById } from '@/src/shared/api'
+import { MovieDetailsType } from '@/src/shared/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import { useEffect } from 'react'
 
 export const useMovieDetails = (movieId: number) => {
   const router = useRouter()
-  const { data, ...rest } = useQuery({
-    queryKey: ['details', movieId],
+  const { data, ...rest } = useQuery<MovieDetailsType, Error>({
+    queryKey: ['movie-details', movieId],
     queryFn: () => getMovieById(movieId),
+    enabled: !!movieId,
+    retry: false,
   })
 
   useEffect(() => {

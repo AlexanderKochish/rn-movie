@@ -11,7 +11,7 @@ type Props = {
 }
 
 const ReviewForm = ({ movieId }: Props) => {
-  const { control, handleSubmit, isPending } = useReview(+movieId)
+  const { control, handleSubmit, isPending, isValidValue } = useReview(+movieId)
   const { theme } = useTheme()
   return (
     <View>
@@ -21,7 +21,7 @@ const ReviewForm = ({ movieId }: Props) => {
         multiline
         style={[styles.primary, { backgroundColor: Colors[theme].input }]}
         numberOfLines={5}
-        placeholder="Type your review here"
+        placeholder="What did you think about this movie?"
         mode="outlined"
         textAlignVertical="top"
         textColor={Colors.dark.text}
@@ -38,17 +38,10 @@ const ReviewForm = ({ movieId }: Props) => {
       <Button
         mode="outlined"
         onPress={handleSubmit}
-        style={{
-          backgroundColor: Colors[theme].btn,
-          borderRadius: 10,
-          width: 150,
-          alignSelf: 'center',
-          marginBottom: 20,
-        }}
-        disabled={isPending}
+        style={[styles.btn, { backgroundColor: BaseColors.orangeLight }]}
+        disabled={isValidValue || isPending}
         contentStyle={{
           height: 38,
-          justifyContent: 'center',
         }}
         textColor={Colors[theme].text}
       >
@@ -64,5 +57,11 @@ const styles = StyleSheet.create({
   primary: {
     height: 80,
     marginVertical: 8,
+  },
+  btn: {
+    borderRadius: 10,
+    width: '100%',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
 })

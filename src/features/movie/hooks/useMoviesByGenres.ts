@@ -1,4 +1,4 @@
-import { getMoviesByGenre } from '@/src/shared/api/moviedb.api'
+import { getMoviesByGenre } from '@/src/shared/api'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
 

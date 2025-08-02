@@ -1,20 +1,22 @@
 import React from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import { Icon } from 'react-native-paper'
 
 type Props = {
   rating: number
+  disabled?: boolean
   onRate: (value: number | ((prev: number) => number)) => void
 }
 
-const RatingStars = ({ rating, onRate }: Props) => {
+const RatingStars = ({ rating, onRate, disabled }: Props) => {
   return (
-    <Pressable style={styles.btn}>
+    <View style={styles.btn}>
       {[...Array(5)].map((_, i) => {
         const starNumber = i + 1
         return (
           <Pressable
             key={i}
+            disabled={disabled}
             onPress={() =>
               onRate((prev) => (prev === starNumber ? 0 : starNumber))
             }
@@ -27,7 +29,7 @@ const RatingStars = ({ rating, onRate }: Props) => {
           </Pressable>
         )
       })}
-    </Pressable>
+    </View>
   )
 }
 

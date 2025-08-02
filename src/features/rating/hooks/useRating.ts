@@ -17,7 +17,7 @@ export const useRating = (movieId: number) => {
   })
   const queryClient = useQueryClient()
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (rating: ratingSchemaType) => {
       if (!user?.uid) throw new Error('Unauthorized')
       const result = rating.rating * 2
@@ -46,5 +46,6 @@ export const useRating = (movieId: number) => {
     control,
     handleSubmit: handleSubmit(onSubmit),
     isPending,
+    isSuccess,
   }
 }

@@ -11,13 +11,24 @@ import { createReviewDoc } from '../utils/createReviewDoc'
 
 export const useReview = (movieId: number) => {
   const { user } = useAuth()
-  const { control, handleSubmit, reset } = useForm<reviewSchemaType>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { isValid },
+  } = useForm<reviewSchemaType>({
     defaultValues: {
       review: '',
     },
     resolver: zodResolver(reviewSchema),
+    mode: 'onSubmit',
   })
   const queryClient = useQueryClient()
+
+  const reviewInput = watch('review')
+
+  const isValidValue = !isValid || reviewInput?.trim() === ''
 
   const { data, isLoading: isLoadingReviews } = useQuery({
     queryKey: ['reviews', movieId],
@@ -67,5 +78,6 @@ export const useReview = (movieId: number) => {
     reviews: data,
     isPending,
     isLoadingReviews,
+    isValidValue,
   }
 }

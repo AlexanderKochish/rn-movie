@@ -1,4 +1,4 @@
-import { getMoviesByName } from '@/src/shared/api/moviedb.api'
+import { getMoviesByName } from '@/src/shared/api'
 import { useDebounce } from '@/src/shared/hooks/useDebounce'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'

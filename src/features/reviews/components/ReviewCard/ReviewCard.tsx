@@ -26,13 +26,15 @@ const ReviewCard = ({ avatar, username, review, rating }: Props) => {
         style={styles.avatar}
       />
       <View style={styles.content}>
-        <Text
-          numberOfLines={2}
-          ellipsizeMode="tail"
-          style={[styles.review, { color: Colors[theme].text }]}
-        >
-          {review}
-        </Text>
+        {review && (
+          <Text
+            numberOfLines={2}
+            ellipsizeMode="tail"
+            style={[styles.review, { color: Colors[theme].text }]}
+          >
+            {review}
+          </Text>
+        )}
         <Text style={[styles.username, { color: Colors[theme].text }]}>
           {username}
         </Text>

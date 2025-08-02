@@ -1,4 +1,4 @@
-import { getMovieCredits } from '@/src/shared/api/moviedb.api'
+import { getMovieCredits } from '@/src/shared/api'
 import { useQuery } from '@tanstack/react-query'
 
 export const useCredits = (movieId: number) => {

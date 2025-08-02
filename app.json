@@ -4,7 +4,7 @@
     "slug": "rn-movie-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo.png",
     "scheme": "rnmovieapp",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -20,8 +20,8 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/logo.png",
-          "imageWidth": 200,
+          "image": "./assets/images/logo-text-icon.png",
+          "imageWidth": 100,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
