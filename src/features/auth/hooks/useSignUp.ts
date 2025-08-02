@@ -1,6 +1,7 @@
 import { auth } from '@/src/shared/services/firebase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'expo-router'
+import { FirebaseError } from 'firebase/app'
 import {
   createUserWithEmailAndPassword,
   getIdToken,
@@ -35,13 +36,30 @@ export const useSignUp = () => {
 
       const token = await getIdToken(auth.currentUser!)
       if (!token) {
-        Alert.alert('User not found')
-      } else {
-        router.replace('/(tabs)/profile')
+        Alert.alert('Authentication Error', 'Unable to retrieve token.')
+        return
       }
-    } catch (error: any) {
-      console.error('Login error:', error)
-      Alert.alert('Login failed', error.message)
+      router.replace('/(tabs)/profile')
+    } catch (error: unknown) {
+      let message = 'An unexpected error occurred.'
+
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            message = 'Email is already registered.'
+            break
+          case 'auth/invalid-email':
+            message = 'Invalid email address.'
+            break
+          case 'auth/weak-password':
+            message = 'Password is too weak.'
+            break
+          default:
+            message = error.message
+        }
+      }
+
+      Alert.alert('Sign Up Failed', message)
     }
   }
 

@@ -1,6 +1,7 @@
 import { auth } from '@/src/shared/services/firebase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'expo-router'
+import { FirebaseError } from 'firebase/app'
 import { getIdToken, signInWithEmailAndPassword } from 'firebase/auth'
 import { useForm } from 'react-hook-form'
 import { Alert } from 'react-native'
@@ -26,13 +27,27 @@ export const useSignIn = () => {
 
       const token = await getIdToken(userCredential.user)
       if (!token) {
-        Alert.alert('User not found')
-      } else {
-        router.replace('/(tabs)/profile')
+        Alert.alert('Authentication Error', 'Unable to retrieve token.')
+        return
       }
-    } catch (error: any) {
-      console.error('Login error:', error)
-      Alert.alert('Login failed', error.message)
+      router.replace('/(tabs)/profile')
+    } catch (error: unknown) {
+      let message = 'An unexpected error occurred.'
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case 'auth/user-not-found':
+            message = 'User not found.'
+            break
+          case 'auth/wrong-password':
+            message = 'Incorrect password.'
+            break
+          case 'auth/invalid-email':
+            message = 'Invalid email format.'
+            break
+        }
+      }
+
+      Alert.alert('Login failed', message)
     }
   }
 
