@@ -4,16 +4,19 @@ import CustomButton from '@/src/shared/components/UI/Button/Button'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
+import { useRouter } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { useReview } from '../../hooks/useReview'
 import ReviewCard from '../ReviewCard/ReviewCard'
 import ReviewForm from '../ReviewForm/ReviewForm'
+import { Icon } from 'react-native-paper'
 
 const Reviews = () => {
   const movieId = useMovieId()
   const { reviews, isLoadingReviews } = useReview(+movieId)
   const { theme } = useTheme()
+  const router = useRouter()
 
   if (isLoadingReviews) {
     return <Preloader />
@@ -30,6 +33,14 @@ const Reviews = () => {
           variant="secondary"
           fullWidth={false}
           size="small"
+          icon={
+            <Icon
+              source={'chevron-right'}
+              size={24}
+              color={Colors[theme].text}
+            />
+          }
+          onPress={() => router.push(`/(movie)/${movieId}/reviews`)}
         />
       </View>
       <ReviewForm movieId={+movieId} />

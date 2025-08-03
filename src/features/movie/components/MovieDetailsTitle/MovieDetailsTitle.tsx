@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     height: 500,
   },
-
   imageBackground: {
     height: 500,
     flex: 1,

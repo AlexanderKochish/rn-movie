@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import {
   ActivityIndicator,
   GestureResponderEvent,
@@ -11,7 +11,6 @@ import {
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 type ButtonVariant = 'primary' | 'secondary' | 'text'
 type ButtonSize = 'small' | 'regular' | 'large'
@@ -23,7 +22,7 @@ type CustomButtonProps = {
   loading?: boolean
   disabled?: boolean
   fullWidth?: boolean
-  icon?: keyof typeof MaterialCommunityIcons.glyphMap
+  icon?: ReactNode
   size?: ButtonSize
 }
 
@@ -85,14 +84,6 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         <ActivityIndicator color={textColor} />
       ) : (
         <View style={styles.content}>
-          {icon && (
-            <MaterialCommunityIcons
-              name={icon}
-              size={18}
-              color={textColor}
-              style={{ marginRight: 6 }}
-            />
-          )}
           <Text
             style={{
               color: textColor,
@@ -103,6 +94,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
           >
             {title}
           </Text>
+          {icon}
         </View>
       )}
     </TouchableOpacity>

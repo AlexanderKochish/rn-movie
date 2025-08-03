@@ -3,7 +3,6 @@ import { Colors } from '@/src/shared/styles/Colors'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
-import { StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const ProfileLayout = () => {
@@ -33,6 +32,8 @@ const ProfileLayout = () => {
               },
             }}
           />
+          <Stack.Screen name="email-settings" />
+          <Stack.Screen name="security" />
         </Stack>
       </SafeAreaView>
     </>
@@ -40,5 +41,3 @@ const ProfileLayout = () => {
 }
 
 export default ProfileLayout
-
-const styles = StyleSheet.create({})

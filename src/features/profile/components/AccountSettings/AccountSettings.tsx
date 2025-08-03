@@ -26,13 +26,13 @@ const AccountSettings = () => {
         icon="email"
         onPress={() => null}
         settingName="Email settings"
-        link={'/profile/account'}
+        link={'/profile/email-settings'}
       />
       <NavigationItem
         icon="security"
         onPress={() => null}
         settingName="Security"
-        link={'/profile/account'}
+        link={'/profile/security'}
       />
 
       <View style={styles.switchWrapper}>

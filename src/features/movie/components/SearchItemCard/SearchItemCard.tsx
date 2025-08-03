@@ -25,7 +25,7 @@ const SearchItemCard = ({
   return (
     <View style={styles.card}>
       <Link
-        href={{ pathname: '/movie/[movieId]', params: { movieId: id } }}
+        href={{ pathname: '/(movie)/[movieId]', params: { movieId: id } }}
         push
       >
         <Image

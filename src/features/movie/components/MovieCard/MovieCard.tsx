@@ -7,7 +7,7 @@ import { StyleSheet, View } from 'react-native'
 import { Icon, Text } from 'react-native-paper'
 
 type Props = {
-  imageUrl: string
+  imageUrl: string | null
   title?: string
   vote_average?: number
   id: number
@@ -15,12 +15,15 @@ type Props = {
 
 const MovieCard = ({ imageUrl, title, vote_average, id }: Props) => {
   const { theme } = useTheme()
+
   return (
     <View style={styles.card}>
-      <Link href={{ pathname: `/movie/[movieId]`, params: { movieId: id } }}>
+      <Link href={{ pathname: `/(movie)/[movieId]`, params: { movieId: id } }}>
         <Image
           source={{
-            uri: `${imageUrl}`,
+            uri: imageUrl
+              ? `${process.env.EXPO_PUBLIC_IMG_W300}${imageUrl}`
+              : process.env.EXPO_PUBLIC_IMG_ORIGINAL,
           }}
           style={styles.cardImage}
           contentFit="cover"

@@ -49,7 +49,7 @@ const MoviesRow = <T extends MovieUnionType>({
         renderItem={({ item }) => (
           <MovieCard
             id={item.id}
-            imageUrl={`${process.env.EXPO_PUBLIC_IMG_W300}${item.poster_path || item.backdrop_path}`}
+            imageUrl={item.poster_path || item.backdrop_path}
             title={item.title || item.original_title}
             vote_average={item.vote_average}
           />

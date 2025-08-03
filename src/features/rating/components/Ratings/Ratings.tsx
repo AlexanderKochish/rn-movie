@@ -9,7 +9,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-paper'
 import { useRating } from '../../hooks/useRating'
 import RatingModal from '../RatingModal/RatingModal'
-import RetingResult from '../RatingResult/RatingResult'
+import RatingResult from '../RatingResult/RatingResult'
 import RatingStars from '../RatingStars/RatingStars'
 
 type Props = {
@@ -35,13 +35,15 @@ const Ratings = ({ voteAverage, voteCount }: Props) => {
 
   return (
     <>
-      <View style={styles.rating}>
+      <View
+        style={[styles.rating, { backgroundColor: Colors[theme].background }]}
+      >
         <Text style={[globalStyles.subTitle, { color: Colors[theme].text }]}>
           Ratings
         </Text>
         <View style={{ gap: 15 }}>
           <Pressable onPress={showDialog} style={{ flexDirection: 'row' }}>
-            <RetingResult voteAverage={voteAverage} />
+            <RatingResult voteAverage={voteAverage} />
           </Pressable>
           <View>
             <Text style={{ color: Colors[theme].text }}>

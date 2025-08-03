@@ -14,12 +14,12 @@ import {
   View,
 } from 'react-native'
 import { Text } from 'react-native-paper'
-
-const HEADER_HEIGHT = 500
+import { HEADER_HEIGHT } from '@/src/shared/constants/constants'
+import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 
 const PersonDetailsScreen = () => {
   const personId = Number(useParam('personId'))
-  const { data, personMovieCredits } = useProfileDetails(personId)
+  const { data, personMovieCredits, isLoading } = useProfileDetails(personId)
   const { theme } = useTheme()
 
   const scrollY = new Animated.Value(0)
@@ -29,6 +29,10 @@ const PersonDetailsScreen = () => {
     outputRange: [0, -HEADER_HEIGHT],
     extrapolate: 'clamp',
   })
+
+  if (isLoading) {
+    return <Preloader />
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors[theme].background }}>
@@ -93,7 +97,7 @@ const PersonDetailsScreen = () => {
             renderItem={({ item }) => (
               <MovieCard
                 id={item.id}
-                imageUrl={`${process.env.EXPO_PUBLIC_IMG_W300}${item.poster_path || item.backdrop_path}`}
+                imageUrl={item.poster_path || item.backdrop_path}
                 title={item.title || item.original_title}
                 vote_average={item.vote_average}
               />
