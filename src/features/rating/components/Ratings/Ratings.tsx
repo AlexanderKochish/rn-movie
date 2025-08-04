@@ -1,7 +1,6 @@
 import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { adaptOnChange } from '@/src/shared/utils/adaptOnChange'
 import React, { useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
@@ -11,6 +10,7 @@ import { useRating } from '../../hooks/useRating'
 import RatingModal from '../RatingModal/RatingModal'
 import RatingResult from '../RatingResult/RatingResult'
 import RatingStars from '../RatingStars/RatingStars'
+import SubsectionHeader from '@/src/shared/components/SubsectionHeader/SubsectionHeader'
 
 type Props = {
   voteAverage?: number
@@ -38,9 +38,7 @@ const Ratings = ({ voteAverage, voteCount }: Props) => {
       <View
         style={[styles.rating, { backgroundColor: Colors[theme].background }]}
       >
-        <Text style={[globalStyles.subTitle, { color: Colors[theme].text }]}>
-          Ratings
-        </Text>
+        <SubsectionHeader title="Ratings" />
         <View style={{ gap: 15 }}>
           <Pressable onPress={showDialog} style={{ flexDirection: 'row' }}>
             <RatingResult voteAverage={voteAverage} />
@@ -92,8 +90,6 @@ const styles = StyleSheet.create({
     borderBottomColor: BaseColors.brown,
     borderTopColor: BaseColors.brown,
     paddingVertical: 15,
-    marginHorizontal: 15,
-    marginBottom: 10,
-    gap: 10,
+    alignItems: 'flex-start',
   },
 })

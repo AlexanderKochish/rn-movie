@@ -3,7 +3,11 @@ import { View, Text, StyleSheet } from 'react-native'
 import { IconButton } from 'react-native-paper'
 import { useRouter } from 'expo-router'
 
-const BackTitleHeader = () => {
+type Props = {
+  title: string
+}
+
+const BackTitleHeader = ({ title }: Props) => {
   const router = useRouter()
   return (
     <View style={styles.container}>
@@ -15,7 +19,7 @@ const BackTitleHeader = () => {
         style={{ marginRight: 10 }}
       />
 
-      <Text style={styles.title}>Reviews</Text>
+      <Text style={styles.title}>{title}</Text>
     </View>
   )
 }

@@ -1,37 +1,30 @@
-import { useCredits } from '@/src/features/movie/hooks/useCredits'
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import SubsectionHeader from '@/src/shared/components/SubsectionHeader/SubsectionHeader'
 import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
-import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import { Colors } from '@/src/shared/styles/Colors'
-import { globalStyles } from '@/src/shared/styles/globalStyles'
-import { CrewMember } from '@/src/shared/types/types'
-import React, { useCallback } from 'react'
-import { FlatList, Text, View } from 'react-native'
-import CastAndCrewCard from '../CastAndCrewCard/CastAndCrewCard'
+import { useCredits } from '@/src/features/movie/hooks/useCredits'
+import CrewList from '@/src/features/cast-and-crew/components/CrewList/CrewList'
 
 const CastAndCrew = () => {
   const movieId = useMovieId()
   const { credits } = useCredits(movieId)
-  const { theme } = useTheme()
 
-  const renderCrewItem = useCallback(
-    ({ item }: { item: CrewMember }) => <CastAndCrewCard person={item} />,
-    []
-  )
   return (
-    <View style={{ paddingHorizontal: 15 }}>
-      <Text style={[globalStyles.subTitle, { color: Colors[theme].text }]}>
-        Cast & Crew
-      </Text>
-      <FlatList
-        data={credits?.crew || []}
-        keyExtractor={(item) => String(item.id + item.credit_id)}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={renderCrewItem}
-        contentContainerStyle={{ paddingHorizontal: 10 }}
+    <View style={styles.container}>
+      <SubsectionHeader
+        title={'Cast & Crew'}
+        link={`/(movie)/${movieId}/credits`}
       />
+      <CrewList crew={credits?.crew} />
     </View>
   )
 }
 
 export default CastAndCrew
+
+const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 15,
+    gap: 10,
+  },
+})
