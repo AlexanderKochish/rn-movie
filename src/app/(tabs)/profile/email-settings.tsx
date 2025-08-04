@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native'
 const EmailSettingsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>email-settings</Text>
+      <Text>email settings</Text>
     </View>
   )
 }

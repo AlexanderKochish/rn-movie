@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   paginationContainer: {
     position: 'absolute',
-    bottom: -15,
+    bottom: -20,
     alignSelf: 'center',
   },
 })

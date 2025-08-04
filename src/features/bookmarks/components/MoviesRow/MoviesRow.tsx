@@ -5,7 +5,7 @@ import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { MovieUnionType } from '@/src/shared/types/types'
 import { Href } from 'expo-router'
 import React from 'react'
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Text, View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 
 type Props<T extends MovieUnionType> = {
@@ -25,7 +25,7 @@ const MoviesRow = <T extends MovieUnionType>({
 }: Props<T>) => {
   const { theme } = useTheme()
   return (
-    <View style={styles.container}>
+    <>
       <NavigationItem icon={icon} settingName={title} link={link} />
       {!items && (
         <Text style={{ color: Colors[theme].text, paddingVertical: 10 }}>
@@ -55,14 +55,8 @@ const MoviesRow = <T extends MovieUnionType>({
           />
         )}
       />
-    </View>
+    </>
   )
 }
 
 export default MoviesRow
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-})

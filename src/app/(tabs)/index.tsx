@@ -13,7 +13,7 @@ export default function HomeScreen() {
     <View
       style={[styles.container, { backgroundColor: Colors[theme].background }]}
     >
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <CustomCarousel items={trending} />
         <View style={styles.row}>
           <MoviesRow

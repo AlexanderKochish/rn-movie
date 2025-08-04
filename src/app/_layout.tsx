@@ -12,7 +12,7 @@ import { RootStack } from '../shared/navigation/RootStack'
 SplashScreen.preventAutoHideAsync()
 
 SplashScreen.setOptions({
-  duration: 1000,
+  duration: 2000,
   fade: true,
 })
 

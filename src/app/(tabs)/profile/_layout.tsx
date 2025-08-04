@@ -20,7 +20,13 @@ const ProfileLayout = () => {
             },
           }}
         >
-          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="index"
+            options={{
+              headerShown: false,
+              title: '',
+            }}
+          />
           <Stack.Screen
             name="account"
             options={{

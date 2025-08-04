@@ -7,13 +7,14 @@ import { auth } from '@/src/shared/services/firebase'
 import { Colors } from '@/src/shared/styles/Colors'
 import { signOut } from 'firebase/auth'
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 
 const ProfileScreen = () => {
   const { theme } = useTheme()
 
   return (
-    <View
+    <ScrollView
+      showsVerticalScrollIndicator={false}
       style={[styles.container, { backgroundColor: Colors[theme].background }]}
     >
       <UserInfo />
@@ -25,7 +26,7 @@ const ProfileScreen = () => {
         icon="logout"
         onPress={async () => await signOut(auth)}
       />
-    </View>
+    </ScrollView>
   )
 }
 

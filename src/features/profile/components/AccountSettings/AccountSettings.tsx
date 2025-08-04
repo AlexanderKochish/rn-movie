@@ -43,7 +43,7 @@ const AccountSettings = () => {
             color={Colors[theme].text}
           />
           <Text style={[styles.switchText, { color: Colors[theme].text }]}>
-            {theme === 'dark' ? 'Dark' : 'Light'} Mode
+            {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
           </Text>
         </View>
 

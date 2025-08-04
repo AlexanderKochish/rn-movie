@@ -41,23 +41,19 @@ const styles = StyleSheet.create({
   logo: {
     alignItems: 'center',
   },
-
   imgSmall: {
     width: 56,
     height: 56,
   },
-
   img: {
     width: 119,
     height: 119,
   },
-
   textLarge: {
     color: BaseColors.orange,
     fontSize: Typography.title.fontSize,
     fontWeight: '800',
   },
-
   logoHorizontal: {
     flexDirection: 'row',
     alignItems: 'center',
