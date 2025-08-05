@@ -85,12 +85,13 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       ) : (
         <View style={styles.content}>
           <Text
-            style={{
-              color: textColor,
-              fontFamily: Typography.body.fontFamily,
-              fontSize: sizeStyle.fontSize,
-              fontWeight: 'bold',
-            }}
+            style={[
+              styles.title,
+              {
+                color: textColor,
+                fontSize: sizeStyle.fontSize,
+              },
+            ]}
           >
             {title}
           </Text>
@@ -115,5 +116,10 @@ const styles = StyleSheet.create({
   },
   textButton: {
     backgroundColor: 'transparent',
+  },
+  title: {
+    fontFamily: Typography.body.fontFamily,
+
+    fontWeight: 'bold',
   },
 })

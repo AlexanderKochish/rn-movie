@@ -3,26 +3,31 @@ import { Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
 import { Href, useRouter } from 'expo-router'
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { Icon, IconButton } from 'react-native-paper'
+import { Pressable, StyleSheet, View } from 'react-native'
+import { Icon, IconButton, MD3TypescaleKey, Text } from 'react-native-paper'
 
 type Props = {
   icon?: string
   onPress?: () => void
   settingName?: string
+  titleSize?: keyof typeof MD3TypescaleKey
   link?: Href
 }
 
-const NavigationItem = ({ settingName, onPress, icon, link }: Props) => {
+const NavigationItem = ({
+  settingName,
+  onPress,
+  icon,
+  link,
+  titleSize = 'titleLarge',
+}: Props) => {
   const { theme } = useTheme()
   const router = useRouter()
   return (
     <Pressable style={styles.wrapper} onPress={onPress}>
       <View style={styles.titleWrapper}>
         <Icon source={icon} size={24} color={Colors[theme].text} />
-        <Text style={[styles.title, { color: Colors[theme].text }]}>
-          {settingName}
-        </Text>
+        <Text variant={titleSize}>{settingName}</Text>
       </View>
       {link && (
         <IconButton
@@ -48,7 +53,7 @@ const styles = StyleSheet.create({
   titleWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
+    gap: 10,
   },
   title: {
     fontSize: Typography.title.fontSize,

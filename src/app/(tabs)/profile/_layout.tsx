@@ -38,8 +38,28 @@ const ProfileLayout = () => {
               },
             }}
           />
-          <Stack.Screen name="email-settings" />
-          <Stack.Screen name="security" />
+          <Stack.Screen
+            name="email-settings"
+            options={{
+              headerTitle: 'EMAIL SETTINGS',
+              headerTintColor: Colors[theme].text,
+              headerTitleAlign: 'center',
+              headerTitleStyle: {
+                color: Colors[theme].text,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="security"
+            options={{
+              headerTitle: 'SECURITY',
+              headerTintColor: Colors[theme].text,
+              headerTitleAlign: 'center',
+              headerTitleStyle: {
+                color: Colors[theme].text,
+              },
+            }}
+          />
         </Stack>
       </SafeAreaView>
     </>
