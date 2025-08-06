@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   logoWrapper: {
     width: '100%',
     position: 'absolute',
-    top: 35,
+    top: 20,
     zIndex: 50,
     alignItems: 'center',
   },

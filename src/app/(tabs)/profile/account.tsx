@@ -3,12 +3,15 @@ import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import CustomButton from '@/src/shared/components/UI/Button/Button'
 import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
 import { Colors } from '@/src/shared/styles/Colors'
-import React from 'react'
+import { Typography } from '@/src/shared/styles/Typography'
+import * as ImagePicker from 'expo-image-picker'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import { Avatar, Button } from 'react-native-paper'
 
 const AccountScreen = () => {
+  const [image, setImage] = useState<string | null>(null)
   const { user } = useAuth()
   const { theme } = useTheme()
   const { control } = useForm({
@@ -18,6 +21,18 @@ const AccountScreen = () => {
       email: '',
     },
   })
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    })
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri)
+    }
+  }
   return (
     <View
       style={[
@@ -28,16 +43,26 @@ const AccountScreen = () => {
       ]}
     >
       <View style={{ alignItems: 'center', marginBottom: 15, gap: 10 }}>
-        <Avatar.Image
-          source={
-            user?.photoURL
-              ? { uri: user.photoURL }
-              : require('../../../../assets/images/profile-placeholder.png')
-          }
-          size={115}
-        />
+        {image ? (
+          <Image source={{ uri: image }} style={styles.image} />
+        ) : (
+          <Avatar.Image
+            source={
+              user?.photoURL
+                ? { uri: user.photoURL }
+                : require('../../../../assets/images/profile-placeholder.png')
+            }
+            size={115}
+          />
+        )}
 
-        <Button icon={'upload'}>Upload your image</Button>
+        <Button
+          labelStyle={{ fontSize: Typography.title.fontSize }}
+          icon={'upload'}
+          onPress={pickImage}
+        >
+          Upload your image
+        </Button>
       </View>
 
       <View style={{ gap: 15 }}>
@@ -71,5 +96,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
+  },
+  image: {
+    width: 200,
+    height: 200,
   },
 })

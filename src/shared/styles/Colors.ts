@@ -17,7 +17,7 @@ export const BaseColors = {
 export const Colors = {
   dark: {
     title: BaseColors.white,
-    background: BaseColors.black,
+    background: BaseColors.dark,
     btn: BaseColors.orange,
     disabled: BaseColors.brown,
     ratingStar: BaseColors.yellow,

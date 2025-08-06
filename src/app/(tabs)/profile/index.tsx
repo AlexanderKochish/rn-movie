@@ -8,25 +8,28 @@ import { Colors } from '@/src/shared/styles/Colors'
 import { signOut } from 'firebase/auth'
 import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const ProfileScreen = () => {
   const { theme } = useTheme()
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
+    <SafeAreaView
+      edges={['top']}
       style={[styles.container, { backgroundColor: Colors[theme].background }]}
     >
-      <UserInfo />
-      <AccountSettings />
-      <InformationList />
-      <CustomButton
-        title="Log out"
-        variant="secondary"
-        icon="logout"
-        onPress={async () => await signOut(auth)}
-      />
-    </ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <UserInfo />
+        <AccountSettings />
+        <InformationList />
+        <CustomButton
+          title="Log out"
+          variant="secondary"
+          icon="logout"
+          onPress={async () => await signOut(auth)}
+        />
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
@@ -36,6 +39,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 15,
-    paddingBottom: 10,
   },
 })

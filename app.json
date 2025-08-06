@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "rn-movie-app",
+    "name": "watcher",
     "slug": "rn-movie-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -33,6 +33,12 @@
             "useFrameworks": "static"
           }
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
       ]
     ],
     "experiments": {
@@ -41,11 +47,18 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "180e7155-a487-49ee-aea3-41dbea034907"
+        "projectId": "e650b3d0-405c-4eb6-9d47-af68182be11f"
       }
     },
     "android": {
-      "package": "com.alexander888.rnmovieapp"
-    }
+      "package": "com.alexander888.rnmovieapp",
+      "permissions": [
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "owner": "alexander888"
   }
 }

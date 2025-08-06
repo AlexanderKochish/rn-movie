@@ -1,10 +1,11 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import PlayVideoButton from '@/src/shared/components/PlayVideoButton/PlayVideoButton'
+import { Colors } from '@/src/shared/styles/Colors'
 import { MovieUnionType } from '@/src/shared/types/types'
 import { LinearGradient } from 'expo-linear-gradient'
 import React from 'react'
 import { ImageBackground, StyleSheet, View } from 'react-native'
-import { Button, Text } from 'react-native-paper'
+import { Text } from 'react-native-paper'
 
 type Props = {
   item: MovieUnionType
@@ -12,6 +13,7 @@ type Props = {
 
 const CarouselItem = ({ item }: Props) => {
   const { theme } = useTheme()
+
   return (
     <View style={{ position: 'relative' }}>
       <ImageBackground
@@ -22,9 +24,19 @@ const CarouselItem = ({ item }: Props) => {
         resizeMode="cover"
       >
         <View style={styles.contentWrapper}>
+          <LinearGradient
+            colors={[
+              `${theme === 'dark' ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)'}`,
+              'transparent',
+            ]}
+            style={[
+              styles.gradient,
+              { top: 0, height: theme === 'dark' ? 100 : 80 },
+            ]}
+          />
           <View style={styles.detailsWrapper}>
             <Text
-              variant="headlineSmall"
+              variant="titleLarge"
               style={{
                 color: Colors[theme].title,
                 fontWeight: '700',
@@ -34,26 +46,22 @@ const CarouselItem = ({ item }: Props) => {
               {item.title || item.original_title}
             </Text>
             <Text
-              variant="bodyLarge"
+              variant="titleMedium"
               style={[styles.overview, { color: Colors[theme].text }]}
             >
               {item.overview}
             </Text>
-            <Button
-              style={styles.playBtn}
-              icon="play"
-              mode="contained"
-              labelStyle={styles.label}
-            >
-              Trailer
-            </Button>
+            <PlayVideoButton movieId={item?.id} />
           </View>
           <LinearGradient
             colors={[
               'transparent',
-              `${theme === 'dark' ? 'rgba(0,0,0,0.8)' : 'rgba(255, 255, 255, 0.95)'}`,
+              `${theme === 'dark' ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)'}`,
             ]}
-            style={[styles.gradient, { bottom: 0, height: 250 }]}
+            style={[
+              styles.gradient,
+              { bottom: 0, height: theme === 'dark' ? 250 : 200 },
+            ]}
           />
         </View>
       </ImageBackground>
@@ -84,23 +92,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    gap: 10,
+    gap: 5,
     zIndex: 1,
   },
   overview: {
     textAlign: 'center',
     fontWeight: '600',
     height: 75,
-    marginBottom: 70,
-  },
-  playBtn: {
-    backgroundColor: BaseColors.brown,
-    position: 'absolute',
-    bottom: 10,
-    zIndex: 100,
-  },
-  label: {
-    fontSize: 18,
-    color: BaseColors.orangeLight,
+    marginBottom: 40,
   },
 })

@@ -3,7 +3,7 @@ import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function TabLayout() {
@@ -19,8 +19,8 @@ export default function TabLayout() {
           borderTopWidth: 0,
           elevation: 0,
           paddingTop: 10,
-          paddingBottom: insets.bottom + 10,
-          height: 60 + insets.bottom,
+          height: 70 + (Platform.OS === 'ios' ? insets.bottom : 0),
+          paddingBottom: Platform.OS === 'ios' ? insets.bottom : 10,
         },
       }}
     >

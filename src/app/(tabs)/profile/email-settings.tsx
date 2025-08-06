@@ -3,6 +3,7 @@ import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import BaseCard from '@/src/shared/components/BaseCard/BaseCard'
 import PreferenceSwitchItem from '@/src/shared/components/PreferenceSwitchItem/PreferenceSwitchItem'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import { Typography } from '@/src/shared/styles/Typography'
 import React from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
@@ -16,13 +17,7 @@ const EmailSettingsScreen = () => {
       <View style={styles.container}>
         <BaseCard>
           <Text variant="titleLarge">Email address</Text>
-          <View
-            style={{
-              width: '100%',
-              height: 1,
-              backgroundColor: BaseColors.gray,
-            }}
-          />
+          <View style={styles.borderLine} />
           <Text variant="titleMedium">{user?.email}</Text>
         </BaseCard>
         <BaseCard>
@@ -48,8 +43,9 @@ const EmailSettingsScreen = () => {
         <Button
           style={{ width: '100%', borderRadius: 10 }}
           buttonColor={Colors[theme].btn}
+          labelStyle={styles.labeStyle}
         >
-          <Text variant="titleMedium">Unsubscribe</Text>
+          Unsubscribe
         </Button>
       </View>
     </ScrollView>
@@ -63,5 +59,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     gap: 20,
+  },
+  borderLine: {
+    width: '100%',
+    height: 1,
+    backgroundColor: BaseColors.gray,
+  },
+  labeStyle: {
+    fontSize: Typography.title.fontSize,
+    color: BaseColors.white,
   },
 })

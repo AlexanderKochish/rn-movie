@@ -16,6 +16,7 @@ const SearchScreen = () => {
 
   return (
     <SafeAreaView
+      edges={['top']}
       style={[styles.container, { backgroundColor: Colors[theme].background }]}
     >
       <SearchForm control={control} name="search" />
@@ -31,6 +32,7 @@ export default SearchScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
+    paddingBottom: 0,
   },
 })

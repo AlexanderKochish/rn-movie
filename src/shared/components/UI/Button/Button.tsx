@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import {
   ActivityIndicator,
   GestureResponderEvent,
@@ -11,6 +11,7 @@ import {
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
+import { Icon } from 'react-native-paper'
 
 type ButtonVariant = 'primary' | 'secondary' | 'text'
 type ButtonSize = 'small' | 'regular' | 'large'
@@ -22,7 +23,7 @@ type CustomButtonProps = {
   loading?: boolean
   disabled?: boolean
   fullWidth?: boolean
-  icon?: ReactNode
+  icon?: string
   size?: ButtonSize
 }
 
@@ -95,7 +96,11 @@ const CustomButton: React.FC<CustomButtonProps> = ({
           >
             {title}
           </Text>
-          {icon}
+          {icon && (
+            <View style={styles.iconWrapper}>
+              <Icon source={icon} size={24} color={Colors[theme].text} />
+            </View>
+          )}
         </View>
       )}
     </TouchableOpacity>
@@ -119,7 +124,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: Typography.body.fontFamily,
-
     fontWeight: 'bold',
+  },
+  iconWrapper: {
+    marginLeft: 8,
   },
 })

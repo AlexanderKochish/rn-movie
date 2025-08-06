@@ -35,14 +35,13 @@ export default UserInfo
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: 15,
   },
   name: {
     paddingVertical: 10,
     fontSize: Typography.title.fontSize,
   },
   email: {
-    paddingVertical: 10,
     color: Colors.dark.text,
     fontSize: Typography.title.fontSize,
   },

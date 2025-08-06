@@ -4,13 +4,15 @@ import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import CustomCarousel from '@/src/shared/components/CustomCarousel/CustomCarousel'
 import { Colors } from '@/src/shared/styles/Colors'
 import { ScrollView, StyleSheet, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function HomeScreen() {
   const { trending, isLoading } = useTrendingMovies()
   const { theme } = useTheme()
 
   return (
-    <View
+    <SafeAreaView
+      edges={['top']}
       style={[styles.container, { backgroundColor: Colors[theme].background }]}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -23,7 +25,7 @@ export default function HomeScreen() {
           />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   )
 }
 
