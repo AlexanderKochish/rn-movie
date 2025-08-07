@@ -23,7 +23,7 @@ const MovieCard = ({ imageUrl, title, vote_average, id }: Props) => {
           source={{
             uri: imageUrl
               ? `${process.env.EXPO_PUBLIC_IMG_W300}${imageUrl}`
-              : process.env.EXPO_PUBLIC_IMG_ORIGINAL,
+              : process.env.EXPO_PUBLIC_POSTER_HOLDER,
           }}
           style={styles.cardImage}
           contentFit="cover"

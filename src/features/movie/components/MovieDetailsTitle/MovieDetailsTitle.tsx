@@ -35,7 +35,10 @@ const MovieDetailsTitle = ({ movieId, data }: Props) => {
       <GoBackButton />
       <ImageBackground
         source={{
-          uri: `${process.env.EXPO_PUBLIC_IMG_W500}${data?.poster_path || data?.backdrop_path}`,
+          uri:
+            data?.poster_path || data?.backdrop_path
+              ? `${process.env.EXPO_PUBLIC_IMG_W500}${data?.poster_path || data?.backdrop_path}`
+              : process.env.EXPO_PUBLIC_POSTER_HOLDER,
         }}
         style={styles.imageBackground}
       />

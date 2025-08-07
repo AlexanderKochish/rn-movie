@@ -2,6 +2,8 @@ import MovieCard from '@/src/features/movie/components/MovieCard/MovieCard'
 import { useProfileDetails } from '@/src/features/profile/hooks/useProfileDetails'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import GoBackButton from '@/src/shared/components/GoBackButton/GoBackButton'
+import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
+import { HEADER_HEIGHT } from '@/src/shared/constants/constants'
 import { useParam } from '@/src/shared/hooks/useParam'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
@@ -14,8 +16,6 @@ import {
   View,
 } from 'react-native'
 import { Text } from 'react-native-paper'
-import { HEADER_HEIGHT } from '@/src/shared/constants/constants'
-import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 
 const PersonDetailsScreen = () => {
   const personId = Number(useParam('personId'))
@@ -48,7 +48,7 @@ const PersonDetailsScreen = () => {
           source={{
             uri: data?.profile_path
               ? `${process.env.EXPO_PUBLIC_IMG_W300}${data?.profile_path}`
-              : `${process.env.EXPO_PUBLIC_POSTER_HOLDER}`,
+              : process.env.EXPO_PUBLIC_POSTER_HOLDER,
           }}
           resizeMode="cover"
         />
