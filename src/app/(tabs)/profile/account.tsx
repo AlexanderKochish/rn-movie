@@ -1,38 +1,21 @@
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
+import { useAccountForm } from '@/src/features/profile/hooks/useAccountForm'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import CustomButton from '@/src/shared/components/UI/Button/Button'
 import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
-import * as ImagePicker from 'expo-image-picker'
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+
+import React from 'react'
+import { Controller } from 'react-hook-form'
 import { Image, StyleSheet, View } from 'react-native'
 import { Avatar, Button } from 'react-native-paper'
 
 const AccountScreen = () => {
-  const [image, setImage] = useState<string | null>(null)
   const { user } = useAuth()
   const { theme } = useTheme()
-  const { control } = useForm({
-    defaultValues: {
-      username: '',
-      fullName: '',
-      email: '',
-    },
-  })
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images', 'videos'],
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    })
+  const { control, handleSubmit, avatar, handlePickImage } = useAccountForm()
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri)
-    }
-  }
   return (
     <View
       style={[
@@ -42,28 +25,33 @@ const AccountScreen = () => {
         },
       ]}
     >
-      <View style={{ alignItems: 'center', marginBottom: 15, gap: 10 }}>
-        {image ? (
-          <Image source={{ uri: image }} style={styles.image} />
-        ) : (
-          <Avatar.Image
-            source={
-              user?.photoURL
-                ? { uri: user.photoURL }
-                : require('../../../../assets/images/profile-placeholder.png')
-            }
-            size={115}
-          />
+      <Controller
+        control={control}
+        name="avatar"
+        render={() => (
+          <View style={styles.imageWrapper}>
+            {avatar ? (
+              <Image source={{ uri: avatar }} style={styles.image} />
+            ) : (
+              <Avatar.Image
+                source={
+                  user?.photoURL
+                    ? { uri: user.photoURL }
+                    : require('../../../../assets/images/profile-placeholder.png')
+                }
+                size={200}
+              />
+            )}
+            <Button
+              labelStyle={{ fontSize: Typography.title.fontSize }}
+              icon={'upload'}
+              onPress={handlePickImage}
+            >
+              Upload your image
+            </Button>
+          </View>
         )}
-
-        <Button
-          labelStyle={{ fontSize: Typography.title.fontSize }}
-          icon={'upload'}
-          onPress={pickImage}
-        >
-          Upload your image
-        </Button>
-      </View>
+      />
 
       <View style={{ gap: 15 }}>
         <ControlledTextInput
@@ -79,12 +67,13 @@ const AccountScreen = () => {
           name={'fullName'}
         />
         <ControlledTextInput
-          label={'Email'}
+          label={'Your age'}
           mode={'outlined'}
           control={control}
-          name={'email'}
+          name={'age'}
+          keyboardType="numeric"
         />
-        <CustomButton title="Save Changes" />
+        <CustomButton title="Save Changes" onPress={handleSubmit} />
       </View>
     </View>
   )
@@ -97,8 +86,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
   },
+  imageWrapper: {
+    alignItems: 'center',
+    marginBottom: 15,
+    gap: 10,
+  },
   image: {
     width: 200,
     height: 200,
+    borderRadius: 100,
   },
 })

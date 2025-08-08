@@ -26,7 +26,7 @@ const ProfileScreen = () => {
           title="Log out"
           variant="secondary"
           icon="logout"
-          onPress={async () => await signOut(auth)}
+          onPress={() => signOut(auth)}
         />
       </ScrollView>
     </SafeAreaView>

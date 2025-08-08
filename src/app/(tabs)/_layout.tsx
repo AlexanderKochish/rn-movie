@@ -9,6 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 export default function TabLayout() {
   const insets = useSafeAreaInsets()
   const { theme } = useTheme()
+
   return (
     <Tabs
       screenOptions={{
@@ -19,7 +20,7 @@ export default function TabLayout() {
           borderTopWidth: 0,
           elevation: 0,
           paddingTop: 10,
-          height: 70 + (Platform.OS === 'ios' ? insets.bottom : 0),
+          height: 80,
           paddingBottom: Platform.OS === 'ios' ? insets.bottom : 10,
         },
       }}

@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import { Colors } from '@/src/shared/styles/Colors'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
 import { Icon } from 'react-native-paper'
 
@@ -85,6 +85,11 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         <ActivityIndicator color={textColor} />
       ) : (
         <View style={styles.content}>
+          {icon && (
+            <View style={styles.iconWrapper}>
+              <Icon source={icon} size={24} color={BaseColors.white} />
+            </View>
+          )}
           <Text
             style={[
               styles.title,
@@ -96,11 +101,6 @@ const CustomButton: React.FC<CustomButtonProps> = ({
           >
             {title}
           </Text>
-          {icon && (
-            <View style={styles.iconWrapper}>
-              <Icon source={icon} size={24} color={Colors[theme].text} />
-            </View>
-          )}
         </View>
       )}
     </TouchableOpacity>
@@ -127,6 +127,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   iconWrapper: {
-    marginLeft: 8,
+    paddingHorizontal: 8,
   },
 })
