@@ -52,6 +52,7 @@
     },
     "android": {
       "package": "com.alexander888.rnmovieapp",
+      "edgeToEdgeEnabled": true,
       "permissions": [
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.READ_EXTERNAL_STORAGE",

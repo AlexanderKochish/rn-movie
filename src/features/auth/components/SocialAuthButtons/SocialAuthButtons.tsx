@@ -1,44 +1,30 @@
-import { Image } from 'expo-image'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Button } from 'react-native-paper'
+import { IconButton } from 'react-native-paper'
 
 const SocialAuthButtons = () => {
+  const { theme } = useTheme()
   return (
     <View style={styles.btns}>
-      <Button
-        mode="contained"
-        onPress={() => console.log('Pressed')}
-        style={styles.button}
-        contentStyle={styles.content}
-      >
-        <Image
-          source={require('../../../../../assets/images/google-icon.png')}
-          style={styles.image}
-        />
-      </Button>
-      <Button
-        mode="contained"
-        onPress={() => console.log('Pressed')}
-        style={styles.button}
-        contentStyle={styles.content}
-      >
-        <Image
-          source={require('../../../../../assets/images/apple-icon.png')}
-          style={styles.image}
-        />
-      </Button>
-      <Button
-        mode="contained"
-        onPress={() => console.log('Pressed')}
-        style={styles.button}
-        contentStyle={styles.content}
-      >
-        <Image
-          source={require('../../../../../assets/images/facebook-icon.png')}
-          style={styles.image}
-        />
-      </Button>
+      <IconButton
+        icon={'google'}
+        contentStyle={{ backgroundColor: Colors[theme].input }}
+        iconColor={BaseColors.yellow}
+        size={34}
+      />
+      <IconButton
+        icon={'github'}
+        contentStyle={{ backgroundColor: Colors[theme].input }}
+        size={34}
+      />
+      <IconButton
+        icon={'facebook'}
+        contentStyle={{ backgroundColor: Colors[theme].input }}
+        iconColor={'blue'}
+        size={34}
+      />
     </View>
   )
 }
@@ -61,6 +47,5 @@ const styles = StyleSheet.create({
   button: {
     paddingHorizontal: 10,
     paddingVertical: 8,
-    backgroundColor: '#1F1F1F',
   },
 })

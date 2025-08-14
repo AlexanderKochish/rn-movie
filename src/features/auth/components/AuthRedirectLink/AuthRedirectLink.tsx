@@ -1,7 +1,9 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Href, Link } from 'expo-router'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { Text } from 'react-native-paper'
 
 type Props = {
   link: Href
@@ -10,9 +12,10 @@ type Props = {
 }
 
 const AuthRedirectText = ({ link, text, linkTag }: Props) => {
+  const { theme } = useTheme()
   return (
     <View>
-      <Text style={styles.regularText}>
+      <Text variant="titleMedium" style={{ color: Colors[theme].text }}>
         {text}{' '}
         <Link href={link} style={styles.link}>
           {linkTag}
@@ -25,11 +28,6 @@ const AuthRedirectText = ({ link, text, linkTag }: Props) => {
 export default AuthRedirectText
 
 const styles = StyleSheet.create({
-  regularText: {
-    color: Colors.dark.text,
-    fontSize: 18,
-    fontWeight: '800',
-  },
   link: {
     textAlign: 'right',
     color: Colors.dark.btn,
