@@ -5,8 +5,8 @@ import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { MovieUnionType } from '@/src/shared/types/types'
 import { Href } from 'expo-router'
 import React from 'react'
-import { FlatList, Text, View } from 'react-native'
-import { ActivityIndicator } from 'react-native-paper'
+import { FlatList, View } from 'react-native'
+import { ActivityIndicator, Text } from 'react-native-paper'
 
 type Props<T extends MovieUnionType> = {
   items: T[] | undefined
@@ -27,13 +27,19 @@ const MoviesRow = <T extends MovieUnionType>({
   return (
     <>
       <NavigationItem icon={icon} settingName={title} link={link} />
-      {!items && (
-        <Text style={{ color: Colors[theme].text, paddingVertical: 10 }}>
+      {!items?.length && (
+        <Text
+          variant="labelLarge"
+          style={{
+            color: Colors[theme].text,
+            paddingVertical: 10,
+          }}
+        >
           List is empty
         </Text>
       )}
       {isLoading && (
-        <View style={{ flex: 1, height: 210 }}>
+        <View>
           <ActivityIndicator
             size={'small'}
             animating={true}
@@ -41,10 +47,12 @@ const MoviesRow = <T extends MovieUnionType>({
           />
         </View>
       )}
+
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
         data={items}
+        style={{ flex: 1, height: 210 }}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <MovieCard

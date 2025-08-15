@@ -24,17 +24,20 @@ export const useCollection = (collectionName: 'favorites' | 'bookmarks') => {
         const ref = collection(db, 'users', userId, collectionName)
         const snapshot = await getDocs(ref)
 
+        if (snapshot.empty) return []
+
         return snapshot.docs.map((doc) => ({
           docId: doc.id,
           ...(doc.data().data as MovieDetailsType),
         }))
       } catch (error) {
-        if (error instanceof Error) {
-          Alert.alert('error', error.message)
-        }
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        Alert.alert('Error', message)
+        return []
       }
     },
     enabled: !!userId,
+    retry: false,
   })
 
   const itemIds = items?.map((item) => item.id)

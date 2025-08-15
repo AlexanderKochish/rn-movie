@@ -3,7 +3,6 @@ import { Colors } from '@/src/shared/styles/Colors'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
-import { StyleSheet } from 'react-native'
 
 const BookmarksLayout = () => {
   const { theme } = useTheme()
@@ -48,9 +47,3 @@ const BookmarksLayout = () => {
 }
 
 export default BookmarksLayout
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-})

@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 const SignInScreen = () => {
   const { control, handleSubmit } = useSignIn()
   const { theme } = useTheme()
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: Colors[theme].background }}

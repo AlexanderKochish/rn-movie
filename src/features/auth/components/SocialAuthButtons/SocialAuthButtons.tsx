@@ -3,9 +3,11 @@ import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
+import { useGithubSignIn } from '../../hooks/useGithubSignIn'
 
 const SocialAuthButtons = () => {
   const { theme } = useTheme()
+  const { promptAsync } = useGithubSignIn()
   return (
     <View style={styles.btns}>
       <IconButton
@@ -18,6 +20,7 @@ const SocialAuthButtons = () => {
         icon={'github'}
         contentStyle={{ backgroundColor: Colors[theme].input }}
         size={34}
+        onPress={() => promptAsync()}
       />
       <IconButton
         icon={'facebook'}

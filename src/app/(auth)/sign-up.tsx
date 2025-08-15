@@ -18,7 +18,7 @@ const SignUpScreen = () => {
 
   return (
     <SafeAreaView
-      style={[styles.container, { backgroundColor: Colors[theme].background }]}
+      style={{ flex: 1, backgroundColor: Colors[theme].background }}
     >
       <KeyboardAvoidingView
         style={styles.container}
