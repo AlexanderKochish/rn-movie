@@ -46,4 +46,4 @@ google-services.json
 src/shared/services/firebase.ts
 
 # cloudinary
-src/shared/utils/fileUploader
+src/shared/utils/fileUploader.env
