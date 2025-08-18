@@ -1,20 +1,14 @@
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
-import { useAccountForm } from '@/src/features/profile/hooks/useAccountForm'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import CustomButton from '@/src/shared/components/UI/Button/Button'
-import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
 import { Colors } from '@/src/shared/styles/Colors'
-import { Typography } from '@/src/shared/styles/Typography'
 
 import React from 'react'
-import { Controller } from 'react-hook-form'
-import { Image, StyleSheet, View } from 'react-native'
-import { Avatar, Button } from 'react-native-paper'
+import { StyleSheet, View } from 'react-native'
 
 const AccountScreen = () => {
   const { user } = useAuth()
   const { theme } = useTheme()
-  const { control, handleSubmit, avatar, handlePickImage } = useAccountForm()
+  // const { control, handleSubmit, avatar, handlePickImage } = useAccountForm()
 
   return (
     <View
@@ -25,7 +19,7 @@ const AccountScreen = () => {
         },
       ]}
     >
-      <Controller
+      {/* <Controller
         control={control}
         name="avatar"
         render={() => (
@@ -74,7 +68,7 @@ const AccountScreen = () => {
           keyboardType="numeric"
         />
         <CustomButton title="Save Changes" onPress={handleSubmit} />
-      </View>
+      </View> */}
     </View>
   )
 }

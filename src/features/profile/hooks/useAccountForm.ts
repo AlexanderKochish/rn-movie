@@ -1,7 +1,6 @@
 import { uploadToCloudinary } from '@/src/shared/utils/fileUploader'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as ImagePicker from 'expo-image-picker'
-import { updateProfile } from 'firebase/auth'
 import { Resolver, useForm } from 'react-hook-form'
 import { Alert } from 'react-native'
 import Toast from 'react-native-toast-message'

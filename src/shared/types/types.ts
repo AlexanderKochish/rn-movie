@@ -117,8 +117,8 @@ export type MovieUnionType = (Movie | MovieDetailsType) & { docId: string }
 export type ReviewType = {
   id: string
   userId: string
-  photoUrl: string | null
-  displayName: string | null
+  photo_url: string | null
+  display_name: string | null
   email: string
   rating: number | null
   review: string | null

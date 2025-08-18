@@ -1,4 +1,4 @@
-package com.alexander888.rnmovieapp
+package com.alexander888.movieapp
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

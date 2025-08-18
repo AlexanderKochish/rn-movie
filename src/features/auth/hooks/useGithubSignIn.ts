@@ -1,10 +1,8 @@
-import { auth } from '@/src/shared/services/firebase'
 import {
   AuthSessionResult,
   makeRedirectUri,
   useAuthRequest,
 } from 'expo-auth-session'
-import { GithubAuthProvider, signInWithCredential } from 'firebase/auth'
 import { useEffect } from 'react'
 import { Alert } from 'react-native'
 import { createTokenWithCode } from '../utils/createTokenWithCode'
@@ -21,6 +19,7 @@ export const useGithubSignIn = () => {
     {
       clientId: clientId!,
       scopes: ['read:user', 'user:email'],
+      extraParams: { prompt: 'consent' },
       redirectUri: makeRedirectUri({
         scheme: 'rnmovieapp',
       }),
@@ -28,26 +27,24 @@ export const useGithubSignIn = () => {
     discovery
   )
 
-  const handleResponse = async (response: AuthSessionResult | null) => {
-    try {
-      if (response?.type === 'success') {
-        const { code } = response.params
-        const { access_token } = await createTokenWithCode(code)
-        if (!access_token) return
-        const credential = GithubAuthProvider.credential(access_token)
-        await signInWithCredential(auth, credential)
-      }
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Failed to sign in with GitHub'
-      console.error('GitHub Sign-In Error:', error)
-      Alert.alert('Error', message)
-    }
-  }
-
   useEffect(() => {
-    if (!response) return
-    void handleResponse(response)
+    const handleResponse = async (response: AuthSessionResult | null) => {
+      try {
+        if (response?.type === 'success') {
+          const { code } = response.params
+          const { access_token } = await createTokenWithCode(code)
+          if (!access_token) return
+        }
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'Failed to sign in with GitHub'
+        console.error('GitHub Sign-In Error:', error)
+        Alert.alert('Error', message)
+      }
+    }
+    handleResponse(response)
   }, [response])
 
   return {

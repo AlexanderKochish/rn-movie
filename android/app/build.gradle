@@ -87,9 +87,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.alexander888.rnmovieapp'
+    namespace 'com.alexander888.movieapp'
     defaultConfig {
-        applicationId 'com.alexander888.rnmovieapp'
+        applicationId 'com.alexander888.movieapp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

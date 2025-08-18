@@ -4,10 +4,13 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
 import { useGithubSignIn } from '../../hooks/useGithubSignIn'
+import { useGoogleSignIn } from '../../hooks/useGoogleSignIn'
 
 const SocialAuthButtons = () => {
   const { theme } = useTheme()
   const { promptAsync } = useGithubSignIn()
+  const { onGoogleButtonPress } = useGoogleSignIn()
+
   return (
     <View style={styles.btns}>
       <IconButton
@@ -15,6 +18,7 @@ const SocialAuthButtons = () => {
         contentStyle={{ backgroundColor: Colors[theme].input }}
         iconColor={BaseColors.yellow}
         size={34}
+        onPress={() => onGoogleButtonPress()}
       />
       <IconButton
         icon={'github'}

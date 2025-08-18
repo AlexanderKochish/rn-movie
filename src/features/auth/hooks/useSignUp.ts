@@ -1,17 +1,13 @@
-import { auth } from '@/src/shared/services/firebase'
+import { supabase } from '@/src/shared/services/supabase'
 import { zodResolver } from '@hookform/resolvers/zod'
+import * as Linking from 'expo-linking'
 import { useRouter } from 'expo-router'
-import { FirebaseError } from 'firebase/app'
-import {
-  createUserWithEmailAndPassword,
-  getIdToken,
-  updateProfile,
-} from 'firebase/auth'
 import { useForm } from 'react-hook-form'
 import { Alert } from 'react-native'
 import { signUpSchema, signUpSchemaType } from '../lib/zod/sign-up.schema'
 
 export const useSignUp = () => {
+  const redirectTo = Linking.createURL('/callback')
   const router = useRouter()
   const { control, handleSubmit } = useForm<signUpSchemaType>({
     defaultValues: {
@@ -22,44 +18,31 @@ export const useSignUp = () => {
     resolver: zodResolver(signUpSchema),
   })
 
-  const onSubmit = async (data: signUpSchemaType) => {
+  const onSubmit = async (formData: signUpSchemaType) => {
     try {
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      )
-
-      await updateProfile(user, {
-        displayName: data.username,
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          emailRedirectTo: redirectTo,
+          data: {
+            username: formData.username,
+          },
+        },
       })
-
-      const token = await getIdToken(auth.currentUser!)
-      if (!token) {
-        Alert.alert('Authentication Error', 'Unable to retrieve token.')
+      if (error) {
+        Alert.alert('Authentication Error', error.message)
         return
       }
-      router.replace('/(tabs)/profile')
+      if (data.session) {
+        router.replace('/(tabs)/profile')
+      }
     } catch (error: unknown) {
       let message = 'An unexpected error occurred.'
 
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case 'auth/email-already-in-use':
-            message = 'Email is already registered.'
-            break
-          case 'auth/invalid-email':
-            message = 'Invalid email address.'
-            break
-          case 'auth/weak-password':
-            message = 'Password is too weak.'
-            break
-          default:
-            message = error.message
-        }
+      if (error instanceof Error) {
+        Alert.alert('Sign Up Failed', message)
       }
-
-      Alert.alert('Sign Up Failed', message)
     }
   }
 

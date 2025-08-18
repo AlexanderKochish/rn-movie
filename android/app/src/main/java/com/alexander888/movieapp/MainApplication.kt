@@ -1,4 +1,4 @@
-package com.alexander888.rnmovieapp
+package com.alexander888.movieapp
 
 import android.app.Application
 import android.content.res.Configuration

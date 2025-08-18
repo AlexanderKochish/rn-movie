@@ -1,6 +1,7 @@
 import AuthRedirectText from '@/src/features/auth/components/AuthRedirectLink/AuthRedirectLink'
 import SocialAuthButtons from '@/src/features/auth/components/SocialAuthButtons/SocialAuthButtons'
 import { useSignIn } from '@/src/features/auth/hooks/useSignIn'
+// import { useSignIn } from '@/src/features/auth/hooks/useSignIn'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import AppLogo from '@/src/shared/components/AppLogo/AppLogo'
 import PseudoElement from '@/src/shared/components/PseudoElement/PseudoElement'

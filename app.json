@@ -17,6 +17,7 @@
     },
     "plugins": [
       "expo-router",
+      "@react-native-google-signin/google-signin",
       [
         "expo-splash-screen",
         {
@@ -52,7 +53,7 @@
       }
     },
     "android": {
-      "package": "com.alexander888.rnmovieapp",
+      "package": "com.alexander888.movieapp",
       "edgeToEdgeEnabled": true,
       "permissions": [
         "android.permission.READ_MEDIA_IMAGES",

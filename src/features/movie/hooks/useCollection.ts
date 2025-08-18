@@ -1,49 +1,49 @@
-import { db } from '@/src/shared/services/firebase'
+import { supabase } from '@/src/shared/services/supabase'
 import { MovieDetailsType, MovieUnionType } from '@/src/shared/types/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore'
 import { useCallback } from 'react'
 import { Alert } from 'react-native'
 import Toast from 'react-native-toast-message'
 import { useAuth } from '../../auth/hooks/useAuth'
 
-export const useCollection = (collectionName: 'favorites' | 'bookmarks') => {
+export const useCollection = (table: 'liked_movies' | 'bookmarks') => {
   const { user } = useAuth()
   const queryClient = useQueryClient()
-  const userId = user?.uid
+  const userId = user?.id
 
-  const queryKey = [collectionName, userId]
+  const queryKey = [table, userId]
 
-  const { data: items = [], isLoading } = useQuery<
-    MovieUnionType[] | undefined
-  >({
+  const { data: items = [], isLoading } = useQuery<MovieUnionType[]>({
     queryKey,
     queryFn: async () => {
       if (!userId) return []
-      try {
-        const ref = collection(db, 'users', userId, collectionName)
-        const snapshot = await getDocs(ref)
 
-        if (snapshot.empty) return []
+      const { data, error } = await supabase
+        .from(table)
+        .select('movie_id, data, created_at')
+        .eq('user_id', userId)
 
-        return snapshot.docs.map((doc) => ({
-          docId: doc.id,
-          ...(doc.data().data as MovieDetailsType),
-        }))
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        Alert.alert('Error', message)
+      if (error) {
+        Alert.alert('Ошибка', error.message)
         return []
       }
+
+      return (
+        data?.map((row) => ({
+          id: row.movie_id,
+          ...row.data,
+          createdAt: row.created_at,
+        })) ?? []
+      )
     },
     enabled: !!userId,
     retry: false,
   })
 
-  const itemIds = items?.map((item) => item.id)
+  const itemIds = items.map((item) => item.id)
 
   const isItemToggled = useCallback(
-    (id: number) => itemIds?.includes(id),
+    (id: number) => itemIds.includes(id),
     [itemIds]
   )
 
@@ -51,19 +51,28 @@ export const useCollection = (collectionName: 'favorites' | 'bookmarks') => {
     mutationFn: async (movie: MovieDetailsType | undefined) => {
       if (!userId || !movie?.id) return
 
-      const ref = doc(db, 'users', userId, collectionName, String(movie.id))
-
       if (isItemToggled(movie.id)) {
-        await deleteDoc(ref)
+        const { error } = await supabase
+          .from(table)
+          .delete()
+          .eq('user_id', userId)
+          .eq('movie_id', movie.id)
+
+        if (error) throw error
+
         Toast.show({
           type: 'customRemoved',
-          text1: 'Removed from the saved',
+          text1: 'Removed from saved',
         })
       } else {
-        await setDoc(ref, {
+        const { error } = await supabase.from(table).insert({
+          user_id: userId,
+          movie_id: movie.id,
           data: movie,
-          createdAt: new Date().toISOString(),
         })
+
+        if (error) throw error
+
         Toast.show({
           type: 'customSuccess',
           text1: 'Saved successfully',

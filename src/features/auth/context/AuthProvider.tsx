@@ -1,6 +1,6 @@
-import { auth } from '@/src/shared/services/firebase'
+import { supabase } from '@/src/shared/services/supabase'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
-import { onAuthStateChanged, User } from 'firebase/auth'
+import { User } from '@supabase/supabase-js'
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
@@ -12,13 +12,23 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isLogged, setIsLogged] = useState<boolean>(false)
 
   useEffect(() => {
-    const unsbscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser)
-      setIsLogged(!!firebaseUser)
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user)
+      setIsLogged(!!user)
       setLoading(false)
     })
 
-    return unsbscribe
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+      setIsLogged(!!session?.user)
+      setLoading(false)
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
   }, [])
 
   if (loading) {

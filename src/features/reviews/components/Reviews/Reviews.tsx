@@ -1,5 +1,6 @@
 import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import SubsectionHeader from '@/src/shared/components/SubsectionHeader/SubsectionHeader'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
@@ -7,7 +8,6 @@ import { StyleSheet, Text, View } from 'react-native'
 import { useReview } from '../../hooks/useReview'
 import ReviewCard from '../ReviewCard/ReviewCard'
 import ReviewForm from '../ReviewForm/ReviewForm'
-import SubsectionHeader from '@/src/shared/components/SubsectionHeader/SubsectionHeader'
 
 const Reviews = () => {
   const movieId = useMovieId()
@@ -35,9 +35,9 @@ const Reviews = () => {
           <ReviewCard
             key={item.id}
             review={item.review}
-            username={item.displayName}
+            username={item.display_name}
             rating={item.rating}
-            avatar={item.photoUrl}
+            avatar={item.photo_url}
           />
         ))}
       </View>

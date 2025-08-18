@@ -1,3 +1,3 @@
 import { useCollection } from './useCollection'
 
-export const useFavorite = () => useCollection('favorites')
+export const useFavorite = () => useCollection('liked_movies')

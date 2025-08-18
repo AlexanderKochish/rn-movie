@@ -14,14 +14,14 @@ const UserInfo = () => {
     <View style={styles.container}>
       <Avatar.Image
         source={
-          user?.photoURL
-            ? { uri: user.photoURL }
+          user?.user_metadata.avatar_url
+            ? { uri: user.user_metadata.avatar_url }
             : require('../../../../../assets/images/profile-placeholder.png')
         }
         size={115}
       />
       <Text style={[styles.name, { color: Colors[theme].text }]}>
-        {user?.displayName ?? 'No name'}
+        {user?.user_metadata.username ?? 'No name'}
       </Text>
       <Text style={[styles.email, { color: Colors[theme].text }]}>
         {user?.email}
