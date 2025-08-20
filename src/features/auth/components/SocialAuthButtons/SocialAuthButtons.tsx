@@ -9,7 +9,7 @@ import { useGoogleSignIn } from '../../hooks/useGoogleSignIn'
 const SocialAuthButtons = () => {
   const { theme } = useTheme()
   const { signInWithGithub } = useGithubSignIn()
-  const { onGoogleButtonPress } = useGoogleSignIn()
+  const { signInWithGoogle } = useGoogleSignIn()
 
   return (
     <View style={styles.btns}>
@@ -18,7 +18,7 @@ const SocialAuthButtons = () => {
         contentStyle={{ backgroundColor: Colors[theme].input }}
         iconColor={BaseColors.yellow}
         size={34}
-        onPress={() => onGoogleButtonPress()}
+        onPress={() => signInWithGoogle()}
       />
       <IconButton
         icon={'github'}

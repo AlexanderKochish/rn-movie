@@ -1,39 +1,53 @@
 import { supabase } from '@/src/shared/services/supabase'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import {
+  GoogleSignin,
+  isSuccessResponse,
+  statusCodes,
+} from '@react-native-google-signin/google-signin'
+import { Alert } from 'react-native'
+
+GoogleSignin.configure({
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
+  offlineAccess: true,
+  scopes: ['profile', 'email'],
+})
 
 export const useGoogleSignIn = () => {
-  GoogleSignin.configure({
-    webClientId:
-      '1071199830580-qb9bshb0jl82bpucdr49b4bsvoc5nna5.apps.googleusercontent.com',
-  })
-  const onGoogleButtonPress = async () => {
+  const signInWithGoogle = async () => {
     try {
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true })
+      await GoogleSignin.hasPlayServices()
+      const userInfo = await GoogleSignin.signIn()
+      console.log('Google User:', userInfo)
+      if (isSuccessResponse(userInfo)) {
+        const { data, error } = await supabase.auth.signInWithIdToken({
+          provider: 'google',
+          token: userInfo.data.idToken!,
+        })
 
-      await GoogleSignin.signIn()
-
-      const { idToken } = await GoogleSignin.getTokens()
-      console.log('idToken:' + idToken)
-      if (!idToken) {
-        throw new Error('Google Sign-In: no ID token present!')
+        if (error) {
+          Alert.alert('Error', error.message)
+        }
+        Alert.alert('Success', data.user?.email)
+      } else {
+        Alert.alert('Error', 'no ID token present!')
       }
-
-      const { data, error } = await supabase.auth.signInWithIdToken({
-        provider: 'google',
-        token: idToken,
-      })
-      console.log('Supabase session:', data.session)
-      return data.session
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Google sign-in failed:', error.message)
+    } catch (error: any) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        Alert.alert('Cancelled')
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        Alert.alert('Cancelled', 'play services not available or outdated')
+      } else {
+        // some other error happened
+        console.log({ error })
       }
-
-      return null
     }
   }
 
   return {
-    onGoogleButtonPress,
+    signInWithGoogle,
   }
 }
