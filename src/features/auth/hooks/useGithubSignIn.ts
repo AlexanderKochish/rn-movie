@@ -1,53 +1,50 @@
-import {
-  AuthSessionResult,
-  makeRedirectUri,
-  useAuthRequest,
-} from 'expo-auth-session'
-import { useEffect } from 'react'
-import { Alert } from 'react-native'
-import { createTokenWithCode } from '../utils/createTokenWithCode'
+import { supabase } from '@/src/shared/services/supabase'
+import { makeRedirectUri } from 'expo-auth-session'
+import * as QueryParams from 'expo-auth-session/build/QueryParams'
+import * as Linking from 'expo-linking'
+import * as WebBrowser from 'expo-web-browser'
+
+WebBrowser.maybeCompleteAuthSession()
 
 export const useGithubSignIn = () => {
-  const clientId = process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID
+  const redirectTo = makeRedirectUri()
 
-  const discovery = {
-    authorizationEndpoint: 'https://github.com/login/oauth/authorize',
-    tokenEndpoint: 'https://github.com/login/oauth/access_token',
-    revocationEndpoint: `https://github.com/settings/connections/applications/${clientId}`,
+  const createSessionFromUrl = async (url: string) => {
+    const { params, errorCode } = QueryParams.getQueryParams(url)
+    if (errorCode) throw new Error(errorCode)
+    const { access_token, refresh_token } = params
+    if (!access_token) return
+    const { data, error } = await supabase.auth.setSession({
+      access_token,
+      refresh_token,
+    })
+    if (error) throw error
+    return data.session
   }
-  const [, response, promptAsync] = useAuthRequest(
-    {
-      clientId: clientId!,
-      scopes: ['read:user', 'user:email'],
-      extraParams: { prompt: 'consent' },
-      redirectUri: makeRedirectUri({
-        scheme: 'rnmovieapp',
-      }),
-    },
-    discovery
-  )
 
-  useEffect(() => {
-    const handleResponse = async (response: AuthSessionResult | null) => {
-      try {
-        if (response?.type === 'success') {
-          const { code } = response.params
-          const { access_token } = await createTokenWithCode(code)
-          if (!access_token) return
-        }
-      } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to sign in with GitHub'
-        console.error('GitHub Sign-In Error:', error)
-        Alert.alert('Error', message)
-      }
+  const signInWithGithub = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo,
+        skipBrowserRedirect: true,
+      },
+    })
+    if (error) throw error
+    const res = await WebBrowser.openAuthSessionAsync(
+      data?.url ?? '',
+      redirectTo
+    )
+    if (res.type === 'success') {
+      const { url } = res
+      await createSessionFromUrl(url)
     }
-    handleResponse(response)
-  }, [response])
+  }
+
+  const url = Linking.useLinkingURL()
+  if (url) createSessionFromUrl(url)
 
   return {
-    promptAsync,
+    signInWithGithub,
   }
 }

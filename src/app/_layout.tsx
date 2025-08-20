@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
-import * as WebBrowser from 'expo-web-browser'
 import { useCallback, useEffect, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -11,7 +10,6 @@ import CustomToast from '../shared/components/UI/CustomToast/CustomToast'
 import { RootStack } from '../shared/navigation/RootStack'
 
 SplashScreen.preventAutoHideAsync()
-WebBrowser.maybeCompleteAuthSession()
 
 SplashScreen.setOptions({
   duration: 2000,
