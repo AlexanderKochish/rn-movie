@@ -1,3 +1,4 @@
+import { supabase } from '@/src/shared/services/supabase'
 import { uploadToCloudinary } from '@/src/shared/utils/fileUploader'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as ImagePicker from 'expo-image-picker'
@@ -6,7 +7,6 @@ import { Alert } from 'react-native'
 import Toast from 'react-native-toast-message'
 import { useAuth } from '../../auth/hooks/useAuth'
 import { accountSchema, accountSchemaType } from '../lib/zod/account.schema'
-import { setUserData } from '../utils/updateUserData'
 
 export const useAccountForm = () => {
   const { user } = useAuth()
@@ -46,14 +46,14 @@ export const useAccountForm = () => {
     return url
   }
 
-  const onSubmit = async (data: accountSchemaType) => {
+  const onSubmit = async (formData: accountSchemaType) => {
     try {
       if (!user) return
 
-      const imageUrl = await uploadAvatar(data.avatar)
+      const imageUrl = await uploadAvatar(formData.avatar)
 
       const payload: Partial<accountSchemaType> = {
-        ...data,
+        ...formData,
       }
 
       if (imageUrl) {
@@ -64,19 +64,30 @@ export const useAccountForm = () => {
         payload.age = Number(payload.age)
       }
 
-      await updateProfile(user, {
-        ...(payload.avatar && { photoURL: payload.avatar }),
-        ...(payload.username && { displayName: payload.username }),
-      })
+      const updateData: Record<string, any> = {}
 
-      if (payload.age || payload.fullName) {
-        await setUserData(user.uid, {
-          ...(payload.age !== undefined && { age: payload.age }),
-          ...(payload.fullName && { fullName: payload.fullName }),
-        })
+      if (payload.avatar) updateData.avatar_url = payload.avatar
+      if (payload.username) updateData.username = payload.username
+      if (payload.age !== undefined) updateData.age = payload.age
+      if (payload.fullName) updateData.full_name = payload.fullName
+
+      if (Object.keys(updateData).length > 0) {
+        const { error } = await supabase
+          .from('profiles')
+          .update(updateData)
+          .eq('id', user.id)
+          .single()
+
+        if (error) {
+          Alert.alert('Error', error.message)
+        }
       }
-
-      reset()
+      reset({
+        avatar: updateData.avatar_url ?? '',
+        username: updateData.username ?? '',
+        fullName: updateData.full_name ?? '',
+        age: updateData.age ?? '',
+      })
 
       Toast.show({
         type: 'customSuccess',

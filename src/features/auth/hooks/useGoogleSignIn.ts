@@ -17,7 +17,6 @@ export const useGoogleSignIn = () => {
     try {
       await GoogleSignin.hasPlayServices()
       const userInfo = await GoogleSignin.signIn()
-      console.log('Google User:', userInfo)
       if (isSuccessResponse(userInfo)) {
         const { data, error } = await supabase.auth.signInWithIdToken({
           provider: 'google',

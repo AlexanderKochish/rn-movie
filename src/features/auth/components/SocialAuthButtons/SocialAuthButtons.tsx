@@ -3,6 +3,7 @@ import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
+import { useFacebookSignIn } from '../../hooks/useFacebookSignIn'
 import { useGithubSignIn } from '../../hooks/useGithubSignIn'
 import { useGoogleSignIn } from '../../hooks/useGoogleSignIn'
 
@@ -10,6 +11,7 @@ const SocialAuthButtons = () => {
   const { theme } = useTheme()
   const { signInWithGithub } = useGithubSignIn()
   const { signInWithGoogle } = useGoogleSignIn()
+  const { signInWithFacebook } = useFacebookSignIn()
 
   return (
     <View style={styles.btns}>
@@ -18,19 +20,20 @@ const SocialAuthButtons = () => {
         contentStyle={{ backgroundColor: Colors[theme].input }}
         iconColor={BaseColors.yellow}
         size={34}
-        onPress={() => signInWithGoogle()}
+        onPress={signInWithGoogle}
       />
       <IconButton
         icon={'github'}
         contentStyle={{ backgroundColor: Colors[theme].input }}
         size={34}
-        onPress={() => signInWithGithub()}
+        onPress={signInWithGithub}
       />
       <IconButton
         icon={'facebook'}
         contentStyle={{ backgroundColor: Colors[theme].input }}
         iconColor={'blue'}
         size={34}
+        onPress={signInWithFacebook}
       />
     </View>
   )

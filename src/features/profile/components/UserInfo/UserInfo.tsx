@@ -5,26 +5,28 @@ import { Typography } from '@/src/shared/styles/Typography'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Avatar } from 'react-native-paper'
+import { useProfile } from '../../hooks/useProfile'
 
 const UserInfo = () => {
   const { user } = useAuth()
+  const { profile } = useProfile()
   const { theme } = useTheme()
-
+  console.log({ user })
   return (
     <View style={styles.container}>
       <Avatar.Image
         source={
-          user?.user_metadata.avatar_url
-            ? { uri: user.user_metadata.avatar_url }
+          profile?.avatar_url
+            ? { uri: profile?.avatar_url }
             : require('../../../../../assets/images/profile-placeholder.png')
         }
         size={115}
       />
       <Text style={[styles.name, { color: Colors[theme].text }]}>
-        {user?.user_metadata.username ?? 'No name'}
+        {profile?.username ?? 'No name'}
       </Text>
       <Text style={[styles.email, { color: Colors[theme].text }]}>
-        {user?.email}
+        {profile?.email}
       </Text>
     </View>
   )
