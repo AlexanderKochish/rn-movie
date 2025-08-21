@@ -1,20 +1,20 @@
-import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { useAccountForm } from '@/src/features/profile/hooks/useAccountForm'
+import { useProfile } from '@/src/features/profile/hooks/useProfile'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import CustomButton from '@/src/shared/components/UI/Button/Button'
 import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
-import { Colors } from '@/src/shared/styles/Colors'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
+import { Avatar, Button } from 'react-native-paper'
 
 import React from 'react'
 import { Controller } from 'react-hook-form'
 import { Image, StyleSheet, View } from 'react-native'
-import { Avatar, Button } from 'react-native-paper'
 
 const AccountScreen = () => {
-  const { user } = useAuth()
+  const { profile } = useProfile()
   const { theme } = useTheme()
-  const { control, handleSubmit, avatar, handlePickImage } = useAccountForm()
+  const { control, handleSubmit, avatar, handlePickImage, isLoading } =
+    useAccountForm()
 
   return (
     <View
@@ -35,8 +35,8 @@ const AccountScreen = () => {
             ) : (
               <Avatar.Image
                 source={
-                  user?.user_metadata.photo_url
-                    ? { uri: user?.user_metadata.photo_url }
+                  profile?.avatar_url
+                    ? { uri: profile.avatar_url }
                     : require('../../../../assets/images/profile-placeholder.png')
                 }
                 size={200}
@@ -73,7 +73,15 @@ const AccountScreen = () => {
           name={'age'}
           keyboardType="numeric"
         />
-        <CustomButton title="Save Changes" onPress={handleSubmit} />
+        <Button
+          mode="contained"
+          style={{ borderRadius: 4 }}
+          textColor={BaseColors.white}
+          loading={isLoading}
+          onPress={handleSubmit}
+        >
+          Save Changes
+        </Button>
       </View>
     </View>
   )

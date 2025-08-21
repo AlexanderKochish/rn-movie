@@ -1,4 +1,3 @@
-import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
@@ -8,10 +7,8 @@ import { Avatar } from 'react-native-paper'
 import { useProfile } from '../../hooks/useProfile'
 
 const UserInfo = () => {
-  const { user } = useAuth()
   const { profile } = useProfile()
   const { theme } = useTheme()
-  console.log({ user })
   return (
     <View style={styles.container}>
       <Avatar.Image

@@ -1,6 +1,7 @@
 import { supabase } from '@/src/shared/services/supabase'
 import { uploadToCloudinary } from '@/src/shared/utils/fileUploader'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as ImagePicker from 'expo-image-picker'
 import { Resolver, useForm } from 'react-hook-form'
 import { Alert } from 'react-native'
@@ -10,6 +11,7 @@ import { accountSchema, accountSchemaType } from '../lib/zod/account.schema'
 
 export const useAccountForm = () => {
   const { user } = useAuth()
+  const queryClient = useQueryClient()
 
   const { control, watch, setValue, handleSubmit, reset } =
     useForm<accountSchemaType>({
@@ -24,7 +26,7 @@ export const useAccountForm = () => {
   const avatar = watch('avatar')
 
   const handlePickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [4, 3],
@@ -32,78 +34,59 @@ export const useAccountForm = () => {
     })
 
     if (!result.canceled && result.assets.length > 0) {
-      const imageUri = result.assets[0].uri
-      setValue('avatar', imageUri)
+      setValue('avatar', result.assets[0].uri)
     }
   }
 
-  const uploadAvatar = async (uri?: string) => {
-    if (!uri) return null
-    const url = await uploadToCloudinary(uri)
-    if (!url) {
-      Toast.show({ type: 'customError', text1: 'Image upload failed' })
-    }
-    return url
-  }
+  const mutation = useMutation({
+    mutationFn: async (formData: accountSchemaType) => {
+      if (!user) throw new Error('User not found')
 
-  const onSubmit = async (formData: accountSchemaType) => {
-    try {
-      if (!user) return
-
-      const imageUrl = await uploadAvatar(formData.avatar)
-
-      const payload: Partial<accountSchemaType> = {
-        ...formData,
-      }
-
-      if (imageUrl) {
-        payload.avatar = imageUrl
-      }
-
-      if (payload.age) {
-        payload.age = Number(payload.age)
-      }
+      const imageUrl = formData.avatar
+        ? await uploadToCloudinary(formData.avatar)
+        : null
 
       const updateData: Record<string, any> = {}
+      if (imageUrl) updateData.avatar_url = imageUrl
+      if (formData.username) updateData.username = formData.username
+      if (formData.fullName) updateData.full_name = formData.fullName
+      if (formData.age) updateData.age = Number(formData.age)
 
-      if (payload.avatar) updateData.avatar_url = payload.avatar
-      if (payload.username) updateData.username = payload.username
-      if (payload.age !== undefined) updateData.age = payload.age
-      if (payload.fullName) updateData.full_name = payload.fullName
+      const { error } = await supabase
+        .from('profiles')
+        .update(updateData)
+        .eq('id', user.id)
+        .single()
 
-      if (Object.keys(updateData).length > 0) {
-        const { error } = await supabase
-          .from('profiles')
-          .update(updateData)
-          .eq('id', user.id)
-          .single()
+      if (error) throw error
 
-        if (error) {
-          Alert.alert('Error', error.message)
-        }
-      }
+      return updateData
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['profile', user?.id] })
+
       reset({
-        avatar: updateData.avatar_url ?? '',
-        username: updateData.username ?? '',
-        fullName: updateData.full_name ?? '',
-        age: updateData.age ?? '',
+        avatar: data.avatar_url ?? '',
+        username: data.username ?? '',
+        fullName: data.full_name ?? '',
+        age: data.age ?? '',
       })
 
       Toast.show({
         type: 'customSuccess',
         text1: 'Profile updated successfully',
       })
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        Alert.alert('Error', error.message)
-      }
-    }
-  }
+    },
+    onError: (error: any) => {
+      Alert.alert('Error', error.message ?? 'Failed to update profile')
+    },
+  })
 
   return {
     control,
-    handleSubmit: handleSubmit(onSubmit),
+    handleSubmit: handleSubmit((formData) => mutation.mutate(formData)),
     handlePickImage,
     avatar,
+    isLoading: mutation.isPending,
   }
 }

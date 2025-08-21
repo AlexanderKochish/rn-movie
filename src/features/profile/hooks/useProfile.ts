@@ -1,29 +1,31 @@
 import { supabase } from '@/src/shared/services/supabase'
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Alert } from 'react-native'
 import { useAuth } from '../../auth/hooks/useAuth'
+import { ProfileType } from '../types/types'
 
 export const useProfile = () => {
   const { user } = useAuth()
-  const [profile, setProfile] = useState<any>(null)
 
-  useEffect(() => {
-    if (!user) return
-
-    const fetchProfile = async () => {
+  const query = useQuery({
+    queryKey: ['profile', user?.id],
+    enabled: !!user?.id,
+    queryFn: async (): Promise<ProfileType | null> => {
+      if (!user?.id) return null
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', user.id)
+        .eq('id', user?.id)
         .single()
 
-      if (error) console.log(error)
-      else setProfile(data)
-    }
+      if (error) {
+        Alert.alert('Error', error.message)
+      }
 
-    fetchProfile()
-  }, [user])
+      return data as ProfileType
+    },
+    staleTime: 0,
+  })
 
-  return {
-    profile,
-  }
+  return { profile: query.data }
 }
