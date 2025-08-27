@@ -2,12 +2,14 @@
 
 # dependencies
 node_modules/
-
+./android
+android
 # Expo
 .expo/
 dist/
 web-build/
 expo-env.d.ts
+eas.json
 
 # Native
 .kotlin/

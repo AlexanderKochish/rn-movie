@@ -1,9 +1,9 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import React from 'react'
 import { View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
 
 type Props = {
   size?: 'small' | 'large'

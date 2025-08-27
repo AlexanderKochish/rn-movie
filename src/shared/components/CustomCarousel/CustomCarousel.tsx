@@ -43,13 +43,15 @@ const CustomCarousel = <T extends MovieUnionType>({ items }: Props<T>) => {
         )}
       />
 
-      <Pagination.Basic
-        data={items?.slice(0, 8) || []}
-        progress={progressValue}
-        activeDotStyle={styles.activeDot}
-        dotStyle={styles.dots}
-        containerStyle={styles.paginationContainer}
-      />
+      {items && items.length > 0 && (
+        <Pagination.Basic
+          data={items.slice(0, 8)}
+          progress={progressValue}
+          activeDotStyle={styles.activeDot}
+          dotStyle={styles.dots}
+          containerStyle={styles.paginationContainer}
+        />
+      )}
     </View>
   )
 }

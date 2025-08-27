@@ -1,15 +1,14 @@
-import { useAuth } from '@/src/features/auth/hooks/useAuth'
+import AccountNotificationSettings from '@/src/features/profile/components/AccountNotificationsSettings/AccountNotificationSettings'
+import { useProfile } from '@/src/features/profile/hooks/useProfile'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import BaseCard from '@/src/shared/components/BaseCard/BaseCard'
-import PreferenceSwitchItem from '@/src/shared/components/PreferenceSwitchItem/PreferenceSwitchItem'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { Typography } from '@/src/shared/styles/Typography'
 import React from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { Button, Text } from 'react-native-paper'
+import { Text } from 'react-native-paper'
 
 const EmailSettingsScreen = () => {
-  const { user } = useAuth()
+  const { profile } = useProfile()
   const { theme } = useTheme()
 
   return (
@@ -18,35 +17,9 @@ const EmailSettingsScreen = () => {
         <BaseCard>
           <Text variant="titleLarge">Email address</Text>
           <View style={styles.borderLine} />
-          <Text variant="titleMedium">{user?.email}</Text>
+          <Text variant="titleMedium">{profile?.email}</Text>
         </BaseCard>
-        <BaseCard>
-          <PreferenceSwitchItem
-            icon="email"
-            title="Marketing emails"
-            titleSize="titleLarge"
-          />
-          <Text variant="titleMedium">
-            Receive updates aboute the latest{'\n'}news and offers
-          </Text>
-        </BaseCard>
-        <BaseCard>
-          <PreferenceSwitchItem
-            icon="bell-ring"
-            titleSize="titleLarge"
-            title="Notifications"
-          />
-          <Text variant="titleMedium">
-            Receive email notifications for{'\n'}your account activity
-          </Text>
-        </BaseCard>
-        <Button
-          style={{ width: '100%', borderRadius: 10 }}
-          buttonColor={Colors[theme].btn}
-          labelStyle={styles.labeStyle}
-        >
-          Unsubscribe
-        </Button>
+        <AccountNotificationSettings />
       </View>
     </ScrollView>
   )
@@ -64,9 +37,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 1,
     backgroundColor: BaseColors.gray,
-  },
-  labeStyle: {
-    fontSize: Typography.title.fontSize,
-    color: BaseColors.white,
   },
 })

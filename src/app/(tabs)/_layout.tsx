@@ -1,6 +1,6 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { MaterialIcons } from '@expo/vector-icons'
+import { Ionicons as TabIcon } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
 import React from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
@@ -9,6 +9,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 export default function TabLayout() {
   const insets = useSafeAreaInsets()
   const { theme } = useTheme()
+
+  const tabBarHeight =
+    Platform.OS === 'ios'
+      ? 80 + insets.bottom
+      : 60 + Math.max(insets.bottom, 16)
 
   return (
     <Tabs
@@ -20,8 +25,11 @@ export default function TabLayout() {
           borderTopWidth: 0,
           elevation: 0,
           paddingTop: 10,
-          height: 80,
+          height: tabBarHeight,
           paddingBottom: Platform.OS === 'ios' ? insets.bottom : 10,
+        },
+        tabBarItemStyle: {
+          paddingBottom: Platform.OS === 'android' ? 8 : 0,
         },
       }}
     >
@@ -30,9 +38,9 @@ export default function TabLayout() {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={focused ? styles.focusedTab : undefined}>
-              <MaterialIcons
-                size={32}
-                name="home"
+              <TabIcon
+                size={24}
+                name="home-outline"
                 color={focused ? BaseColors.orange : color}
               />
             </View>
@@ -46,8 +54,8 @@ export default function TabLayout() {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={focused ? styles.focusedTab : undefined}>
-              <MaterialIcons
-                size={32}
+              <TabIcon
+                size={24}
                 name="search"
                 color={focused ? BaseColors.orange : color}
               />
@@ -62,9 +70,9 @@ export default function TabLayout() {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={focused ? styles.focusedTab : undefined}>
-              <MaterialIcons
-                size={32}
-                name="bookmark"
+              <TabIcon
+                size={24}
+                name="bookmark-outline"
                 color={focused ? BaseColors.orange : color}
               />
             </View>
@@ -77,9 +85,9 @@ export default function TabLayout() {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={focused ? styles.focusedTab : undefined}>
-              <MaterialIcons
-                size={32}
-                name="account-circle"
+              <TabIcon
+                size={24}
+                name="person-outline"
                 color={focused ? BaseColors.orange : color}
               />
             </View>

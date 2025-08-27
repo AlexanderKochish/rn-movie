@@ -1,13 +1,23 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import * as Notifications from 'expo-notifications'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { AuthProvider } from '../features/auth/context/AuthProvider'
 import { ThemeProvider } from '../providers/ThemeProvider/ThemeProvider'
 import CustomToast from '../shared/components/UI/CustomToast/CustomToast'
 import { RootStack } from '../shared/navigation/RootStack'
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+})
 
 SplashScreen.preventAutoHideAsync()
 
@@ -17,15 +27,18 @@ SplashScreen.setOptions({
 })
 
 export default function RootLayout() {
+  const queryClientRef = useRef(new QueryClient())
   const [appIsReady, setAppIsReady] = useState(false)
-  const queryClient = new QueryClient()
 
   useEffect(() => {
     async function prepare() {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 2000))
+        await Promise.all([
+          // preloadAssets(),
+          new Promise((resolve) => setTimeout(resolve, 1000)),
+        ])
       } catch (e) {
-        console.warn(e)
+        console.warn('Initialization error:', e)
       } finally {
         setAppIsReady(true)
       }
@@ -47,14 +60,14 @@ export default function RootLayout() {
     <GestureHandlerRootView onLayout={onLayoutRootView}>
       <SafeAreaProvider>
         <StatusBar style="auto" />
-        <AuthProvider>
-          <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClientRef.current}>
+          <AuthProvider>
             <ThemeProvider>
               <RootStack />
               <CustomToast />
             </ThemeProvider>
-          </QueryClientProvider>
-        </AuthProvider>
+          </AuthProvider>
+        </QueryClientProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   )

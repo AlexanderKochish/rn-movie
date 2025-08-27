@@ -16,7 +16,8 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
   const systemColorScheme = useColorScheme()
   const initialTheme = systemColorScheme === 'light' ? 'light' : 'dark'
   const [theme, setTheme] = useState<ThemeColorType>(initialTheme)
-  const paperTheme = theme === 'dark' ? darkTheme : lightTheme
+  const paperTheme = theme === 'light' ? lightTheme : darkTheme
+  const [isThemeReady, setIsThemeReady] = useState(false)
 
   useEffect(() => {
     const loadTheme = async () => {
@@ -24,13 +25,18 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
         const stored = await AsyncStorage.getItem('app-theme')
         if (stored === 'light' || stored === 'dark') {
           setTheme(stored)
+        } else {
+          setTheme(systemColorScheme === 'light' ? 'light' : 'dark')
         }
       } catch (error) {
         console.warn('Failed to load theme from storage:', error)
+        setTheme(systemColorScheme === 'light' ? 'light' : 'dark')
+      } finally {
+        setIsThemeReady(true)
       }
     }
     loadTheme()
-  }, [])
+  }, [systemColorScheme])
 
   const handleSetTheme = useCallback(async (newTheme: ThemeColorType) => {
     try {
@@ -50,9 +56,14 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
     () => ({
       theme,
       toggleTheme,
+      isThemeReady,
     }),
-    [theme, toggleTheme]
+    [theme, toggleTheme, isThemeReady]
   )
+
+  if (!isThemeReady) {
+    return null
+  }
 
   return (
     <ThemeContext.Provider value={value}>

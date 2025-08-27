@@ -37,11 +37,12 @@ const CarouselItem = ({ item }: Props) => {
           <View style={styles.detailsWrapper}>
             <Text
               variant="titleLarge"
-              style={{
-                color: Colors[theme].title,
-                fontWeight: '700',
-                fontSize: 28,
-              }}
+              style={[
+                styles.title,
+                {
+                  color: Colors[theme].title,
+                },
+              ]}
             >
               {item.title || item.original_title}
             </Text>
@@ -87,6 +88,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 10,
+  },
+  title: {
+    fontWeight: '700',
+    fontSize: 28,
+    textAlign: 'center',
   },
   detailsWrapper: {
     flex: 1,

@@ -1,19 +1,20 @@
 export const BaseColors = {
-  orange: '#FA6207',
-  brown: '#4C1C00',
-  yellow: '#F2C94C',
-  gray: '#828282',
-  lightGray: '#E0E0E0',
-  darkGray: '#333333',
-  orangeLight: '#FF7254',
-  red: '#EB2247',
-  black: '#121216',
-  white: '#FBFAF5',
-  lightBlack: '#1F1F1F',
-  whiteDark: '#F5F5F5',
-  orangeOpacity: 'rgba(255, 60, 0, 0.13)',
-  dark: '#000000',
-}
+  orange: "#FA6207",
+  brown: "#4C1C00",
+  yellow: "#F2C94C",
+  gray: "#828282",
+  lightGray: "#E0E0E0",
+  darkGray: "#333333",
+  orangeLight: "#FF7254",
+  red: "#EB2247",
+  black: "#121216",
+  white: "#FBFAF5",
+  lightBlack: "#1F1F1F",
+  whiteDark: "#F5F5F5",
+  orangeOpacity: "rgba(255, 60, 0, 0.13)",
+  dark: "#000000",
+  green: "#00a100ff",
+};
 export const Colors = {
   dark: {
     title: BaseColors.white,
@@ -43,4 +44,4 @@ export const Colors = {
     chip: BaseColors.lightGray,
     card: BaseColors.orangeOpacity,
   },
-}
+};

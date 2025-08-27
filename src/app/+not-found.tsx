@@ -1,19 +1,24 @@
-import { Link } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { ImageBackground, StyleSheet, View } from 'react-native'
-import { Icon, Text } from 'react-native-paper'
+import { IconButton, Text } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors } from '../shared/styles/Colors'
 import { Typography } from '../shared/styles/Typography'
 const notFoundImage = require('../../assets/images/not-found.png')
 
 export default function NotFoundScreen() {
+  const router = useRouter()
   return (
     <View style={styles.container}>
       <ImageBackground style={{ flex: 1 }} source={notFoundImage}>
         <SafeAreaView style={styles.content}>
-          <Link href="/" replace>
-            <Icon source={'arrow-left'} size={24} color={Colors.dark.text} />
-          </Link>
+          <IconButton
+            onPress={() => router.back()}
+            icon={'arrow-left'}
+            size={24}
+            iconColor={Colors.dark.text}
+          />
+
           <View style={styles.titleWrapper}>
             <Text style={styles.title}>
               🎬😕 Oops, we didn’t find any matching movies. Try changing your

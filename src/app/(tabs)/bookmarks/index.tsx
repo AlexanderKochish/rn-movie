@@ -15,6 +15,7 @@ const BookmarksScreen = () => {
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: Colors[theme].background }]}
+      edges={['top', 'left', 'right']}
     >
       <ScrollView>
         <MoviesRow

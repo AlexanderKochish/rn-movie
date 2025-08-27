@@ -12,7 +12,6 @@ const ReviewsScreen = () => {
   const movieId = useMovieId()
   const { reviews } = useReview(movieId)
   const { theme } = useTheme()
-  console.log(reviews)
   return (
     <View
       style={[styles.container, { backgroundColor: Colors[theme].background }]}
@@ -20,6 +19,7 @@ const ReviewsScreen = () => {
       <FlatList
         style={{ flex: 1 }}
         data={reviews || []}
+        contentContainerStyle={{ gap: 10 }}
         ListEmptyComponent={
           <View style={styles.emptyTextWrapper}>
             <Text
@@ -37,8 +37,8 @@ const ReviewsScreen = () => {
           <ReviewCard
             review={item.review}
             rating={item.rating}
-            username={item.displayName}
-            avatar={item.photoUrl}
+            username={item.display_name}
+            avatar={item.photo_url}
           />
         )}
       />

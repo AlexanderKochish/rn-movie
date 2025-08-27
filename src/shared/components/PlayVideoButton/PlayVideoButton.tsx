@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   playBtn: {
     backgroundColor: BaseColors.brown,
     position: 'absolute',
-    bottom: 0,
+    bottom: -5,
     zIndex: 100,
     borderRadius: 10,
   },

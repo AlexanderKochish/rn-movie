@@ -14,6 +14,7 @@ type Props<T extends MovieUnionType> = {
   icon?: string
   isLoading: boolean
   link?: Href
+  isError?: any
 }
 
 const MoviesRow = <T extends MovieUnionType>({
@@ -22,12 +23,24 @@ const MoviesRow = <T extends MovieUnionType>({
   icon,
   isLoading,
   link,
+  isError,
 }: Props<T>) => {
   const { theme } = useTheme()
   return (
     <>
       <NavigationItem icon={icon} settingName={title} link={link} />
-      {!items?.length && (
+      {isLoading && (
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
+          <ActivityIndicator
+            size={'small'}
+            animating={true}
+            color={BaseColors.orange}
+          />
+        </View>
+      )}
+      {!isLoading && !items?.length && (
         <Text
           variant="labelLarge"
           style={{
@@ -38,21 +51,12 @@ const MoviesRow = <T extends MovieUnionType>({
           List is empty
         </Text>
       )}
-      {isLoading && (
-        <View>
-          <ActivityIndicator
-            size={'small'}
-            animating={true}
-            color={BaseColors.orange}
-          />
-        </View>
-      )}
 
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
         data={items}
-        style={{ flex: 1, height: 210 }}
+        style={{ flex: 1, height: 260 }}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <MovieCard

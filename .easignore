@@ -1,0 +1,56 @@
+# .easignore
+# Ненужные для сборки файлы
+node_modules/
+.expo/
+dist/
+build/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Документация и тесты
+docs/
+test/
+tests/
+__tests__/
+*.md
+
+# Конфиги разработки
+.env.local
+.env.development
+.env.test
+expo-notification-cbb91-firebase-adminsdk-fbsvc-4a02b91e00.json
+
+# IDE файлы
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Макеты и дизайн
+design/
+assets/psd/
+assets/ai/
+assets/sketch/
+
+# Видео и большие медиафайлы
+*.mp4
+*.mov
+*.avi
+assets/videos/
+
+# Резервные копии
+*.backup
+*.bak
+
+# iOS специфичные (если собираете только Android)
+ios/
+Podfile
+Podfile.lock
+
+# Дополнительные исключения
+.coverage/
+.nyc_output/
+.nyc_output/
+android

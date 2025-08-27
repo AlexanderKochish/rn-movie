@@ -9,7 +9,13 @@ const MovieDetailsLayout = () => {
   return (
     <>
       <StatusBar style="auto" />
-      <Stack>
+      <Stack
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: Colors[theme].background,
+          },
+        }}
+      >
         <Stack.Screen
           name="[movieId]/index"
           options={{

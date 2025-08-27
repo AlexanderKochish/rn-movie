@@ -1,6 +1,8 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, MD3TypescaleKey, Switch, Text } from 'react-native-paper'
+import { BaseColors } from '../../styles/Colors'
 
 type Props = {
   icon?: string
@@ -9,7 +11,9 @@ type Props = {
   titleSize?: keyof typeof MD3TypescaleKey
   showSwitch?: boolean
   value?: boolean
-  onChangeValue?: () => void
+  onChangeValue?: (val: boolean) => void
+  disabled?: boolean
+  error?: boolean
 }
 
 const PreferenceSwitchItem = ({
@@ -20,6 +24,8 @@ const PreferenceSwitchItem = ({
   showSwitch = true,
   value,
   onChangeValue,
+  disabled,
+  error,
 }: Props) => {
   return (
     <View style={styles.container}>
@@ -27,7 +33,21 @@ const PreferenceSwitchItem = ({
         <Icon source={icon} size={iconSize} />
         <Text variant={titleSize}>{title}</Text>
       </View>
-      {showSwitch && <Switch value={value} onChange={onChangeValue} />}
+      {showSwitch && (
+        <Switch
+          value={value}
+          onValueChange={onChangeValue}
+          disabled={disabled}
+        />
+      )}
+      {error && (
+        <MaterialCommunityIcons
+          name="alert-circle"
+          size={20}
+          color={BaseColors.red}
+          style={styles.errorIcon}
+        />
+      )}
     </View>
   )
 }
@@ -44,5 +64,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+  },
+  errorIcon: {
+    marginLeft: 8,
   },
 })
