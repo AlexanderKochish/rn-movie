@@ -25,7 +25,7 @@ export const useProfileNotificationPreferences = () => {
         .single();
 
       if (error) {
-        Alert.alert("Error", error.message);
+        console.error("Error fetching preferences:", error);
         throw error;
       }
       return data;
@@ -65,7 +65,9 @@ export const useProfileNotificationPreferences = () => {
               onConflict: "user_id,expo_push_token",
             });
 
-          if (subError) console.error("Subscription update error:", subError);
+          if (subError) {
+            console.error("Subscription update error:", subError);
+          }
         } else if (!value) {
           updateData.expo_push_token = null;
 
@@ -80,12 +82,49 @@ export const useProfileNotificationPreferences = () => {
         }
       }
 
+      if (field === "marketing_emails") {
+        try {
+          if (value) {
+            const { error: newsletterError } = await supabase
+              .from("newsletter_subscribers")
+              .upsert({
+                email: user.email,
+                is_active: true,
+              }, {
+                onConflict: "email",
+              });
+
+            if (newsletterError) {
+              console.error("Newsletter subscription error:", newsletterError);
+            }
+          } else {
+            const { error: newsletterError } = await supabase
+              .from("newsletter_subscribers")
+              .update({ is_active: false })
+              .eq("email", user.email);
+
+            if (newsletterError) {
+              console.error(
+                "Newsletter unsubscription error:",
+                newsletterError,
+              );
+            }
+          }
+        } catch (newsletterError) {
+          console.error("Newsletter operation error:", newsletterError);
+        }
+      }
+
       const { error: profileError } = await supabase
         .from("profiles")
         .update(updateData)
         .eq("id", user.id);
 
-      if (profileError) throw profileError;
+      if (profileError) {
+        console.error("Profile update error:", profileError);
+        throw profileError;
+      }
+
       return { field, value };
     },
     onMutate: async ({ field, value }) => {
@@ -107,12 +146,17 @@ export const useProfileNotificationPreferences = () => {
     },
     onError: (err, variables, context) => {
       console.error("Update preference error:", err);
+      Alert.alert("Error", "Failed to update settings");
+
       if (context?.previousPreferences) {
         queryClient.setQueryData(
           ["profile-notification-preferences", user?.id],
           context.previousPreferences,
         );
       }
+    },
+    onSuccess: (data) => {
+      console.log("Preferences updated successfully:", data);
     },
     onSettled: () => {
       queryClient.invalidateQueries({
