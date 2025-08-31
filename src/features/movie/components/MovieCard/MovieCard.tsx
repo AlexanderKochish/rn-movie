@@ -1,65 +1,135 @@
-import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import { Colors } from '@/src/shared/styles/Colors'
-import { Image } from 'expo-image'
-import { Link } from 'expo-router'
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Icon, Text } from 'react-native-paper'
+import { Movie } from '@/src/shared/types/types'
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native'
+import { Text } from 'react-native-paper'
+import { useGenres } from '../../hooks/useGenres'
 
-type Props = {
-  imageUrl: string | null
-  title?: string
-  vote_average?: number
-  id: number
+interface MovieCardProps {
+  movie: Movie
+  size?: 'small' | 'medium' | 'large'
 }
 
-const MovieCard = ({ imageUrl, title, vote_average, id }: Props) => {
-  const { theme } = useTheme()
+const { width } = Dimensions.get('window')
+const POSTER_WIDTH = width / 3 - 20
+const POSTER_HEIGHT = POSTER_WIDTH * 1.5
+
+const MovieCard: React.FC<MovieCardProps> = ({ movie, size = 'medium' }) => {
+  const { getGenreNames } = useGenres()
+  const router = useRouter()
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).getFullYear() || 'TBA'
+  }
+
+  const sizes = {
+    small: { width: POSTER_WIDTH, height: POSTER_HEIGHT },
+    medium: { width: POSTER_WIDTH * 1.2, height: POSTER_HEIGHT * 1.2 },
+    large: { width: POSTER_WIDTH * 1.5, height: POSTER_HEIGHT * 1.5 },
+  }
 
   return (
-    <View style={styles.card}>
-      <Link href={{ pathname: `/(movie)/[movieId]`, params: { movieId: id } }}>
-        <Image
-          source={{
-            uri: imageUrl
-              ? `${process.env.EXPO_PUBLIC_IMG_W300}${imageUrl}`
-              : process.env.EXPO_PUBLIC_POSTER_HOLDER,
-          }}
-          style={styles.cardImage}
-          contentFit="cover"
-        />
-      </Link>
-      <Text style={{ color: Colors[theme].text }}>
-        {title && title?.length > 16
-          ? `${title?.slice(0, 16)}...`
-          : title || 'No Title'}
-      </Text>
-      <View style={styles.content}>
-        <Text style={{ color: 'gray' }}>167 mins</Text>
-        <View style={styles.voteAverage}>
-          <Icon source="star" size={20} color="yellow" />
-          <Text style={{ color: Colors[theme].text }}>
-            {vote_average?.toFixed(1)}
+    <TouchableOpacity
+      style={[styles.card, { width: sizes[size].width }]}
+      onPress={() =>
+        router.push({
+          pathname: '/(movie)/[movieId]',
+          params: {
+            movieId: movie.id,
+          },
+        })
+      }
+      activeOpacity={0.8}
+    >
+      <Image
+        source={{
+          uri: movie.poster_path
+            ? `${process.env.EXPO_PUBLIC_IMG_W500}${movie.poster_path || movie.backdrop_path}`
+            : process.env.EXPO_PUBLIC_POSTER_HOLDER,
+        }}
+        style={[styles.poster, { height: sizes[size].height }]}
+        resizeMode="cover"
+      />
+
+      <View style={styles.info}>
+        <Text style={styles.title} numberOfLines={2}>
+          {movie.title}
+        </Text>
+
+        <View style={styles.meta}>
+          <View style={styles.rating}>
+            <Ionicons name="star" style={{ color: 'yellow' }} />
+            <Text style={styles.ratingText}>
+              {movie.vote_average.toFixed(1)}
+            </Text>
+          </View>
+
+          <Text style={styles.year}>
+            {movie.release_date && formatDate(movie.release_date)}
           </Text>
         </View>
+
+        {movie.genre_ids && (
+          <Text style={styles.genres} numberOfLines={1}>
+            {getGenreNames(movie.genre_ids)}
+          </Text>
+        )}
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
 export default MovieCard
 
 const styles = StyleSheet.create({
-  card: { width: 150, margin: 5 },
-  cardImage: {
-    width: 150,
-    height: 210,
-    marginRight: 12,
-    borderRadius: 10,
+  card: {
+    width: POSTER_WIDTH,
+    marginBottom: 16,
   },
-  content: { flexDirection: 'row', justifyContent: 'space-between' },
-  voteAverage: {
+  poster: {
+    width: POSTER_WIDTH,
+    height: POSTER_HEIGHT,
+    borderRadius: 12,
+    backgroundColor: '#2a2a2a',
+  },
+  info: {
+    marginTop: 8,
+  },
+  title: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 4,
+    lineHeight: 18,
+  },
+  meta: {
     flexDirection: 'row',
-    gap: 5,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  rating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
+  ratingText: {
+    color: '#FFD700',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  year: {
+    color: '#888',
+    fontSize: 12,
+  },
+  genres: {
+    color: '#666',
+    fontSize: 11,
   },
 })

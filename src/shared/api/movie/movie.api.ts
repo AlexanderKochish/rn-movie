@@ -27,8 +27,8 @@ export const getMovieById = (id: number) =>
 export const getMovieCredits = (id: number) =>
   fetchData<MovieCredits>(`movie/${id}/credits`);
 
-export const getMoviesByName = (search: string) =>
-  fetchData<MoviesResponse>(`search/movie`, { query: search });
+export const getMoviesByName = (search: string, page: number) =>
+  fetchData<MoviesResponse>(`search/movie`, { query: search, page });
 
 export const getTrailerVideoById = (id: number) =>
   fetchData<VideosResponse>(`movie/${id}/videos`);

@@ -21,7 +21,7 @@ export type Movie = {
 
 export type MoviesResponse = {
   page: number;
-  results: MovieUnionType[];
+  results: Movie[];
   total_pages: number;
   total_results: number;
 };
@@ -112,7 +112,7 @@ export type CrewMember = {
   job: string;
 };
 
-export type MovieUnionType = (Movie | MovieDetailsType) & { docId: string };
+export type MovieUnionType = Movie | MovieDetailsType;
 
 export type ReviewType = {
   id: string;
