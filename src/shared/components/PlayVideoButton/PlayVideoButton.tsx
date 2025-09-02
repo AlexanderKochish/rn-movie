@@ -1,8 +1,8 @@
+import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import React from 'react'
-import { StyleSheet } from 'react-native'
-import { Button } from 'react-native-paper'
-import { BaseColors } from '../../styles/Colors'
+import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Text } from 'react-native-paper'
 
 type Props = {
   movieId: number
@@ -11,11 +11,8 @@ type Props = {
 const PlayVideoButton = ({ movieId }: Props) => {
   const router = useRouter()
   return (
-    <Button
-      style={styles.playBtn}
-      icon="play-outline"
-      mode="contained"
-      labelStyle={styles.label}
+    <TouchableOpacity
+      style={styles.trailerButton}
       onPress={() => {
         router.push({
           pathname: '/trailer',
@@ -25,23 +22,28 @@ const PlayVideoButton = ({ movieId }: Props) => {
         })
       }}
     >
-      Trailer
-    </Button>
+      <Ionicons name="play" size={16} color="#fff" />
+      <Text style={styles.trailerButtonText}>Watch Trailer</Text>
+    </TouchableOpacity>
   )
 }
 
 export default PlayVideoButton
 
 const styles = StyleSheet.create({
-  playBtn: {
-    backgroundColor: BaseColors.brown,
-    position: 'absolute',
-    bottom: -5,
-    zIndex: 100,
-    borderRadius: 10,
+  trailerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 8,
+    alignSelf: 'flex-start',
   },
-  label: {
-    fontSize: 18,
-    color: BaseColors.orangeLight,
+  trailerButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
 })

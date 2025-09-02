@@ -1,46 +1,77 @@
+import MovieDetailsActionBar from '@/src/features/movie/components/MovieDetailsActionBar/MovieDetailsActionBar'
+import MovieDetailsTabs from '@/src/features/movie/components/MovieDetailsTabs/MovieDetailsTabs'
+import MovieDetailsTitle from '@/src/features/movie/components/MovieDetailsTitle/MovieDetailsTitle'
 import { useMovieDetails } from '@/src/features/movie/hooks/useMovieDetails'
-import { Colors } from '@/src/shared/styles/Colors'
-import CastAndCrew from '@/src/features/cast-and-crew/components/CastAndCrew/CastAndCrew'
-import MovieDetails from '@/src/features/movie/components/MovieDetails/MovieDetails'
 import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
-import Ratings from '@/src/features/rating/components/Ratings/Ratings'
-import Reviews from '@/src/features/reviews/components/Reviews/Reviews'
-import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import React from 'react'
-import { ScrollView, View } from 'react-native'
-import { PaperProvider } from 'react-native-paper'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-const MovieDetailsScreen = () => {
+export default function MovieDetailsScreen() {
+  const router = useRouter()
   const movieId = useMovieId()
-  const { data, isLoading } = useMovieDetails(movieId)
-  const { theme } = useTheme()
+  const { data: movie, isLoading } = useMovieDetails(movieId)
 
-  if (isLoading || !data) {
+  if (isLoading || !movie) {
     return <Preloader />
   }
 
+  if (!movieId) {
+    return (
+      <View style={styles.errorContainer}>
+        <Ionicons name="sad-outline" size={64} color="#666" />
+        <Text style={styles.errorText}>Movie not found</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Text style={styles.backButtonText}>Go Back</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   return (
-    <PaperProvider>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 40,
-          backgroundColor: Colors[theme].background,
-        }}
-      >
-        <MovieDetails data={data} />
-        <View style={{ paddingHorizontal: 15 }}>
-          <Ratings
-            voteAverage={data?.vote_average}
-            voteCount={data?.vote_count}
-          />
-          <CastAndCrew />
-          <Reviews />
-        </View>
-      </ScrollView>
-    </PaperProvider>
+    <View style={styles.container}>
+      <StatusBar style="light" />
+      <MovieDetailsTitle movieId={movieId} data={movie} />
+
+      <MovieDetailsTabs movie={movie} />
+
+      <MovieDetailsActionBar />
+    </View>
   )
 }
 
-export default MovieDetailsScreen
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
+    gap: 20,
+    padding: 20,
+  },
+  errorText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  backButton: {
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    padding: 8,
+    borderRadius: 20,
+  },
+  backButtonText: {
+    color: '#007AFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+})

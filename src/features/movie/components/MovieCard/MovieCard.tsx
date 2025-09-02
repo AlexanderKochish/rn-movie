@@ -12,7 +12,7 @@ import { Text } from 'react-native-paper'
 import { useGenres } from '../../hooks/useGenres'
 
 interface MovieCardProps {
-  movie: Movie
+  movie: Omit<Movie, 'media_type'>
   size?: 'small' | 'medium' | 'large'
 }
 

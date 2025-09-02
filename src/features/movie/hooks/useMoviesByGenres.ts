@@ -1,31 +1,34 @@
-import { getMoviesByGenre } from '@/src/shared/api'
-import { MoviesResponse } from '@/src/shared/types/types'
-import { useQuery } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
+import { getMoviesByGenre } from "@/src/shared/api";
+import { MoviesResponse } from "@/src/shared/types/types";
+import { useQuery } from "@tanstack/react-query";
+import { useCallback, useState } from "react";
 
 export const useMoviesByGenres = () => {
-  const [genreIds, setGenreId] = useState<number[]>([])
+  const [genreIds, setGenreId] = useState<number[]>([]);
 
   const { data: moviesByGenres, ...rest } = useQuery<MoviesResponse, Error>({
-    queryKey: ['moviesByGenres', genreIds],
+    queryKey: ["moviesByGenres", genreIds],
     queryFn: () => getMoviesByGenre(genreIds),
-  })
+    enabled: !!genreIds.length,
+    retry: false,
+  });
 
   const handleGenre = useCallback(
     (id: number) => {
       if (!genreIds.includes(id)) {
-        setGenreId((prev) => [...prev, id])
+        setGenreId((prev) => [...prev, id]);
       } else {
-        setGenreId((prev) => prev.filter((genreId) => genreId !== id))
+        setGenreId((prev) => prev.filter((genreId) => genreId !== id));
       }
     },
-    [genreIds]
-  )
+    [genreIds],
+  );
 
   return {
-    moviesByGenres: moviesByGenres?.results,
+    moviesByGenres: moviesByGenres?.results || [],
     handleGenre,
     genreIds,
+    setGenreId,
     ...rest,
-  }
-}
+  };
+};
