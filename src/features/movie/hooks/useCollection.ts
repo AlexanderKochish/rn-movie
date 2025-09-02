@@ -1,5 +1,5 @@
 import { supabase } from "@/src/shared/services/supabase";
-import { MovieDetailsType, MovieUnionType } from "@/src/shared/types/types";
+import { MovieDetailsType } from "@/src/shared/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import { Alert } from "react-native";
@@ -13,32 +13,34 @@ export const useCollection = (table: "liked_movies" | "bookmarks") => {
 
   const queryKey = [table, userId];
 
-  const { data: items = [], isLoading, isError } = useQuery<MovieUnionType[]>({
-    queryKey,
-    queryFn: async () => {
-      if (!userId) return [];
+  const { data: items = [], isLoading, isError } = useQuery<MovieDetailsType[]>(
+    {
+      queryKey,
+      queryFn: async () => {
+        if (!userId) return [];
 
-      const { data, error } = await supabase
-        .from(table)
-        .select("movie_id, data, created_at")
-        .eq("user_id", userId);
+        const { data, error } = await supabase
+          .from(table)
+          .select("movie_id, data, created_at")
+          .eq("user_id", userId);
 
-      if (error) {
-        Alert.alert("Error", error.message);
-        return [];
-      }
+        if (error) {
+          Alert.alert("Error", error.message);
+          return [];
+        }
 
-      return (
-        data?.map((row) => ({
-          id: row.movie_id,
-          ...row.data,
-          createdAt: row.created_at,
-        })) ?? []
-      );
+        return (
+          data?.map((row) => ({
+            id: row.movie_id,
+            ...row.data,
+            createdAt: row.created_at,
+          })) ?? []
+        );
+      },
+      enabled: !!userId,
+      retry: 1,
     },
-    enabled: !!userId,
-    retry: 1,
-  });
+  );
 
   const itemIds = useMemo(() => items.map((item) => item.id), [items]);
 

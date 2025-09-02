@@ -1,11 +1,11 @@
-import MoviesList from '@/src/features/movie/components/MoviesList/MoviesList'
+import MoviesRow from '@/src/features/bookmarks/components/MoviesRow/MoviesRow'
 import { useBookmark } from '@/src/features/movie/hooks/useBookmark'
 import React from 'react'
 
 const BookmarkScreen = () => {
-  const { items } = useBookmark()
+  const { items, isLoading } = useBookmark()
 
-  return <MoviesList items={items} />
+  return <MoviesRow movies={items} isLoading={isLoading} />
 }
 
 export default BookmarkScreen
