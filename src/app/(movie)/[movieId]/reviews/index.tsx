@@ -1,62 +1,61 @@
+import NotFoundScreen from '@/src/app/+not-found'
+import MovieInfoCard from '@/src/features/movie/components/MovieInfoCard/MovieInfoCard'
+import { useMovieDetails } from '@/src/features/movie/hooks/useMovieDetails'
 import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
-import ReviewCard from '@/src/features/reviews/components/ReviewCard/ReviewCard'
+import ReviewForm from '@/src/features/reviews/components/ReviewForm/ReviewForm'
+import Reviews from '@/src/features/reviews/components/Reviews/Reviews'
 import { useReview } from '@/src/features/reviews/hooks/useReview'
-import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import { Colors } from '@/src/shared/styles/Colors'
-import { Typography } from '@/src/shared/styles/Typography'
-import React from 'react'
-import { FlatList, StyleSheet, View } from 'react-native'
-import { Text } from 'react-native-paper'
+import React, { useState } from 'react'
+import { ScrollView, StyleSheet } from 'react-native'
+import { RefreshControl } from 'react-native-gesture-handler'
 
-const ReviewsScreen = () => {
+const ReviewScreen = () => {
   const movieId = useMovieId()
-  const { reviews } = useReview(movieId)
-  const { theme } = useTheme()
+  const { data: movie, refetch: refetchMovie } = useMovieDetails(movieId)
+  const { refetch: refetchReviews } = useReview(movieId)
+
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true)
+
+    const refreshPromises = [refetchMovie(), refetchReviews()]
+
+    Promise.all(refreshPromises)
+      .then(() => {
+        setRefreshing(false)
+      })
+      .catch(() => {
+        setRefreshing(false)
+      })
+  }, [refetchMovie, refetchReviews])
+
+  if (!movie) {
+    return <NotFoundScreen />
+  }
+
   return (
-    <View
-      style={[styles.container, { backgroundColor: Colors[theme].background }]}
+    <ScrollView
+      style={styles.scrollView}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     >
-      <FlatList
-        style={{ flex: 1 }}
-        data={reviews || []}
-        contentContainerStyle={{ gap: 10 }}
-        ListEmptyComponent={
-          <View style={styles.emptyTextWrapper}>
-            <Text
-              style={{
-                color: Colors[theme].text,
-                fontSize: Typography.title.fontSize,
-              }}
-            >
-              Reviews list is empty!
-            </Text>
-          </View>
-        }
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <ReviewCard
-            review={item.review}
-            rating={item.rating}
-            username={item.display_name}
-            avatar={item.photo_url}
-          />
-        )}
-      />
-    </View>
+      <MovieInfoCard movie={movie} />
+      <ReviewForm movieId={movie?.id} />
+      <Reviews />
+    </ScrollView>
   )
 }
 
-export default ReviewsScreen
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 15,
+  backButton: {
+    padding: 8,
   },
-  emptyTextWrapper: {
+  scrollView: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 20,
+    backgroundColor: '#0a0a0a',
   },
 })
+
+export default ReviewScreen

@@ -14,7 +14,7 @@ const RatingResult = ({ voteAverage }: Props) => {
     <View style={styles.container}>
       {[...Array(5)].map((_, i) => {
         const startRating = i + 1
-        const rating = Math.ceil(Number(voteAverage) / 2)
+        const rating = Math.floor(Number(voteAverage) / 2)
         return (
           <Icon
             key={i}

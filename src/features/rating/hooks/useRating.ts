@@ -9,7 +9,9 @@ import { ratingSchema, ratingSchemaType } from "../lib/rating.schema";
 
 export const useRating = (movieId: number) => {
   const { profile: user } = useProfile();
-  const { control, handleSubmit, reset, setValue } = useForm<ratingSchemaType>({
+  const { control, handleSubmit, reset, setValue, watch } = useForm<
+    ratingSchemaType
+  >({
     defaultValues: { rating: 0 },
     resolver: zodResolver(ratingSchema),
   });
@@ -108,5 +110,6 @@ export const useRating = (movieId: number) => {
     isPending,
     isSuccess,
     setValue,
+    ratingWatch: watch,
   };
 };

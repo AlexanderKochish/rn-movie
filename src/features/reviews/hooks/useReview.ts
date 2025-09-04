@@ -16,7 +16,6 @@ export const useReview = (movieId: number) => {
     handleSubmit,
     reset,
     watch,
-    setValue,
     formState: { isValid },
   } = useForm<reviewSchemaType>({
     defaultValues: { review: "" },
@@ -27,7 +26,7 @@ export const useReview = (movieId: number) => {
   const reviewInput = watch("review");
   const isValidValue = !isValid || reviewInput?.trim() === "";
 
-  const { data: allReviews, isLoading: isLoadingReviews } = useQuery<
+  const { data: allReviews, isLoading: isLoadingReviews, refetch } = useQuery<
     ReviewType[]
   >({
     queryKey: ["reviews", movieId],
@@ -110,7 +109,6 @@ export const useReview = (movieId: number) => {
       queryClient.invalidateQueries({
         queryKey: ["user-review", movieId, user?.id],
       });
-
       if (result === "created") {
         Alert.alert("Success", "Review added!");
       } else {
@@ -140,5 +138,6 @@ export const useReview = (movieId: number) => {
     isValidValue,
     hasUserReview: !!userReview,
     isEditing: !!userReview,
+    refetch,
   };
 };
