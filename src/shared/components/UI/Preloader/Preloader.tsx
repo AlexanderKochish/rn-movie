@@ -2,15 +2,21 @@ import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { Ionicons } from '@expo/vector-icons'
-import React from 'react'
+import React, { ComponentProps } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Text } from 'react-native-paper'
 
 type Props = {
   size?: 'small' | 'large'
+  icon?: ComponentProps<typeof Ionicons>['name']
+  text?: string
 }
 
-const Preloader = ({ size = 'large' }: Props) => {
+const Preloader = ({
+  size = 'large',
+  icon = 'film',
+  text = 'Loading new movies...',
+}: Props) => {
   const { theme } = useTheme()
   return (
     <View
@@ -25,9 +31,9 @@ const Preloader = ({ size = 'large' }: Props) => {
           { backgroundColor: Colors[theme].background },
         ]}
       >
-        <Ionicons name="film" size={64} color="#666" />
+        <Ionicons name={icon} size={64} color="#666" />
         <Text style={[styles.loadingText, { color: Colors[theme].text }]}>
-          Loading new movies...
+          {text}
         </Text>
         <ActivityIndicator size={size} />
       </View>
