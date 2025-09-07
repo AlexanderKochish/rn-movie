@@ -2,14 +2,14 @@ import MovieCard from '@/src/features/movie/components/MovieCard/MovieCard'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import NavigationItem from '@/src/shared/components/UI/NavigationItem/NavigationItem'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { MovieUnionType } from '@/src/shared/types/types'
+import { MovieDetailsType } from '@/src/shared/types/types'
 import { Href } from 'expo-router'
 import React from 'react'
 import { FlatList, View } from 'react-native'
 import { ActivityIndicator, Text } from 'react-native-paper'
 
-type Props<T extends MovieUnionType> = {
-  items: T[] | undefined
+type Props<T extends MovieDetailsType> = {
+  movies: T[] | null
   title?: string
   icon?: string
   isLoading: boolean
@@ -17,8 +17,8 @@ type Props<T extends MovieUnionType> = {
   isError?: any
 }
 
-const MoviesRow = <T extends MovieUnionType>({
-  items,
+const MoviesRow = <T extends MovieDetailsType>({
+  movies,
   title,
   icon,
   isLoading,
@@ -40,7 +40,7 @@ const MoviesRow = <T extends MovieUnionType>({
           />
         </View>
       )}
-      {!isLoading && !items?.length && (
+      {!isLoading && !movies?.length && (
         <Text
           variant="labelLarge"
           style={{
@@ -55,17 +55,10 @@ const MoviesRow = <T extends MovieUnionType>({
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
-        data={items}
+        data={movies}
         style={{ flex: 1, height: 260 }}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <MovieCard
-            id={item.id}
-            imageUrl={item.poster_path || item.backdrop_path}
-            title={item.title || item.original_title}
-            vote_average={item.vote_average}
-          />
-        )}
+        renderItem={({ item }) => <MovieCard movie={item} />}
       />
     </>
   )

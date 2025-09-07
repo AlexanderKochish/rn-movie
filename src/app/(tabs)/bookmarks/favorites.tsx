@@ -1,11 +1,12 @@
-import MoviesList from '@/src/features/movie/components/MoviesList/MoviesList'
-import { useFavorite } from '@/src/features/movie/hooks/useFavorite'
+import MoviesRow from '@/src/features/bookmarks/components/MoviesRow/MoviesRow'
+import { useFavorite } from '@/src/features/bookmarks/hooks/useFavorite'
+
 import React from 'react'
 
 const FavoritesMoviesScreen = () => {
-  const { items } = useFavorite()
+  const { items, isLoading } = useFavorite()
 
-  return <MoviesList items={items} />
+  return <MoviesRow movies={items} isLoading={isLoading} />
 }
 
 export default FavoritesMoviesScreen
