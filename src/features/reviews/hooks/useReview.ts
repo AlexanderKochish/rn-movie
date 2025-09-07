@@ -1,15 +1,21 @@
-import { supabase } from "@/src/shared/services/supabase";
 import { ReviewType } from "@/src/shared/types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { Alert } from "react-native";
+import Toast from "react-native-toast-message";
 import { useProfile } from "../../profile/hooks/useProfile";
+import {
+  addNewReview,
+  getAllReviewsOfMovie,
+  getUserReview,
+  updateUserReview,
+} from "../api/reviewsRepository";
 import { reviewSchema, reviewSchemaType } from "../lib/zod/review.schema";
 
 export const useReview = (movieId: number) => {
   const { profile: user } = useProfile();
   const queryClient = useQueryClient();
+  const userId = user?.id as string;
 
   const {
     control,
@@ -30,89 +36,51 @@ export const useReview = (movieId: number) => {
     ReviewType[]
   >({
     queryKey: ["reviews", movieId],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("reviews")
-        .select("*")
-        .eq("movie_id", movieId)
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching reviews:", error);
-        return [];
-      }
-
-      return data as ReviewType[];
-    },
+    queryFn: () => getAllReviewsOfMovie(movieId),
   });
 
   const { data: userReview, isLoading: isLoadingUserReview } = useQuery<
-    ReviewType | null
+    ReviewType | null,
+    Error
   >({
-    queryKey: ["user-review", movieId, user?.id],
+    queryKey: ["user-review", movieId, userId],
     queryFn: async () => {
-      if (!user?.id) return null;
+      if (!userId && !movieId) return null;
 
-      const { data, error } = await supabase
-        .from("reviews")
-        .select("*")
-        .eq("movie_id", movieId)
-        .eq("user_id", user.id)
-        .single();
+      const data = await getUserReview(movieId, userId);
 
-      if (error) {
-        if (error.code === "PGRST116") {
-          return null;
-        }
-        console.error("Error fetching user review:", error);
-        return null;
-      }
-
-      return data as ReviewType;
+      return data;
     },
-    enabled: !!user?.id,
+    enabled: !!userId,
   });
 
   const mutation = useMutation({
     mutationFn: async (review: reviewSchemaType) => {
-      if (!user?.id) throw new Error("Unauthorized");
+      if (!userId || !user) throw new Error("Unauthorized");
 
       if (userReview) {
-        const { error } = await supabase
-          .from("reviews")
-          .update({
-            review: review.review,
-            rating: userReview.rating ?? null,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", userReview.id);
-
-        if (error) throw error;
+        await updateUserReview(review, userReview);
         return "updated";
       } else {
-        const { error } = await supabase.from("reviews").insert({
-          user_id: user.id,
-          movie_id: movieId,
-          review: review.review,
-          rating: null,
-          updated_at: new Date().toISOString(),
-          email: user.email,
-          display_name: (user.username || user.email) ?? null,
-          photo_url: user.avatar_url ?? null,
-        });
-        if (error) throw error;
+        await addNewReview(userId, movieId, review, user);
         return "created";
       }
     },
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ["reviews", movieId] });
       queryClient.invalidateQueries({
-        queryKey: ["user-review", movieId, user?.id],
+        queryKey: ["user-review", movieId, userId],
       });
       if (result === "created") {
-        Alert.alert("Success", "Review added!");
+        Toast.show({
+          type: "customSuccess",
+          text1: "Review added!",
+        });
       } else {
-        Alert.alert("Success", "Review added!");
+        Toast.show({
+          type: "customSuccess",
+          text1: "Review added!",
+        });
       }
 
       if (result === "created") {
@@ -121,7 +89,7 @@ export const useReview = (movieId: number) => {
     },
     onError: (error: unknown) => {
       if (error instanceof Error) {
-        Alert.alert("Error", error.message);
+        Error(error.message);
       }
     },
   });
