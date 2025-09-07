@@ -2,7 +2,6 @@ import FaqListQuestions from '@/src/features/faq/components/FaqListQuestions/Faq
 import FaqQuickActions from '@/src/features/faq/components/FaqQuickActions/FaqQuickActions'
 import { useFaq } from '@/src/features/faq/hooks/useFaq'
 import Header from '@/src/shared/components/Header/Header'
-import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 
@@ -15,6 +14,7 @@ export default function FAQScreen() {
     expandedQuestionIds,
     toggleQuestion,
     isLoadingFaq,
+    isErrorFaq,
   } = useFaq()
 
   return (
@@ -29,15 +29,15 @@ export default function FAQScreen() {
         selectedCategoryId={selectedCategoryId}
         setSelectedCategoryId={setSelectedCategoryId}
       />
-      {isLoadingFaq && (
-        <Preloader icon="help-buoy" text="Loading questions..." size="small" />
-      )}
+
       <FaqListQuestions
         categories={categories}
         selectedCategoryId={selectedCategoryId}
         expandedQuestionIds={expandedQuestionIds}
         faq={faq}
         toggleQuestion={toggleQuestion}
+        isLoading={isLoadingFaq}
+        isError={isErrorFaq}
       />
     </View>
   )

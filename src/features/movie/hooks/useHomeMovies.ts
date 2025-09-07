@@ -1,20 +1,26 @@
-import {
-    getNowPlayingMovies,
-    getPopularMovies,
-    getTopRatedMovies,
-    getTrendigMovies,
-    getUpcomingMovies,
-} from "@/src/shared/api";
+import { getMoviesByCategory, getTrendigMovies } from "@/src/shared/api";
 import { useQueries } from "@tanstack/react-query";
 
 export const useHomeMovies = () => {
     const queries = useQueries({
         queries: [
             { queryKey: ["trending-movies"], queryFn: getTrendigMovies },
-            { queryKey: ["popular-movies"], queryFn: getPopularMovies },
-            { queryKey: ["top-rated-movies"], queryFn: getTopRatedMovies },
-            { queryKey: ["upcoming-movies"], queryFn: getUpcomingMovies },
-            { queryKey: ["now-playing-movies"], queryFn: getNowPlayingMovies },
+            {
+                queryKey: ["popular-movies"],
+                queryFn: () => getMoviesByCategory("popular"),
+            },
+            {
+                queryKey: ["top-rated-movies"],
+                queryFn: () => getMoviesByCategory("top_rated"),
+            },
+            {
+                queryKey: ["upcoming-movies"],
+                queryFn: () => getMoviesByCategory("upcoming"),
+            },
+            {
+                queryKey: ["now-playing-movies"],
+                queryFn: () => getMoviesByCategory("now_playing"),
+            },
         ],
     });
 

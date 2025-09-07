@@ -1,7 +1,6 @@
 import { supabase } from "@/src/shared/services/supabase";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
-import { Alert } from "react-native";
 import { FAQCategoryType, FAQQuestionType } from "../types/types";
 
 export const useFaq = () => {
@@ -27,7 +26,6 @@ export const useFaq = () => {
                     .select("*");
 
                 if (error) {
-                    Alert.alert("Error", error.message);
                     throw error;
                 }
 
@@ -42,7 +40,6 @@ export const useFaq = () => {
                 return data ?? [];
             } catch (error: unknown) {
                 if (error instanceof Error) {
-                    Alert.alert("Error", error.message);
                     throw new Error(error.message);
                 }
                 throw error;
@@ -50,36 +47,36 @@ export const useFaq = () => {
         },
     });
 
-    const { data: faq, isLoading: isLoadingFaq } = useQuery<
-        FAQQuestionType[],
-        Error
-    >({
-        queryKey: ["faq", selectedCategoryId],
-        queryFn: async (): Promise<FAQQuestionType[]> => {
-            try {
-                const { data, error } = await supabase
-                    .from("faq")
-                    .select("*")
-                    .eq("category_id", selectedCategoryId)
-                    .eq("is_active", true)
-                    .order("sort_order", { ascending: true });
+    const { data: faq, isLoading: isLoadingFaq, isError: isErrorFaq } =
+        useQuery<
+            FAQQuestionType[],
+            Error
+        >({
+            queryKey: ["faq", selectedCategoryId],
+            queryFn: async (): Promise<FAQQuestionType[]> => {
+                try {
+                    const { data, error } = await supabase
+                        .from("faq")
+                        .select("*")
+                        .eq("category_id", selectedCategoryId)
+                        .eq("is_active", true)
+                        .order("sort_order", { ascending: true });
 
-                if (error) {
-                    Alert.alert("Error", error.message);
+                    if (error) {
+                        throw error;
+                    }
+                    setExpandedQuestionIds(data);
+                    return data ?? [];
+                } catch (error: unknown) {
+                    if (error instanceof Error) {
+                        throw new Error(error.message);
+                    }
                     throw error;
                 }
-                setExpandedQuestionIds(data);
-                return data ?? [];
-            } catch (error: unknown) {
-                if (error instanceof Error) {
-                    Alert.alert("Error", error.message);
-                    throw new Error(error.message);
-                }
-                throw error;
-            }
-        },
-        enabled: !!selectedCategoryId,
-    });
+            },
+            enabled: !!selectedCategoryId,
+            retry: false,
+        });
 
     return {
         faqCategory,
@@ -89,5 +86,6 @@ export const useFaq = () => {
         toggleQuestion,
         expandedQuestionIds,
         isLoadingFaq,
+        isErrorFaq,
     };
 };

@@ -1,8 +1,12 @@
+import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
+import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
+import { openSupportEmail } from '@/src/shared/utils/openSupportEmail'
 import { Ionicons } from '@expo/vector-icons'
-import React from 'react'
-import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useCallback } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { FAQCategoryType, FAQQuestionType } from '../../types/types'
+import FaqQuestionItem from '../FaqQuestionItem/FaqQuestionItem'
 
 type Props = {
   categories: FAQCategoryType[] | undefined | null
@@ -10,6 +14,8 @@ type Props = {
   faq: FAQQuestionType[] | undefined
   toggleQuestion: (id: string) => void
   expandedQuestionIds: string[]
+  isLoading: boolean
+  isError: boolean
 }
 
 const FaqListQuestions = ({
@@ -18,10 +24,59 @@ const FaqListQuestions = ({
   selectedCategoryId,
   toggleQuestion,
   expandedQuestionIds,
+  isLoading,
+  isError,
 }: Props) => {
-  const openSupportEmail = () => {
-    Linking.openURL('mailto:support@movieapp.com?subject=MovieApp Support')
+  const renderQuestion = useCallback(
+    (item: FAQQuestionType) => (
+      <View key={item.id}>
+        <FaqQuestionItem
+          categories={categories}
+          expanded={expandedQuestionIds.includes(item.id)}
+          item={item}
+          toggleQuestion={toggleQuestion}
+        />
+      </View>
+    ),
+    [categories, expandedQuestionIds, toggleQuestion]
+  )
+
+  if (isLoading) {
+    return (
+      <Preloader icon="help-buoy" text="Loading questions..." size="small" />
+    )
   }
+
+  if (isError) {
+    return (
+      <EmptyState
+        colorIcon="#ff0000ff"
+        style={{
+          backgroundColor: 'rgba(109, 44, 44, 0.4)',
+          borderColor: 'rgba(120, 43, 43, 0.58)',
+          borderWidth: 1,
+        }}
+        icon="warning"
+        title="Error"
+        description="Try again later or send message to our support team!"
+      />
+    )
+  }
+
+  if (!isLoading && !isError && faq?.length === 0) {
+    return (
+      <EmptyState
+        icon="help-buoy"
+        title="Questions not found"
+        description="Try again later or send message to our support team!"
+      />
+    )
+  }
+
+  const selectedCategory = categories?.find((c) => c.id === selectedCategoryId)
+  const isAllQuestions =
+    selectedCategory?.name?.toLowerCase() === 'all questions'
+
   return (
     <ScrollView
       style={styles.faqContainer}
@@ -29,59 +84,12 @@ const FaqListQuestions = ({
       showsVerticalScrollIndicator={false}
     >
       <Text style={styles.sectionTitle}>
-        {categories?.find(
-          (f) => String(f.name).toLowerCase() === 'all questions'
-        )
-          ? 'All Questions'
-          : categories?.find((c) => c.id === selectedCategoryId)?.name}{' '}
-        ({faq?.length})
+        {isAllQuestions ? 'All Questions' : selectedCategory?.name}{' '}
+        {!!faq?.length && `(${faq.length})`}
       </Text>
 
-      {faq &&
-        faq.map((item) => (
-          <View key={item.id} style={styles.faqItem}>
-            <TouchableOpacity
-              style={styles.questionContainer}
-              onPress={() => toggleQuestion(item.id)}
-              activeOpacity={0.7}
-            >
-              <View style={styles.questionContent}>
-                <Text style={styles.questionText}>{item.question}</Text>
-                <Ionicons
-                  name={
-                    expandedQuestionIds?.includes(item.id)
-                      ? 'chevron-up'
-                      : 'chevron-down'
-                  }
-                  size={20}
-                  color="#666"
-                />
-              </View>
-            </TouchableOpacity>
+      {faq && faq?.map(renderQuestion)}
 
-            {expandedQuestionIds?.includes(item.id) && (
-              <View style={styles.answerContainer}>
-                <Text style={styles.answerText}>{item.answer}</Text>
-
-                {categories?.find(
-                  (category) => category.name === 'Technical'
-                ) && (
-                  <TouchableOpacity
-                    style={styles.supportLink}
-                    onPress={openSupportEmail}
-                  >
-                    <Text style={styles.supportLinkText}>
-                      Contact support now
-                    </Text>
-                    <Ionicons name="arrow-forward" size={16} color="#007AFF" />
-                  </TouchableOpacity>
-                )}
-              </View>
-            )}
-          </View>
-        ))}
-
-      {/* Still need help section */}
       <View style={styles.helpSection}>
         <Ionicons name="help-buoy" size={48} color="#007AFF" />
         <Text style={styles.helpTitle}>Still need help?</Text>
@@ -90,7 +98,11 @@ const FaqListQuestions = ({
           you might have.
         </Text>
 
-        <TouchableOpacity style={styles.helpButton} onPress={openSupportEmail}>
+        <TouchableOpacity
+          accessibilityRole="button"
+          style={styles.helpButton}
+          onPress={() => openSupportEmail('FAQ Movie Team')}
+        >
           <Text style={styles.helpButtonText}>Get Help</Text>
           <Ionicons name="arrow-forward" size={16} color="#fff" />
         </TouchableOpacity>
@@ -115,48 +127,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  faqItem: {
-    backgroundColor: '#1a1a1a',
-    borderRadius: 12,
-    marginBottom: 12,
-    overflow: 'hidden',
-  },
-  questionContainer: {
-    padding: 16,
-  },
-  questionContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  questionText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-    flex: 1,
-    marginRight: 12,
-  },
-  answerContainer: {
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#333',
-  },
-  answerText: {
-    color: '#888',
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 12,
-  },
-  supportLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  supportLinkText: {
-    color: '#007AFF',
-    fontSize: 14,
-    fontWeight: '600',
-  },
+
   helpSection: {
     backgroundColor: 'rgba(0, 122, 255, 0.1)',
     padding: 24,

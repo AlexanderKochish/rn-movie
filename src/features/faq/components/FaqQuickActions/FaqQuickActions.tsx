@@ -1,5 +1,6 @@
+import { openSupportEmail } from '@/src/shared/utils/openSupportEmail'
 import { Ionicons } from '@expo/vector-icons'
-import React from 'react'
+import React, { ComponentProps } from 'react'
 import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { FAQCategoryType } from '../../types/types'
@@ -15,9 +16,6 @@ const FaqQuickActions = ({
   selectedCategoryId,
   setSelectedCategoryId,
 }: Props) => {
-  const openSupportEmail = () => {
-    Linking.openURL('mailto:support@movieapp.com?subject=MovieApp Support')
-  }
   const openHelpCenter = () => {
     Linking.openURL('https://help.movieapp.com')
   }
@@ -27,7 +25,7 @@ const FaqQuickActions = ({
       <View style={styles.quickActions}>
         <TouchableOpacity
           style={styles.actionButton}
-          onPress={openSupportEmail}
+          onPress={() => openSupportEmail('FAQ Movie Team')}
         >
           <Ionicons name="mail" size={20} color="#007AFF" />
           <Text style={styles.actionText}>Contact Support</Text>
@@ -56,7 +54,7 @@ const FaqQuickActions = ({
             onPress={() => setSelectedCategoryId(category.id)}
           >
             <Ionicons
-              name={category.icon as any}
+              name={category.icon as ComponentProps<typeof Ionicons>['name']}
               size={16}
               color={selectedCategoryId === category.id ? '#fff' : '#888'}
             />
