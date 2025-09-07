@@ -1,10 +1,14 @@
-import { supabase } from "@/src/shared/services/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { Alert } from "react-native";
 import Toast from "react-native-toast-message";
 import { useProfile } from "../../profile/hooks/useProfile";
+import {
+  addRatingForMovie,
+  getExistingRatingOfMovie,
+  removeRatinOfMovie,
+  updateRatingOfMovie,
+} from "../api/ratingRepository";
 import { ratingSchema, ratingSchemaType } from "../lib/rating.schema";
 
 export const useRating = (movieId: number) => {
@@ -15,20 +19,14 @@ export const useRating = (movieId: number) => {
     defaultValues: { rating: 0 },
     resolver: zodResolver(ratingSchema),
   });
+  const userId = user?.id;
   const queryClient = useQueryClient();
 
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (data: ratingSchemaType) => {
-      if (!user) throw new Error("User not authenticated");
+      if (!user || !userId) throw new Error("User not authenticated");
 
-      const { data: existing, error: selErr } = await supabase
-        .from("reviews")
-        .select("id, rating, review")
-        .eq("user_id", user.id)
-        .eq("movie_id", movieId)
-        .maybeSingle();
-
-      if (selErr) throw selErr;
+      const existing = await getExistingRatingOfMovie(userId, movieId);
 
       const ratingValue = Math.round(data.rating * 2);
 
@@ -36,68 +34,47 @@ export const useRating = (movieId: number) => {
         ratingValue === 0 &&
         (!existing?.review || existing.review.trim() === "")
       ) {
-        const { error } = await supabase
-          .from("reviews")
-          .delete()
-          .eq("user_id", user.id)
-          .eq("movie_id", movieId);
-        if (error) throw error;
+        await removeRatinOfMovie(userId, movieId);
         Toast.show({ type: "customSuccess", text1: "Rating removed" });
         return;
       }
 
       if (ratingValue === 0 && existing?.review) {
-        const { error } = await supabase
-          .from("reviews")
-          .update({
-            rating: null,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", existing.id);
-        if (error) throw error;
+        await updateRatingOfMovie(existing.id, null);
         Toast.show({ type: "customSuccess", text1: "Rating removed" });
         return;
       }
 
       if (existing) {
-        const { error } = await supabase
-          .from("reviews")
-          .update({
-            rating: ratingValue,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", existing.id);
-
-        if (error) throw error;
+        await updateRatingOfMovie(existing.id, ratingValue);
         Toast.show({ type: "customSuccess", text1: "Rating updated" });
       } else {
-        const { error } = await supabase.from("reviews").insert({
-          user_id: user.id,
-          movie_id: movieId,
-          rating: ratingValue,
-          updated_at: new Date().toISOString(),
-          email: user.email ?? null,
-          display_name: (user.username || user.email) ?? null,
-          photo_url: user.avatar_url ?? null,
-          review: null,
-        });
-        if (error) throw error;
+        await addRatingForMovie(
+          userId,
+          movieId,
+          ratingValue,
+          user,
+        );
         Toast.show({ type: "customSuccess", text1: "Rating created" });
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reviews", movieId] });
       queryClient.invalidateQueries({
-        queryKey: ["user-review", movieId, user?.id],
+        queryKey: ["user-review", movieId, userId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["user-rating", movieId, user?.id],
+        queryKey: ["user-rating", movieId, userId],
       });
       reset();
     },
     onError: (error: unknown) => {
       if (error instanceof Error) {
-        Alert.alert("Error", error.message || "Failed to send rating");
+        Toast.show({
+          type: "customError",
+          text1: "Failed to send rating",
+        });
+        Error(error.message);
       }
     },
   });
