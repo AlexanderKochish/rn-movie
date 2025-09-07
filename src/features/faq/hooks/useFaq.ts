@@ -1,6 +1,9 @@
-import { supabase } from "@/src/shared/services/supabase";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
+import {
+    getFaqCategories,
+    getFaqQuestionsByCategory,
+} from "../api/faqRepository";
 import { FAQCategoryType, FAQQuestionType } from "../types/types";
 
 export const useFaq = () => {
@@ -20,30 +23,16 @@ export const useFaq = () => {
     const { data: faqCategory } = useQuery<FAQCategoryType[] | null, Error>({
         queryKey: ["faq-categories"],
         queryFn: async (): Promise<FAQCategoryType[]> => {
-            try {
-                const { data, error } = await supabase
-                    .from("faq_categories")
-                    .select("*");
+            const data = await getFaqCategories();
 
-                if (error) {
-                    throw error;
-                }
-
-                if (!selectedCategoryId) {
-                    setSelectedCategoryId(
-                        data?.find((category) =>
-                            category.name === "All Questions"
-                        ).id,
-                    );
-                }
-
-                return data ?? [];
-            } catch (error: unknown) {
-                if (error instanceof Error) {
-                    throw new Error(error.message);
-                }
-                throw error;
+            if (!selectedCategoryId) {
+                setSelectedCategoryId(
+                    data?.find((category) => category.name === "All Questions")
+                        .id,
+                );
             }
+
+            return data ?? [];
         },
     });
 
@@ -55,16 +44,9 @@ export const useFaq = () => {
             queryKey: ["faq", selectedCategoryId],
             queryFn: async (): Promise<FAQQuestionType[]> => {
                 try {
-                    const { data, error } = await supabase
-                        .from("faq")
-                        .select("*")
-                        .eq("category_id", selectedCategoryId)
-                        .eq("is_active", true)
-                        .order("sort_order", { ascending: true });
-
-                    if (error) {
-                        throw error;
-                    }
+                    const data = await getFaqQuestionsByCategory(
+                        selectedCategoryId,
+                    );
                     setExpandedQuestionIds(data);
                     return data ?? [];
                 } catch (error: unknown) {
