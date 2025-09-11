@@ -115,7 +115,7 @@ const AccountNotificationSettings = () => {
 
       <BaseCard>
         <PreferenceSwitchItem
-          icon="email"
+          icon="mail"
           title="Marketing emails"
           titleSize="titleLarge"
           value={preferences.marketing_emails}
@@ -139,7 +139,7 @@ const AccountNotificationSettings = () => {
 
       <BaseCard>
         <PreferenceSwitchItem
-          icon="bell-ring"
+          icon="notifications"
           titleSize="titleLarge"
           title="Push Notifications"
           value={preferences.notifications}
