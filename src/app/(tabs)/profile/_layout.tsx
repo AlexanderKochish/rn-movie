@@ -24,36 +24,46 @@ const ProfileLayout = () => {
           }}
         />
         <Stack.Screen
-          name="account"
+          name="edit-profile"
           options={{
-            headerTitle: 'ACCOUNT',
-            headerTintColor: Colors[theme].text,
-            headerTitleAlign: 'center',
-            headerTitleStyle: {
-              color: Colors[theme].text,
-            },
+            headerShown: false,
           }}
         />
         <Stack.Screen
           name="email-settings"
           options={{
-            headerTitle: 'EMAIL SETTINGS',
-            headerTintColor: Colors[theme].text,
-            headerTitleAlign: 'center',
-            headerTitleStyle: {
-              color: Colors[theme].text,
-            },
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="whats-new"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="faq"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="terms-of-service"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="privacy-policy"
+          options={{
+            headerShown: false,
           }}
         />
         <Stack.Screen
           name="security"
           options={{
-            headerTitle: 'SECURITY',
-            headerTintColor: Colors[theme].text,
-            headerTitleAlign: 'center',
-            headerTitleStyle: {
-              color: Colors[theme].text,
-            },
+            headerShown: false,
           }}
         />
       </Stack>

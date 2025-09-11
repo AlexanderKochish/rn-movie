@@ -41,7 +41,7 @@ export default function TabLayout() {
               <TabIcon
                 size={24}
                 name="home-outline"
-                color={focused ? BaseColors.orange : color}
+                color={focused ? BaseColors.blue : color}
               />
             </View>
           ),
@@ -57,7 +57,7 @@ export default function TabLayout() {
               <TabIcon
                 size={24}
                 name="search"
-                color={focused ? BaseColors.orange : color}
+                color={focused ? BaseColors.blue : color}
               />
             </View>
           ),
@@ -73,7 +73,7 @@ export default function TabLayout() {
               <TabIcon
                 size={24}
                 name="bookmark-outline"
-                color={focused ? BaseColors.orange : color}
+                color={focused ? BaseColors.blue : color}
               />
             </View>
           ),
@@ -88,7 +88,7 @@ export default function TabLayout() {
               <TabIcon
                 size={24}
                 name="person-outline"
-                color={focused ? BaseColors.orange : color}
+                color={focused ? BaseColors.blue : color}
               />
             </View>
           ),
@@ -101,7 +101,7 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   focusedTab: {
-    backgroundColor: 'rgba(255, 61, 0, 0.3)',
+    backgroundColor: 'rgba(100, 181, 246, 0.1)',
     borderRadius: 50,
     width: 45,
     height: 45,
