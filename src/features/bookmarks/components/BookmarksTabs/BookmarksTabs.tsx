@@ -1,8 +1,7 @@
-import { useBookmark } from '@/src/features/movie/hooks/useBookmark'
-import { useFavorite } from '@/src/features/movie/hooks/useFavorite'
 import Tabs from '@/src/shared/components/UI/Tabs/Tabs'
 import React, { useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { useBookmark } from '../../hooks/useBookmark'
+import { useFavorite } from '../../hooks/useFavorite'
 import LibraryCollection from '../LibraryCollection/LibraryCollection'
 
 const BookmarksTabs = () => {
@@ -69,5 +68,3 @@ const BookmarksTabs = () => {
 }
 
 export default BookmarksTabs
-
-const styles = StyleSheet.create({})

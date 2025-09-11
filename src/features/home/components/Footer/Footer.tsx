@@ -1,10 +1,19 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-const Footer = () => {
+type Props = {
+  title?: string
+  subtitle?: string
+}
+
+const Footer = ({
+  title = 'Made with ❤️ using TMDB API',
+  subtitle = '© 2025 MovieApp, Inc.',
+}: Props) => {
   return (
     <View style={styles.footer}>
-      <Text style={styles.footerText}>Made with ❤️ using TMDB API</Text>
+      <Text style={styles.footerText}>{title}</Text>
+      <Text style={styles.footerText}>{subtitle}</Text>
     </View>
   )
 }

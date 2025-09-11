@@ -20,7 +20,7 @@ const POSTER_WIDTH = width / 3 - 20
 const POSTER_HEIGHT = POSTER_WIDTH * 1.5
 
 type Props = {
-  collection: MovieDetailsType[]
+  collection: MovieDetailsType[] | null
   activeTab: 'rated' | 'favorites' | 'watchlist'
   isLoading: boolean
   toggleItem: UseMutateFunction<
@@ -42,13 +42,6 @@ const LibraryCollection = ({
 
   const handleRefresh = () => {
     setRefreshing(true)
-  }
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-    })
   }
 
   const getEmptyStateConfig = () => {
@@ -101,7 +94,7 @@ const LibraryCollection = ({
         />
       }
     >
-      {collection.length === 0 ? (
+      {collection?.length === 0 ? (
         <View style={styles.emptyState}>
           <Ionicons name={emptyState.icon as any} size={64} color="#666" />
           <Text style={styles.emptyStateTitle}>{emptyState.title}</Text>
@@ -116,7 +109,7 @@ const LibraryCollection = ({
         </View>
       ) : (
         <View style={styles.moviesGrid}>
-          {collection.map((movie) => (
+          {collection?.map((movie) => (
             <View key={movie.id} style={styles.movieCard}>
               <TouchableOpacity activeOpacity={0.8}>
                 <Image
@@ -185,11 +178,11 @@ const LibraryCollection = ({
       )}
 
       {/* Stats */}
-      {collection.length > 0 && (
+      {collection && collection?.length > 0 && (
         <View style={styles.statsContainer}>
           <View style={styles.statItem}>
             <Ionicons name="film" size={20} color="#007AFF" />
-            <Text style={styles.statNumber}>{collection.length}</Text>
+            <Text style={styles.statNumber}>{collection?.length}</Text>
             <Text style={styles.statLabel}>Total movies</Text>
           </View>
 
