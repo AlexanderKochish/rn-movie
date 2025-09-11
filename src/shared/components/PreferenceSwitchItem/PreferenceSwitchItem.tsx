@@ -1,11 +1,11 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import React from 'react'
+import { Ionicons } from '@expo/vector-icons'
+import React, { ComponentProps } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Icon, MD3TypescaleKey, Switch, Text } from 'react-native-paper'
+import { MD3TypescaleKey, Switch, Text } from 'react-native-paper'
 import { BaseColors } from '../../styles/Colors'
 
 type Props = {
-  icon?: string
+  icon?: ComponentProps<typeof Ionicons>['name']
   iconSize?: number
   title: string
   titleSize?: keyof typeof MD3TypescaleKey
@@ -30,7 +30,7 @@ const PreferenceSwitchItem = ({
   return (
     <View style={styles.container}>
       <View style={styles.textWrapper}>
-        <Icon source={icon} size={iconSize} />
+        <Ionicons name={icon} size={iconSize} color={'#ffffff'} />
         <Text variant={titleSize}>{title}</Text>
       </View>
       {showSwitch && (
@@ -41,7 +41,7 @@ const PreferenceSwitchItem = ({
         />
       )}
       {error && (
-        <MaterialCommunityIcons
+        <Ionicons
           name="alert-circle"
           size={20}
           color={BaseColors.red}

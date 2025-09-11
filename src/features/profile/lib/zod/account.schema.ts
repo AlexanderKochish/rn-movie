@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from "zod";
 
 export const accountSchema = z.object({
   username: z.string().max(20).optional(),
@@ -7,6 +7,7 @@ export const accountSchema = z.object({
     .preprocess((val) => Number(val), z.number().int().positive().max(120))
     .optional(),
   avatar: z.string().optional(),
-})
+  email: z.string(),
+});
 
-export type accountSchemaType = z.infer<typeof accountSchema>
+export type accountSchemaType = z.infer<typeof accountSchema>;
