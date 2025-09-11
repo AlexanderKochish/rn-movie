@@ -1,3 +1,4 @@
+import { useBookmark } from '@/src/features/bookmarks/hooks/useBookmark'
 import RatingModal from '@/src/features/rating/components/RatingModal/RatingModal'
 import RatingStars from '@/src/features/rating/components/RatingStars/RatingStars'
 import { useRating } from '@/src/features/rating/hooks/useRating'
@@ -7,7 +8,6 @@ import React, { useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ActivityIndicator, Button } from 'react-native-paper'
-import { useBookmark } from '../../hooks/useBookmark'
 import { useMovieDetails } from '../../hooks/useMovieDetails'
 import { useMovieId } from '../../hooks/useMovieId'
 
@@ -22,16 +22,6 @@ const MovieDetailsActionBar = () => {
     isLoading,
   } = useBookmark()
   const isActiveBookmark = isBookmarkToggled(movieId)
-
-  //         {data && (
-  //           <IconToggleButton
-  //             data={data}
-  //             onPress={toggleBookmark}
-  //             isLoading={isLoadingBookmark}
-  //             isActive={isActiveBookmark}
-  //             icon="bookmark"
-  //           />
-  //         )}
 
   const showDialog = () => setVisible(true)
 

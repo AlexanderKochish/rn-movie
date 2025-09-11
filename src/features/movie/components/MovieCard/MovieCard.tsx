@@ -1,4 +1,4 @@
-import { Movie } from '@/src/shared/types/types'
+import { MovieCardEntity } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import {
@@ -11,8 +11,8 @@ import {
 import { Text } from 'react-native-paper'
 import { useGenres } from '../../hooks/useGenres'
 
-interface MovieCardProps {
-  movie: Omit<Movie, 'media_type'>
+type MovieCardProps<T extends MovieCardEntity> = {
+  movie: T
   size?: 'small' | 'medium' | 'large'
 }
 
@@ -20,7 +20,10 @@ const { width } = Dimensions.get('window')
 const POSTER_WIDTH = width / 3 - 20
 const POSTER_HEIGHT = POSTER_WIDTH * 1.5
 
-const MovieCard: React.FC<MovieCardProps> = ({ movie, size = 'medium' }) => {
+const MovieCard = <T extends MovieCardEntity>({
+  movie,
+  size = 'medium',
+}: MovieCardProps<T>) => {
   const { getGenreNames } = useGenres()
   const router = useRouter()
 

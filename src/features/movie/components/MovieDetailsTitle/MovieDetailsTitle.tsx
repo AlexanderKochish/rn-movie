@@ -1,3 +1,4 @@
+import { useFavorite } from '@/src/features/bookmarks/hooks/useFavorite'
 import PlayVideoButton from '@/src/shared/components/PlayVideoButton/PlayVideoButton'
 import IconToggleButton from '@/src/shared/components/UI/IconToggleButton/IconToggleButton'
 import { MovieDetailsType } from '@/src/shared/types/types'
@@ -14,7 +15,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { useFavorite } from '../../hooks/useFavorite'
 
 type Props = {
   movieId: number
@@ -94,6 +94,20 @@ const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
               icon="heart"
             />
           )}
+
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() =>
+              router.push({
+                pathname: '/(movie)/[movieId]/reviews',
+                params: {
+                  movieId: String(movie?.id),
+                },
+              })
+            }
+          >
+            <Ionicons name="chatbubble-outline" size={20} color="#fff" />
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -134,6 +148,7 @@ const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
               </Text>
             )}
           </View>
+
           <PlayVideoButton movieId={movieId} />
         </View>
       </View>
