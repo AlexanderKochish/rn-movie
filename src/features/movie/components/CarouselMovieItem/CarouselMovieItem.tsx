@@ -1,110 +1,165 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import PlayVideoButton from '@/src/shared/components/PlayVideoButton/PlayVideoButton'
-import { Colors } from '@/src/shared/styles/Colors'
-import { MovieUnionType } from '@/src/shared/types/types'
+import { Movie } from '@/src/shared/types/types'
+import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
-import React from 'react'
-import { ImageBackground, StyleSheet, View } from 'react-native'
+import { useRouter } from 'expo-router'
+import React, { useRef } from 'react'
+import {
+  Animated,
+  Dimensions,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import { Text } from 'react-native-paper'
 
 type Props = {
-  item: MovieUnionType
+  item: Movie
 }
+
+const { width } = Dimensions.get('window')
+const HERO_HEIGHT = width - 50 * 0.7
 
 const CarouselItem = ({ item }: Props) => {
   const { theme } = useTheme()
+  const router = useRouter()
+  const scrollY = useRef(new Animated.Value(0)).current
+  const heroScale = scrollY.interpolate({
+    inputRange: [-100, 0],
+    outputRange: [1.2, 1],
+    extrapolate: 'clamp',
+  })
+
+  const navigateToMovie = (movie: Movie) => {
+    router.push({
+      pathname: '/(movie)/[movieId]',
+      params: {
+        movieId: movie.id.toString(),
+      },
+    })
+  }
 
   return (
-    <View style={{ position: 'relative' }}>
-      <ImageBackground
+    <Animated.View
+      style={[styles.heroSection, { transform: [{ scale: heroScale }] }]}
+    >
+      <Image
         source={{
-          uri: `${process.env.EXPO_PUBLIC_IMG_W500}${item.poster_path || item.backdrop_path}`,
+          uri:
+            item.backdrop_path || item.poster_path
+              ? `${process.env.EXPO_PUBLIC_IMG_ORIGINAL}${item.backdrop_path || item.poster_path}`
+              : process.env.EXPO_PUBLIC_POSTER_HOLDER,
         }}
-        style={styles.bgImage}
+        style={styles.heroImage}
         resizeMode="cover"
-      >
-        <View style={styles.contentWrapper}>
-          <LinearGradient
-            colors={[
-              `${theme === 'dark' ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)'}`,
-              'transparent',
-            ]}
-            style={[
-              styles.gradient,
-              { top: 0, height: theme === 'dark' ? 100 : 80 },
-            ]}
-          />
-          <View style={styles.detailsWrapper}>
-            <Text
-              variant="titleLarge"
-              style={[
-                styles.title,
-                {
-                  color: Colors[theme].title,
+      />
+      <LinearGradient
+        colors={['transparent', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.9)']}
+        style={styles.heroGradient}
+      />
+
+      <View style={styles.heroContent}>
+        <Text style={styles.heroBadge}>🎬 Featured Today</Text>
+        <Text style={styles.heroTitle}>{item.title}</Text>
+        <Text style={styles.heroOverview} numberOfLines={2}>
+          {item.overview}
+        </Text>
+
+        <View style={styles.heroActions}>
+          <TouchableOpacity
+            style={styles.playButton}
+            onPress={() => navigateToMovie(item)}
+          >
+            <Ionicons name="play" size={20} color="#fff" />
+            <Text style={styles.playButtonText}>Watch Now</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: '/(movie)/[movieId]',
+                params: {
+                  movieId: item.id,
                 },
-              ]}
-            >
-              {item.title || item.original_title}
-            </Text>
-            <Text
-              variant="titleMedium"
-              style={[styles.overview, { color: Colors[theme].text }]}
-            >
-              {item.overview}
-            </Text>
-            <PlayVideoButton movieId={item?.id} />
-          </View>
-          <LinearGradient
-            colors={[
-              'transparent',
-              `${theme === 'dark' ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)'}`,
-            ]}
-            style={[
-              styles.gradient,
-              { bottom: 0, height: theme === 'dark' ? 250 : 200 },
-            ]}
-          />
+              })
+            }
+            style={styles.infoButton}
+          >
+            <Ionicons name="information" size={20} color="#fff" />
+          </TouchableOpacity>
         </View>
-      </ImageBackground>
-    </View>
+      </View>
+    </Animated.View>
   )
 }
 
 export default CarouselItem
 
 const styles = StyleSheet.create({
-  gradient: {
+  heroSection: {
+    height: HERO_HEIGHT,
+    marginBottom: 24,
+  },
+  heroImage: {
+    width: '100%',
+    height: '100%',
+  },
+  heroGradient: {
     position: 'absolute',
     left: 0,
     right: 0,
+    bottom: 0,
+    height: '70%',
   },
-  bgImage: {
-    flex: 1,
-    height: 500,
-    position: 'relative',
+  heroContent: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 20,
   },
-  contentWrapper: {
-    height: 500,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 10,
-  },
-  title: {
-    fontWeight: '700',
-    fontSize: 28,
-    textAlign: 'center',
-  },
-  detailsWrapper: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    gap: 5,
-    zIndex: 1,
-  },
-  overview: {
-    textAlign: 'center',
+  heroBadge: {
+    color: '#FFD700',
+    fontSize: 12,
     fontWeight: '600',
-    height: 75,
-    marginBottom: 40,
+    marginBottom: 8,
+  },
+  heroTitle: {
+    color: '#fff',
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  heroOverview: {
+    color: '#ccc',
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 16,
+  },
+  heroActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  playButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 25,
+    gap: 8,
+  },
+  playButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  infoButton: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    padding: 12,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.3)',
   },
 })

@@ -4,43 +4,34 @@ import { Dimensions, StyleSheet, View } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
 import Carousel, { Pagination } from 'react-native-reanimated-carousel'
 import { BaseColors, Colors } from '../../styles/Colors'
-import { MovieUnionType } from '../../types/types'
-import AppLogo from '../AppLogo/AppLogo'
+import { Movie } from '../../types/types'
 
 const SLIDER_WIDTH = Dimensions.get('window').width
 
-type Props<T extends MovieUnionType> = {
+type Props<T extends Movie> = {
   items?: T[]
 }
 
-const CustomCarousel = <T extends MovieUnionType>({ items }: Props<T>) => {
+const { width } = Dimensions.get('window')
+const HERO_HEIGHT = width - 50 * 0.7
+
+const CustomCarousel = <T extends Movie>({ items }: Props<T>) => {
   const progressValue = useSharedValue(0)
   return (
     <View style={styles.wrapper}>
-      <View style={styles.logoWrapper}>
-        <AppLogo
-          text="Watcher"
-          size="small"
-          variant="horizontal"
-          color="orange"
-        />
-      </View>
       <Carousel
         testID={'xxx'}
         loop={true}
         width={SLIDER_WIDTH}
-        height={500}
         snapEnabled={true}
         pagingEnabled={true}
-        autoPlayInterval={2000}
+        autoPlayInterval={10000}
+        autoPlay={true}
         data={items?.slice(0, 8) || []}
-        style={{ width: '100%' }}
         onProgressChange={(_, absoluteProgress) => {
           progressValue.value = absoluteProgress
         }}
-        renderItem={({ item }: { item: MovieUnionType }) => (
-          <CarouselItem item={item} />
-        )}
+        renderItem={({ item }: { item: Movie }) => <CarouselItem item={item} />}
       />
 
       {items && items.length > 0 && (
@@ -60,29 +51,23 @@ export default CustomCarousel
 
 const styles = StyleSheet.create({
   wrapper: {
-    height: 500,
+    height: HERO_HEIGHT,
     position: 'relative',
-  },
-  logoWrapper: {
-    width: '100%',
-    position: 'absolute',
-    top: 20,
-    zIndex: 50,
-    alignItems: 'center',
+    marginBottom: 20,
   },
   activeDot: {
-    backgroundColor: Colors.dark.background,
+    backgroundColor: Colors.dark.card,
   },
   dots: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: BaseColors.gray,
+    backgroundColor: BaseColors.white,
     marginHorizontal: 4,
   },
   paginationContainer: {
     position: 'absolute',
-    bottom: -20,
+    bottom: -5,
     alignSelf: 'center',
   },
 })

@@ -1,38 +1,60 @@
-import MoviesList from '@/src/features/movie/components/MoviesList/MoviesList'
-import { useMoviesByGenres } from '@/src/features/movie/hooks/useMoviesByGenres'
 import { useSearchMovies } from '@/src/features/movie/hooks/useSearchMovies'
-import GenresList from '@/src/features/search/components/GenresList/GenresList'
 import SearchForm from '@/src/features/search/components/SearchForm/SearchForm'
-import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import { Colors } from '@/src/shared/styles/Colors'
+import SearchTabs from '@/src/features/search/components/SearchTabs/SearchTabs'
+import SearchProvider from '@/src/features/search/context/SearchProvider'
+import Header from '@/src/shared/components/Header/Header'
+import { StatusBar } from 'expo-status-bar'
 import React from 'react'
-import { StyleSheet } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { StyleSheet, View } from 'react-native'
 
-const SearchScreen = () => {
-  const { movies, control } = useSearchMovies()
-  const { handleGenre, genreIds, moviesByGenres } = useMoviesByGenres()
-  const { theme } = useTheme()
-
+export default function SearchScreen() {
+  const {
+    movies,
+    search,
+    reset,
+    control,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useSearchMovies()
   return (
-    <SafeAreaView
-      edges={['top']}
-      style={[styles.container, { backgroundColor: Colors[theme].background }]}
+    <SearchProvider
+      value={{
+        movies,
+        search,
+        isLoading,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+      }}
     >
-      <SearchForm control={control} name="search" />
-      <GenresList handleGenre={handleGenre} genreIds={genreIds} />
-
-      <MoviesList items={movies?.results || moviesByGenres} />
-    </SafeAreaView>
+      <View style={styles.container}>
+        <StatusBar style="light" />
+        <Header title="Search Movies" subTitle="Find your next favorite film" />
+        <View style={styles.searchContainer}>
+          <SearchForm
+            control={control}
+            name="search"
+            reset={reset}
+            typingText={search}
+          />
+        </View>
+        <SearchTabs />
+      </View>
+    </SearchProvider>
   )
 }
-
-export default SearchScreen
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 15,
-    paddingBottom: 0,
+    backgroundColor: '#000',
+  },
+  searchContainer: {
+    padding: 16,
+    backgroundColor: '#1a1a1a',
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
   },
 })

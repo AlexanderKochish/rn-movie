@@ -1,5 +1,5 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import { BaseColors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
@@ -17,20 +17,20 @@ const SocialAuthButtons = () => {
     <View style={styles.btns}>
       <IconButton
         icon={'google'}
-        contentStyle={{ backgroundColor: Colors[theme].input }}
+        contentStyle={{ backgroundColor: 'rgba(100, 181, 246, 0.1)' }}
         iconColor={BaseColors.yellow}
         size={34}
         onPress={signInWithGoogle}
       />
       <IconButton
         icon={'github'}
-        contentStyle={{ backgroundColor: Colors[theme].input }}
+        contentStyle={{ backgroundColor: 'rgba(100, 181, 246, 0.1)' }}
         size={34}
         onPress={signInWithGithub}
       />
       <IconButton
         icon={'facebook'}
-        contentStyle={{ backgroundColor: Colors[theme].input }}
+        contentStyle={{ backgroundColor: 'rgba(100, 181, 246, 0.1)' }}
         iconColor={'blue'}
         size={34}
         onPress={signInWithFacebook}

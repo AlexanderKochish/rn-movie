@@ -1,17 +1,26 @@
 import { Ionicons } from '@expo/vector-icons'
 import React, { ComponentProps } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ViewStyle } from 'react-native'
 
 type Props = {
   title?: string
   description?: string
   icon: ComponentProps<typeof Ionicons>['name']
+  colorIcon?: string
+
+  style?: ViewStyle
 }
 
-const EmptyState = ({ title, description, icon }: Props) => {
+const EmptyState = ({
+  title,
+  description,
+  icon,
+  colorIcon = '#666',
+  style,
+}: Props) => {
   return (
-    <View style={styles.emptyState}>
-      <Ionicons name={icon} size={64} color="#666" />
+    <View style={[styles.emptyState, { ...style }]}>
+      <Ionicons name={icon} size={64} color={colorIcon} />
       <Text style={styles.emptyStateTitle}>{title}</Text>
       <Text style={styles.emptyStateText}>{description}</Text>
     </View>

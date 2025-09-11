@@ -2,7 +2,8 @@ import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { Control, FieldValues, Path, useController } from 'react-hook-form'
-import { StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { Text, TextInput, TextInputProps } from 'react-native-paper'
 
 type Props<T extends FieldValues> = {
   control: Control<T>
@@ -31,9 +32,10 @@ const ControlledTextInput = <T extends FieldValues>({
         {...rest}
         style={{
           borderWidth: 0,
-          borderColor: 'transparent',
-          color: 'black',
+          borderColor: '#007AFF',
+          color: 'transparent',
           backgroundColor: 'transparent',
+          borderRadius: 16,
         }}
       />
 
