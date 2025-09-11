@@ -94,14 +94,7 @@ const PersonDetailsScreen = () => {
             showsHorizontalScrollIndicator={false}
             data={personMovieCredits?.cast}
             keyExtractor={(item) => String(item.id)}
-            renderItem={({ item }) => (
-              <MovieCard
-                id={item.id}
-                imageUrl={item.poster_path || item.backdrop_path}
-                title={item.title || item.original_title}
-                vote_average={item.vote_average}
-              />
-            )}
+            renderItem={({ item }) => <MovieCard movie={item} />}
           />
         </View>
       </Animated.ScrollView>

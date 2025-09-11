@@ -1,9 +1,7 @@
-import React from 'react'
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Link } from 'expo-router'
-import { Colors } from '@/src/shared/styles/Colors'
-import { Typography } from '@/src/shared/styles/Typography'
+import React from 'react'
+import { Image, StyleSheet, Text, View } from 'react-native'
 
 type PersonCardBaseProps = {
   id: number
@@ -13,13 +11,10 @@ type PersonCardBaseProps = {
   fullWidth?: boolean
 }
 
-const ITEM_MARGIN = 2
-const ITEM_WIDTH = (Dimensions.get('window').width - ITEM_MARGIN * 2) / 2
-
 const PersonCardBase = ({
   id,
   name,
-  role,
+  role: character,
   profilePath,
   fullWidth = false,
 }: PersonCardBaseProps) => {
@@ -27,44 +22,22 @@ const PersonCardBase = ({
 
   return (
     <Link href={`/person/${id}`} style={{ padding: 5 }}>
-      <View
-        style={[
-          styles.crewItem,
-          {
-            backgroundColor: Colors[theme].input,
-            width: fullWidth ? '100%' : ITEM_WIDTH,
-          },
-        ]}
-      >
+      <View key={id} style={styles.castCard}>
         <Image
           source={{
             uri: profilePath
-              ? `${process.env.EXPO_PUBLIC_IMG_W300}${profilePath}`
+              ? `${process.env.EXPO_PUBLIC_IMG_W200}${profilePath}`
               : process.env.EXPO_PUBLIC_POSTER_HOLDER,
           }}
-          style={styles.crewImage}
+          style={styles.castImage}
+          resizeMode="cover"
         />
-        <View style={{ flex: 1, justifyContent: 'space-around' }}>
-          {fullWidth && (
-            <Text style={[styles.largeName, { color: Colors[theme].text }]}>
-              {name}
-            </Text>
-          )}
-          {!fullWidth && (
-            <Text style={[styles.smallName, { color: Colors[theme].text }]}>
-              {name.length > 14 ? `${name.slice(0, 14)}...` : name}
-            </Text>
-          )}
-
-          {fullWidth && (
-            <Text style={{ color: Colors[theme].text }}>{role}</Text>
-          )}
-          {!fullWidth && (
-            <Text style={{ color: Colors[theme].text }}>
-              {role.length > 14 ? `${role.slice(0, 12)}...` : `${role}`}
-            </Text>
-          )}
-        </View>
+        <Text style={styles.castName} numberOfLines={1}>
+          {name}
+        </Text>
+        <Text style={styles.castCharacter} numberOfLines={2}>
+          {character}
+        </Text>
       </View>
     </Link>
   )
@@ -73,29 +46,32 @@ const PersonCardBase = ({
 export default PersonCardBase
 
 const styles = StyleSheet.create({
-  crewItem: {
-    margin: ITEM_MARGIN,
-    flexDirection: 'row',
-    gap: 10,
-    borderRadius: 8,
-    padding: 10,
-    overflow: 'hidden',
+  castCard: {
+    width: 120,
+    marginRight: 16,
+    backgroundColor: '#1a1a1a',
+    borderRadius: 12,
+    padding: 12,
+    alignItems: 'center',
+    height: 190,
   },
-  crewImage: {
-    height: 98,
-    width: 98,
-    borderRadius: 4,
+  castImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 8,
+    backgroundColor: '#2a2a2a',
   },
-  smallName: {
-    fontSize: Typography.body.fontSize,
-    fontWeight: 'bold',
+  castName: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 4,
   },
-  largeName: {
-    fontSize: Typography.title.fontSize,
-    fontWeight: 'bold',
-  },
-
-  role: {
-    fontSize: Typography.body.fontSize,
+  castCharacter: {
+    color: '#888',
+    fontSize: 12,
+    textAlign: 'center',
   },
 })

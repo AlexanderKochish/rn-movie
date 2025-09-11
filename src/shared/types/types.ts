@@ -185,3 +185,25 @@ export interface VideosResponse {
   id: number;
   results: Video[];
 }
+
+export type MoviesCategories =
+  | "popular"
+  | "top_rated"
+  | "upcoming"
+  | "now_playing";
+
+export type TermsOfServiceType = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+export type MovieCardEntity = {
+  id: string | number;
+  poster_path?: string | null;
+  backdrop_path?: string | null;
+  title: string;
+  vote_average: number;
+  release_date?: string;
+  genre_ids?: number[];
+};

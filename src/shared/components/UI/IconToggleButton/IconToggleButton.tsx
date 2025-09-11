@@ -12,7 +12,7 @@ type Props<T extends MovieDetailsType> = {
   onPress: (data: T) => void
   data: T
   isLoading: boolean
-  isActive: boolean
+  isActive: boolean | undefined
   icon: ComponentProps<typeof Ionicons>['name']
 }
 

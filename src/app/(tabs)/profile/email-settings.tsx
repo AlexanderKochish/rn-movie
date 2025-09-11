@@ -2,6 +2,7 @@ import AccountNotificationSettings from '@/src/features/profile/components/Accou
 import { useProfile } from '@/src/features/profile/hooks/useProfile'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import BaseCard from '@/src/shared/components/BaseCard/BaseCard'
+import Header from '@/src/shared/components/Header/Header'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
@@ -12,16 +13,19 @@ const EmailSettingsScreen = () => {
   const { theme } = useTheme()
 
   return (
-    <ScrollView style={[{ backgroundColor: Colors[theme].background }]}>
-      <View style={styles.container}>
-        <BaseCard>
-          <Text variant="titleLarge">Email address</Text>
-          <View style={styles.borderLine} />
-          <Text variant="titleMedium">{profile?.email}</Text>
-        </BaseCard>
-        <AccountNotificationSettings />
-      </View>
-    </ScrollView>
+    <>
+      <Header title="Email Settings" goBack />
+      <ScrollView style={[{ backgroundColor: Colors[theme].background }]}>
+        <View style={styles.container}>
+          <BaseCard>
+            <Text variant="titleLarge">Email address</Text>
+            <View style={styles.borderLine} />
+            <Text variant="titleMedium">{profile?.email}</Text>
+          </BaseCard>
+          <AccountNotificationSettings />
+        </View>
+      </ScrollView>
+    </>
   )
 }
 

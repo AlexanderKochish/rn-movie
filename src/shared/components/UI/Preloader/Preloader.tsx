@@ -51,6 +51,6 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    marginTop: 16,
+    marginVertical: 16,
   },
 })

@@ -14,6 +14,7 @@ export const BaseColors = {
   orangeOpacity: "rgba(255, 60, 0, 0.13)",
   dark: "#000000",
   green: "#00a100ff",
+  blue: "#81b0ff",
 };
 export const Colors = {
   dark: {
