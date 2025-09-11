@@ -7,12 +7,13 @@
     "icon": "./assets/images/logo.png",
     "scheme": "rnmovieapp",
     "userInterfaceStyle": "automatic",
+    "runtimeVersion": "1.0.0",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.alexander888.movieapp",
       "buildNumber": "1.0.0",
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"],
+        "UIBackgroundModes": ["remote-notification", "remote-notification"],
         "ITSAppUsesNonExemptEncryption": false
       }
     },
@@ -67,10 +68,18 @@
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.RECORD_AUDIO",
-        "NOTIFICATIONS"
+        "android.permission.NOTIFICATIONS",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.NOTIFICATIONS"
       ],
       "googleServicesFile": "./google-services.json"
     },
-    "owner": "alexander888"
+    "owner": "alexander888",
+    "updates": {
+      "url": "https://u.expo.dev/e650b3d0-405c-4eb6-9d47-af68182be11f"
+    }
   }
 }
