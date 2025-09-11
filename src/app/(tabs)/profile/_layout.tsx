@@ -8,7 +8,7 @@ const ProfileLayout = () => {
   const { theme } = useTheme()
   return (
     <>
-      <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
+      <StatusBar style={theme} />
       <Stack
         screenOptions={{
           headerStyle: {

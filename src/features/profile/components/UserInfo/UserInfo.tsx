@@ -2,6 +2,7 @@ import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import {
+  Image,
   ImageBackground,
   StyleSheet,
   Text,
@@ -22,11 +23,20 @@ const UserInfo = () => {
       blurRadius={10}
     >
       <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
-            {profile?.username.slice(0, 1).toUpperCase() ?? ''}
-          </Text>
-        </View>
+        {profile?.avatar_url ? (
+          <Image
+            style={styles.avatar}
+            source={{
+              uri: profile?.avatar_url,
+            }}
+          />
+        ) : (
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>
+              {profile?.username.slice(0, 1).toUpperCase() ?? ''}
+            </Text>
+          </View>
+        )}
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{profile?.username}</Text>
           <Text style={styles.userEmail}>{profile?.email}</Text>
