@@ -1,9 +1,8 @@
 import { MovieDetailsType } from "@/src/shared/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { modelId } from "expo-device";
 import { useCallback, useMemo } from "react";
 import Toast from "react-native-toast-message";
-import { useAuth } from "../../auth/hooks/useAuth";
+import { useProfile } from "../../profile/hooks/useProfile";
 import {
   addMovieToCollection,
   getFavoritesCollection,
@@ -12,7 +11,7 @@ import {
 import { FavoriteCollection } from "../types/types";
 
 export const useCollection = (collection: FavoriteCollection) => {
-  const { user } = useAuth();
+  const { profile: user } = useProfile();
   const queryClient = useQueryClient();
   const userId = user?.id;
 
@@ -41,14 +40,14 @@ export const useCollection = (collection: FavoriteCollection) => {
       if (!userId || !movie?.id) return;
 
       if (isItemToggled(movie.id)) {
-        await removeFromCollection(collection, userId, modelId);
+        await removeFromCollection(collection, userId, String(movie.id));
 
         Toast.show({
           type: "customRemoved",
           text1: "Removed from saved",
         });
       } else {
-        await addMovieToCollection(collection, userId, modelId, movie);
+        await addMovieToCollection(collection, userId, String(movie.id), movie);
 
         Toast.show({
           type: "customSuccess",

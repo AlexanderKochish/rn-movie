@@ -88,7 +88,7 @@ const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
           {movie && (
             <IconToggleButton
               data={movie}
-              onPress={toggleFavorite}
+              onPress={() => toggleFavorite(movie)}
               isLoading={isLoadingFavorite}
               isActive={isActiveFavorite}
               icon="heart"

@@ -18,13 +18,13 @@ export const getFavoritesCollection = async (
         throw new Error(error.message);
     }
 
-    return (
-        data?.map((row) => ({
-            id: row.movie_id,
-            ...row.data,
-            createdAt: row.created_at,
-        })) ?? []
-    );
+    const favorites = data?.map((row) => ({
+        id: row.movie_id,
+        ...row.data,
+        createdAt: row.created_at,
+    })) ?? [];
+
+    return favorites;
 };
 
 export const addMovieToCollection = async (
