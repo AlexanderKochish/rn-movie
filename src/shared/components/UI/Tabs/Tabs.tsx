@@ -1,3 +1,5 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { Colors } from '@/src/shared/styles/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import {
@@ -42,8 +44,18 @@ const Tabs: React.FC<TabsProps> = ({
   textStyle,
   activeTextStyle,
 }) => {
+  const { theme } = useTheme()
   return (
-    <View style={[styles.tabsContainer, containerStyle]}>
+    <View
+      style={[
+        styles.tabsContainer,
+        {
+          backgroundColor: Colors[theme].tabBackground,
+          borderColor: Colors[theme].border,
+        },
+        containerStyle,
+      ]}
+    >
       {tabs.map((tab) => (
         <TouchableOpacity
           key={tab.id}
@@ -59,8 +71,8 @@ const Tabs: React.FC<TabsProps> = ({
             size={tab.iconSize || 16}
             color={
               activeTab === tab.id
-                ? tab.activeColor || '#007AFF'
-                : tab.inactiveColor || '#666'
+                ? tab.activeColor || Colors[theme].activeTab
+                : tab.inactiveColor || Colors[theme].inactiveColor
             }
           />
           <Text

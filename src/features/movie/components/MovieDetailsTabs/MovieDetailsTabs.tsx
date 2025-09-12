@@ -1,4 +1,5 @@
 import Tabs from '@/src/shared/components/UI/Tabs/Tabs'
+import { BaseColors } from '@/src/shared/styles/Colors'
 import { MovieDetailsType } from '@/src/shared/types/types'
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
@@ -20,23 +21,23 @@ const MovieDetailsTabs = ({ movie }: Props) => {
     {
       id: 'overview',
       label: 'Overview',
-      iconName: 'compass' as const,
-      activeColor: '#007AFF',
-      inactiveColor: '#666',
+      iconName: 'document-text-outline' as const,
+      activeColor: BaseColors.blueDark,
+      inactiveColor: BaseColors.gray,
     },
     {
       id: 'cast',
       label: 'Cast',
-      iconName: 'compass' as const,
-      activeColor: '#007AFF',
-      inactiveColor: '#666',
+      iconName: 'people-outline' as const,
+      activeColor: BaseColors.blueDark,
+      inactiveColor: BaseColors.gray,
     },
     {
       id: 'details',
       label: 'Details',
       iconName: 'search' as const,
-      activeColor: '#007AFF',
-      inactiveColor: '#666',
+      activeColor: BaseColors.blueDark,
+      inactiveColor: BaseColors.gray,
     },
   ]
   return (

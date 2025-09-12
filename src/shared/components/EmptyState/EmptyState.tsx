@@ -1,13 +1,15 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Ionicons } from '@expo/vector-icons'
-import React, { ComponentProps } from 'react'
+import React, { ComponentProps, ReactNode } from 'react'
 import { StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { Colors } from '../../styles/Colors'
 
 type Props = {
   title?: string
   description?: string
   icon: ComponentProps<typeof Ionicons>['name']
   colorIcon?: string
-
+  children?: ReactNode
   style?: ViewStyle
 }
 
@@ -17,12 +19,24 @@ const EmptyState = ({
   icon,
   colorIcon = '#666',
   style,
+  children,
 }: Props) => {
+  const { theme } = useTheme()
   return (
-    <View style={[styles.emptyState, { ...style }]}>
+    <View
+      style={[
+        styles.emptyState,
+        { backgroundColor: Colors[theme].emptyStateBackground },
+        { borderColor: Colors[theme].border },
+        { ...style },
+      ]}
+    >
       <Ionicons name={icon} size={64} color={colorIcon} />
-      <Text style={styles.emptyStateTitle}>{title}</Text>
+      <Text style={[styles.emptyStateTitle, { color: Colors[theme].text }]}>
+        {title}
+      </Text>
       <Text style={styles.emptyStateText}>{description}</Text>
+      {children}
     </View>
   )
 }
@@ -34,12 +48,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 40,
-    backgroundColor: '#1a1a1a',
+    borderWidth: 1,
     borderRadius: 16,
-    margin: 15,
   },
   emptyStateTitle: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: '600',
     marginTop: 16,
@@ -49,5 +61,6 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: 14,
     textAlign: 'center',
+    marginBottom: 15,
   },
 })

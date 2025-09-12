@@ -1,12 +1,23 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
+import { Colors } from '../../styles/Colors'
 
-const SectionHeader = ({ title }: { title: string }) => (
-  <View style={styles.sectionHeader}>
-    <Text style={styles.sectionHeaderText}>{title}</Text>
-  </View>
-)
-
+const SectionHeader = ({ title }: { title: string }) => {
+  const { theme } = useTheme()
+  return (
+    <View style={styles.sectionHeader}>
+      <Text
+        style={[
+          styles.sectionHeaderText,
+          { color: Colors[theme].settingsSectionTitle },
+        ]}
+      >
+        {title}
+      </Text>
+    </View>
+  )
+}
 export default SectionHeader
 
 const styles = StyleSheet.create({

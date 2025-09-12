@@ -1,9 +1,11 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
+import { Colors } from '@/src/shared/styles/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { Control, FieldValues, Path, UseFormReset } from 'react-hook-form'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { IconButton } from 'react-native-paper'
 
 type Props<T extends FieldValues> = {
   control: Control<T>
@@ -24,25 +26,34 @@ const SearchForm = <T extends FieldValues>({
 
   const clearSearch = () => reset()
   return (
-    <View style={styles.searchInputContainer}>
+    <View
+      style={[
+        styles.searchInputContainer,
+        { backgroundColor: Colors[theme].inputBackground },
+        { borderColor: Colors[theme].border },
+      ]}
+    >
       <Ionicons
         name="search"
         size={20}
-        color="#666"
+        color={Colors[theme].placeholder}
         style={styles.searchIcon}
       />
       <ControlledTextInput
-        style={styles.searchInput}
         placeholder="Search movies by title..."
-        placeholderTextColor="#666"
+        placeholderTextColor={Colors[theme].placeholder}
         control={control}
         name={name}
         returnKeyType="search"
       />
       {typingText.length > 0 && (
-        <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
-          <Ionicons name="close-circle" size={20} color="#666" />
-        </TouchableOpacity>
+        <IconButton
+          icon="close-circle"
+          size={20}
+          iconColor={Colors[theme].placeholder}
+          onPress={clearSearch}
+          style={styles.clearButton}
+        />
       )}
     </View>
   )
@@ -54,20 +65,12 @@ const styles = StyleSheet.create({
   searchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2a2a2a',
-    borderRadius: 12,
+    borderRadius: 14,
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: '#333',
   },
   searchIcon: {
     marginRight: 12,
-  },
-  searchInput: {
-    flex: 1,
-    color: '#fff',
-    fontSize: 16,
-    paddingVertical: 14,
   },
   clearButton: {
     padding: 4,

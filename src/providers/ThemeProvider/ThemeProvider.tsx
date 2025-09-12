@@ -1,6 +1,7 @@
 import { darkTheme, lightTheme } from '@/src/shared/theme/theme'
 import { ThemeColorType } from '@/src/shared/types/types'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { StatusBarStyle } from 'expo-status-bar'
 import {
   PropsWithChildren,
   useCallback,
@@ -52,13 +53,16 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
     handleSetTheme(newTheme)
   }, [handleSetTheme, theme])
 
+  const statusBarTheme: StatusBarStyle = theme === 'dark' ? 'light' : 'dark'
+
   const value = useMemo(
     () => ({
       theme,
       toggleTheme,
       isThemeReady,
+      statusBarTheme,
     }),
-    [theme, toggleTheme, isThemeReady]
+    [theme, toggleTheme, isThemeReady, statusBarTheme]
   )
 
   if (!isThemeReady) {

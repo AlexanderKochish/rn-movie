@@ -5,10 +5,10 @@ import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 
 const MovieDetailsLayout = () => {
-  const { theme } = useTheme()
+  const { theme, statusBarTheme } = useTheme()
   return (
     <>
-      <StatusBar style="auto" />
+      <StatusBar style={statusBarTheme} />
       <Stack
         screenOptions={{
           headerStyle: {

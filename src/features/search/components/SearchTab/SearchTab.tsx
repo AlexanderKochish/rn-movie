@@ -1,12 +1,13 @@
 import MoviesGrid from '@/src/features/movie/components/MoviesGrid/MoviesGrid'
 import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
 import React from 'react'
+import { StyleSheet, View } from 'react-native'
 import { useSearchContext } from '../../hooks/useSearchContext'
 
 const SearchTab = () => {
   const { movies, search, isLoading, hasNextPage } = useSearchContext()
   return (
-    <>
+    <View style={styles.contentContainer}>
       {search.length > 0 && search.length <= 2 && (
         <EmptyState
           icon="search"
@@ -29,8 +30,15 @@ const SearchTab = () => {
         />
       )}
       <MoviesGrid movies={movies} isLoading={isLoading} />
-    </>
+    </View>
   )
 }
 
 export default SearchTab
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+})

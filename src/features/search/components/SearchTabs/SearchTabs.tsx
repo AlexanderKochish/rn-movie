@@ -1,11 +1,13 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import Tabs from '@/src/shared/components/UI/Tabs/Tabs'
+import { Colors } from '@/src/shared/styles/Colors'
 import React, { useState } from 'react'
 import DiscoverTab from '../DiscoverTab/DiscoverTab'
 import SearchTab from '../SearchTab/SearchTab'
 
 const SearchTabs = () => {
   const [activeTab, setActiveTab] = useState('search')
-
+  const { theme } = useTheme()
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId)
   }
@@ -14,15 +16,15 @@ const SearchTabs = () => {
       id: 'search',
       label: 'Search',
       iconName: 'search' as const,
-      activeColor: '#007AFF',
-      inactiveColor: '#666',
+      activeColor: Colors[theme].activeTab,
+      inactiveColor: Colors[theme].inactiveColor,
     },
     {
       id: 'discover',
       label: 'Discover',
       iconName: 'compass' as const,
-      activeColor: '#007AFF',
-      inactiveColor: '#666',
+      activeColor: Colors[theme].activeTab,
+      inactiveColor: Colors[theme].inactiveColor,
     },
   ]
 

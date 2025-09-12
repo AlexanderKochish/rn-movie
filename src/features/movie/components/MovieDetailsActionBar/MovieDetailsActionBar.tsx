@@ -2,12 +2,15 @@ import { useBookmark } from '@/src/features/bookmarks/hooks/useBookmark'
 import RatingModal from '@/src/features/rating/components/RatingModal/RatingModal'
 import RatingStars from '@/src/features/rating/components/RatingStars/RatingStars'
 import { useRating } from '@/src/features/rating/hooks/useRating'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { adaptOnChange } from '@/src/shared/utils/adaptOnChange'
 import { Ionicons } from '@expo/vector-icons'
 import React, { useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ActivityIndicator, Button } from 'react-native-paper'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { useMovieDetails } from '../../hooks/useMovieDetails'
 import { useMovieId } from '../../hooks/useMovieId'
 
@@ -16,6 +19,7 @@ const MovieDetailsActionBar = () => {
   const movieId = useMovieId()
   const { control, handleSubmit, isPending, isSuccess } = useRating(movieId)
   const { data: movie } = useMovieDetails(movieId)
+  const { theme } = useTheme()
   const {
     isItemToggled: isBookmarkToggled,
     toggleItem: toggleBookmark,
@@ -34,7 +38,10 @@ const MovieDetailsActionBar = () => {
   }, [isSuccess])
 
   return (
-    <>
+    <SafeAreaView
+      edges={['bottom']}
+      style={{ backgroundColor: Colors[theme].tabBackground }}
+    >
       <RatingModal
         hideDialog={hideDialog}
         visible={visible}
@@ -59,7 +66,12 @@ const MovieDetailsActionBar = () => {
           </>
         }
       />
-      <View style={styles.actionBar}>
+      <View
+        style={[
+          styles.actionBar,
+          { backgroundColor: Colors[theme].tabBackground },
+        ]}
+      >
         <TouchableOpacity
           onPress={() => toggleBookmark(movie)}
           style={[
@@ -70,13 +82,15 @@ const MovieDetailsActionBar = () => {
           disabled={isLoading}
         >
           {isLoading ? (
-            <ActivityIndicator size="small" color="#007AFF" />
+            <ActivityIndicator size="small" color={BaseColors.blueDark} />
           ) : (
             <>
               <Ionicons
                 name={isActiveBookmark ? 'checkmark-circle' : 'add'}
                 size={22}
-                color={isActiveBookmark ? '#34C759' : '#007AFF'}
+                color={
+                  isActiveBookmark ? BaseColors.green : BaseColors.blueDark
+                }
                 style={styles.icon}
               />
               <Text
@@ -97,7 +111,7 @@ const MovieDetailsActionBar = () => {
           <Text style={styles.rateText}>Rate Movie</Text>
         </TouchableOpacity>
       </View>
-    </>
+    </SafeAreaView>
   )
 }
 
@@ -107,7 +121,6 @@ const styles = StyleSheet.create({
   actionBar: {
     flexDirection: 'row',
     padding: 20,
-    paddingBottom: 40,
     backgroundColor: '#1a1a1a',
     borderTopWidth: 1,
     borderTopColor: '#333',

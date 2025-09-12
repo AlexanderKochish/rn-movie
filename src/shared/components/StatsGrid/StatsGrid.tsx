@@ -1,16 +1,19 @@
 import { useBookmark } from '@/src/features/bookmarks/hooks/useBookmark'
 import { useFavorite } from '@/src/features/bookmarks/hooks/useFavorite'
 import { useProfile } from '@/src/features/profile/hooks/useProfile'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Ionicons } from '@expo/vector-icons'
 import { useQuery } from '@tanstack/react-query'
 import React, { ComponentProps } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { supabase } from '../../services/supabase'
+import { Colors } from '../../styles/Colors'
 
 const StatsGrid = () => {
   const { profile } = useProfile()
   const { items } = useBookmark()
   const { items: favorites } = useFavorite()
+  const { theme } = useTheme()
 
   const { data } = useQuery({
     queryKey: ['ratings-result'],
@@ -40,7 +43,16 @@ const StatsGrid = () => {
   return (
     <View style={styles.statsGrid}>
       {stats.map((stat, index) => (
-        <View key={index} style={styles.statItem}>
+        <View
+          key={index}
+          style={[
+            styles.statItem,
+            {
+              backgroundColor: Colors[theme].stats,
+              borderColor: Colors[theme].border,
+            },
+          ]}
+        >
           <View
             style={[styles.statIcon, { backgroundColor: `${stat.color}20` }]}
           >
@@ -50,7 +62,9 @@ const StatsGrid = () => {
               color={stat.color}
             />
           </View>
-          <Text style={styles.statValue}>{stat.value}</Text>
+          <Text style={[styles.statValue, { color: Colors[theme].text }]}>
+            {stat.value}
+          </Text>
           <Text style={styles.statLabel}>{stat.label}</Text>
         </View>
       ))}
@@ -69,11 +83,11 @@ const styles = StyleSheet.create({
   },
   statItem: {
     width: '48%',
-    backgroundColor: '#1a1a1a',
+    // backgroundColor: '#1a1a1a',
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#333',
+    // borderColor: '#333',
   },
   statIcon: {
     width: 40,
