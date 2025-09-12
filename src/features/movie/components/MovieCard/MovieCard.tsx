@@ -56,7 +56,10 @@ const MovieCard = <T extends MovieCardEntity>({
             ? `${process.env.EXPO_PUBLIC_IMG_W500}${movie.poster_path || movie.backdrop_path}`
             : process.env.EXPO_PUBLIC_POSTER_HOLDER,
         }}
-        style={[styles.poster, { height: sizes[size].height }]}
+        style={[
+          styles.poster,
+          { height: sizes[size].height, width: sizes[size].width },
+        ]}
         resizeMode="cover"
       />
 
@@ -96,8 +99,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   poster: {
-    width: POSTER_WIDTH,
-    height: POSTER_HEIGHT,
     borderRadius: 12,
     backgroundColor: '#2a2a2a',
   },

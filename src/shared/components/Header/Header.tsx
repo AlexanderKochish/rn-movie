@@ -1,3 +1,4 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { LinearGradient } from 'expo-linear-gradient'
 import React from 'react'
 import { ColorValue, StyleSheet, Text, View } from 'react-native'
@@ -6,22 +7,38 @@ import GoBackButton from '../GoBackButton/GoBackButton'
 type Props = {
   title: string
   subTitle?: string
-  gradientColors?: readonly [ColorValue, ColorValue, ...ColorValue[]]
+  gradientColors?: {
+    light: readonly [ColorValue, ColorValue, ...ColorValue[]]
+    dark: readonly [ColorValue, ColorValue, ...ColorValue[]]
+  }
   goBack?: boolean
 }
 
-const Header = ({
-  title,
-  subTitle,
-  gradientColors = ['#1a1a1a', '#2a2a2a'],
-  goBack,
-}: Props) => {
+const Header = ({ title, subTitle, gradientColors, goBack }: Props) => {
+  const { theme } = useTheme()
+
+  const getGradientColors = () => {
+    if (gradientColors) {
+      return theme === 'light' ? gradientColors.light : gradientColors.dark
+    }
+
+    return theme === 'light'
+      ? (['#f8f9fa', '#e9ecef'] as const)
+      : (['#1a1a1a', '#2a2a2a'] as const)
+  }
+
+  const titleColor = theme === 'light' ? '#000' : '#fff'
+  const subtitleColor = theme === 'light' ? '#666' : '#888'
   return (
-    <LinearGradient colors={gradientColors} style={styles.header}>
+    <LinearGradient colors={getGradientColors()} style={styles.header}>
       {goBack && <GoBackButton />}
       <View style={styles.headerContent}>
-        <Text style={styles.headerTitle}>{title}</Text>
-        {subTitle && <Text style={styles.headerSubtitle}>{subTitle}</Text>}
+        <Text style={[styles.headerTitle, { color: titleColor }]}>{title}</Text>
+        {subTitle && (
+          <Text style={[styles.headerSubtitle, { color: subtitleColor }]}>
+            {subTitle}
+          </Text>
+        )}
       </View>
     </LinearGradient>
   )
@@ -32,8 +49,8 @@ export default Header
 const styles = StyleSheet.create({
   header: {
     padding: 20,
-    paddingTop: 60,
-    paddingBottom: 30,
+    paddingTop: 40,
+    paddingBottom: 15,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -42,13 +59,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   headerTitle: {
-    color: '#fff',
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 4,
   },
   headerSubtitle: {
-    color: '#888',
     fontSize: 14,
   },
 })

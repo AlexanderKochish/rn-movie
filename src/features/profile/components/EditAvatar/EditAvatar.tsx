@@ -2,10 +2,14 @@ import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
-import { useAccountForm } from '../../hooks/useAccountForm'
 
-const EditAvatar = () => {
-  const { avatar, isLoading, handlePickImage } = useAccountForm()
+type Props = {
+  avatar?: string
+  isLoading: boolean
+  handlePickImage: () => Promise<void>
+}
+
+const EditAvatar = ({ avatar, handlePickImage, isLoading }: Props) => {
   return (
     <View style={styles.avatarSection}>
       <View style={styles.avatarContainer}>
