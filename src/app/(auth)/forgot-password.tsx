@@ -1,4 +1,4 @@
-import { useSignIn } from '@/src/features/auth/hooks/useSignIn'
+import { useResetPasswordForEmail } from '@/src/features/auth/hooks/useResetPasswordForEmail'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import AppLogo from '@/src/shared/components/AppLogo/AppLogo'
 import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
@@ -18,7 +18,7 @@ import { Button, Text, TextInput } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const ForgotPasswordScreen = () => {
-  const { control, handleSubmit } = useSignIn()
+  const { control, handleSubmit } = useResetPasswordForEmail()
   const { theme } = useTheme()
   const isDark = theme === 'dark'
 

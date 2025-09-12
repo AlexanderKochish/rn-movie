@@ -2,18 +2,14 @@ import { useSignOut } from '@/src/features/auth/hooks/useSignOut'
 import ProfileMenuItem from '@/src/features/profile/components/ProfileMenuItem/ProfileMenuItem'
 import UserInfo from '@/src/features/profile/components/UserInfo/UserInfo'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import MenuSection from '@/src/shared/components/MenuSection/MenuSection'
 import SectionHeader from '@/src/shared/components/SectionHeader/SectionHeader'
 import StatsGrid from '@/src/shared/components/StatsGrid/StatsGrid'
+import { Colors } from '@/src/shared/styles/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const ProfileScreen = () => {
@@ -32,7 +28,10 @@ const ProfileScreen = () => {
     setNotificationsEnabled((previousState) => !previousState)
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: Colors[theme].background }]}
+      edges={['top']}
+    >
       <UserInfo />
 
       <ScrollView
@@ -41,7 +40,7 @@ const ProfileScreen = () => {
       >
         <SectionHeader title="Profile" />
         <StatsGrid />
-        <View style={styles.menuSection}>
+        <MenuSection>
           <ProfileMenuItem
             icon="person-outline"
             title="Profile"
@@ -66,10 +65,10 @@ const ProfileScreen = () => {
             value={notificationsEnabled}
             onValueChange={toggleNotifications}
           />
-        </View>
+        </MenuSection>
 
         <SectionHeader title="APPLICATION" />
-        <View style={styles.menuSection}>
+        <MenuSection>
           <ProfileMenuItem
             icon="color-palette-outline"
             title="Appearance"
@@ -92,10 +91,10 @@ const ProfileScreen = () => {
             title="Rate the application"
             onPress={() => router.push('/(tabs)/profile/rate')}
           />
-        </View>
+        </MenuSection>
 
         <SectionHeader title="LEGAL INFORMATION" />
-        <View style={styles.menuSection}>
+        <MenuSection>
           <ProfileMenuItem
             icon="document-text-outline"
             title="Terms of Use"
@@ -107,7 +106,7 @@ const ProfileScreen = () => {
             isLast
             onPress={() => router.push('/(tabs)/profile/privacy-policy')}
           />
-        </View>
+        </MenuSection>
 
         <TouchableOpacity onPress={signOut} style={styles.logoutButton}>
           <Ionicons name="log-out-outline" size={22} color="#ff6b6b" />
@@ -121,7 +120,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
+    // backgroundColor: '#0a0a0a',
   },
 
   scrollView: {
@@ -131,7 +130,7 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: 'rgba(30, 30, 30, 0.6)',
+    // backgroundColor: 'rgba(30, 30, 30, 0.6)',
     borderRadius: 16,
     padding: 20,
     marginVertical: 24,
@@ -156,15 +155,6 @@ const styles = StyleSheet.create({
     width: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     marginHorizontal: 10,
-  },
-
-  menuSection: {
-    backgroundColor: 'rgba(30, 30, 30, 0.6)',
-    borderRadius: 16,
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    overflow: 'hidden',
   },
 
   logoutButton: {

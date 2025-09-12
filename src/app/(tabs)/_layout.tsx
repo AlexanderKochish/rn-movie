@@ -22,7 +22,8 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: Colors[theme].background,
-          borderTopWidth: 0,
+          borderColor: Colors[theme].border,
+          borderTopWidth: 1,
           elevation: 0,
           paddingTop: 10,
           height: tabBarHeight,
@@ -41,7 +42,7 @@ export default function TabLayout() {
               <TabIcon
                 size={24}
                 name="home-outline"
-                color={focused ? BaseColors.blue : color}
+                color={focused ? BaseColors.blueDark : color}
               />
             </View>
           ),
@@ -57,7 +58,7 @@ export default function TabLayout() {
               <TabIcon
                 size={24}
                 name="search"
-                color={focused ? BaseColors.blue : color}
+                color={focused ? BaseColors.blueDark : color}
               />
             </View>
           ),
@@ -66,14 +67,14 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="bookmarks"
+        name="bookmarks/index"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <View style={focused ? styles.focusedTab : undefined}>
               <TabIcon
                 size={24}
                 name="bookmark-outline"
-                color={focused ? BaseColors.blue : color}
+                color={focused ? BaseColors.blueDark : color}
               />
             </View>
           ),
@@ -88,7 +89,7 @@ export default function TabLayout() {
               <TabIcon
                 size={24}
                 name="person-outline"
-                color={focused ? BaseColors.blue : color}
+                color={focused ? BaseColors.blueDark : color}
               />
             </View>
           ),
@@ -101,7 +102,7 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   focusedTab: {
-    backgroundColor: 'rgba(100, 181, 246, 0.1)',
+    backgroundColor: 'rgba(52, 131, 196, 0.24)',
     borderRadius: 50,
     width: 45,
     height: 45,

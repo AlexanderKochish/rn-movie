@@ -6,7 +6,6 @@ import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
@@ -36,7 +35,6 @@ export default function MovieDetailsScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
       <MovieDetailsTitle movieId={movieId} data={movie} />
 
       <MovieDetailsTabs movie={movie} />

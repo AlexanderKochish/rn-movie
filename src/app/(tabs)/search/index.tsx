@@ -2,7 +2,10 @@ import { useSearchMovies } from '@/src/features/movie/hooks/useSearchMovies'
 import SearchForm from '@/src/features/search/components/SearchForm/SearchForm'
 import SearchTabs from '@/src/features/search/components/SearchTabs/SearchTabs'
 import SearchProvider from '@/src/features/search/context/SearchProvider'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import Header from '@/src/shared/components/Header/Header'
+import { Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -18,6 +21,7 @@ export default function SearchScreen() {
     hasNextPage,
     isFetchingNextPage,
   } = useSearchMovies()
+  const { theme } = useTheme()
   return (
     <SearchProvider
       value={{
@@ -29,10 +33,21 @@ export default function SearchScreen() {
         isFetchingNextPage,
       }}
     >
-      <View style={styles.container}>
-        <StatusBar style="light" />
+      <View
+        style={[
+          globalStyles.flex,
+          { backgroundColor: Colors[theme].background },
+        ]}
+      >
+        <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
         <Header title="Search Movies" subTitle="Find your next favorite film" />
-        <View style={styles.searchContainer}>
+        <View
+          style={[
+            styles.searchContainer,
+            { backgroundColor: Colors[theme].emptyStateBackground },
+            { borderBottomColor: '#333' },
+          ]}
+        >
           <SearchForm
             control={control}
             name="search"
@@ -47,14 +62,8 @@ export default function SearchScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
   searchContainer: {
     padding: 16,
-    backgroundColor: '#1a1a1a',
     borderBottomWidth: 1,
-    borderBottomColor: '#333',
   },
 })

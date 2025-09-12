@@ -18,8 +18,15 @@ import {
 
 export default function EditProfileScreen() {
   const router = useRouter()
-  const { control, handleSubmit, isLoading, isDirty, isSuccess } =
-    useAccountForm()
+  const {
+    control,
+    handleSubmit,
+    isLoading,
+    isDirty,
+    isSuccess,
+    avatar,
+    handlePickImage,
+  } = useAccountForm()
 
   const isButtonDisabled = !isDirty || isLoading
   const handleSave = async () => {
@@ -72,7 +79,11 @@ export default function EditProfileScreen() {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <EditAvatar />
+        <EditAvatar
+          avatar={avatar}
+          isLoading={isLoading}
+          handlePickImage={handlePickImage}
+        />
         <EditProfileForm control={control} />
         <AccountActions />
       </ScrollView>

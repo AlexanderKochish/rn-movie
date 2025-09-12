@@ -1,22 +1,21 @@
 import BookmarksTabs from '@/src/features/bookmarks/components/BookmarksTabs/BookmarksTabs'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import Header from '@/src/shared/components/Header/Header'
+import { Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 
 export default function BookmarksScreen() {
+  const { theme } = useTheme()
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
+    <View
+      style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
+    >
+      <StatusBar style={theme} />
       <Header title="My Library" subTitle="Your personal collection" />
       <BookmarksTabs />
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-})
