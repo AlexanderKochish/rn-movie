@@ -39,20 +39,21 @@ export const useReview = (movieId: number) => {
     queryFn: () => getAllReviewsOfMovie(movieId),
   });
 
-  const { data: userReview, isLoading: isLoadingUserReview } = useQuery<
-    ReviewType | null,
-    Error
-  >({
-    queryKey: ["user-review", movieId, userId],
-    queryFn: async () => {
-      if (!userId && !movieId) return null;
+  const { data: userReview, isLoading: isLoadingUserReview, isPending } =
+    useQuery<
+      ReviewType | null,
+      Error
+    >({
+      queryKey: ["user-review", movieId, userId],
+      queryFn: async () => {
+        if (!userId && !movieId) return null;
 
-      const data = await getUserReview(movieId, userId);
+        const data = await getUserReview(movieId, userId);
 
-      return data;
-    },
-    enabled: !!userId,
-  });
+        return data;
+      },
+      enabled: !!userId,
+    });
 
   const mutation = useMutation({
     mutationFn: async (review: reviewSchemaType) => {

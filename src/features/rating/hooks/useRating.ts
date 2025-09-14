@@ -39,7 +39,7 @@ export const useRating = (movieId: number) => {
         return;
       }
 
-      if (ratingValue === 0 && existing?.review) {
+      if (ratingValue === null && existing?.review) {
         await updateRatingOfMovie(existing.id, null);
         Toast.show({ type: "customSuccess", text1: "Rating removed" });
         return;

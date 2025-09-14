@@ -12,7 +12,7 @@ import Toast from 'react-native-toast-message'
 import { useProfileNotificationPreferences } from '../../hooks/useProfileNotificationPreferences'
 
 const AccountNotificationSettings = () => {
-  const { theme: appTheme } = useTheme()
+  const { theme: theme } = useTheme()
   const [isUnsubscribing, setIsUnsubscribing] = useState(false)
 
   const {
@@ -121,6 +121,7 @@ const AccountNotificationSettings = () => {
           value={preferences.marketing_emails}
           onChangeValue={handleMarketingEmailsToggle}
           disabled={isUpdating}
+          error={hasPushError && preferences.marketing_emails}
         />
         <Text variant="titleMedium">
           Receive updates about the latest{'\n'}news and offers

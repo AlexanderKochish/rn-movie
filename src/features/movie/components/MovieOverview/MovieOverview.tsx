@@ -1,3 +1,4 @@
+import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
 import { MovieDetailsType } from '@/src/shared/types/types'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
@@ -8,6 +9,11 @@ type Props = {
 }
 
 const MovieOverview = ({ movie }: Props) => {
+  if (!movie.overview) {
+    return (
+      <EmptyState icon="film" title="Overview for current film not found" />
+    )
+  }
   return (
     <Animated.View entering={FadeIn.duration(500)} style={styles.tabContent}>
       <Text style={styles.overview}>{movie.overview}</Text>

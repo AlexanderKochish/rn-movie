@@ -15,7 +15,8 @@ type Props = {
 
 const ReviewForm = ({ movieId }: Props) => {
   const { theme } = useTheme()
-  const { handleSubmit, control, isLoadingReviews } = useReview(movieId)
+  const { handleSubmit, control, isLoadingReviews, isPending } =
+    useReview(movieId)
   const {
     control: controllRating,
     handleSubmit: handleSubmitRating,
@@ -74,13 +75,14 @@ const ReviewForm = ({ movieId }: Props) => {
         onPress={() => {
           if (rating > 0) {
             handleSubmitRating()
+            handleSubmit()
           }
 
           handleSubmit()
         }}
         disabled={isLoadingReviews}
       >
-        {isLoadingReviews ? (
+        {isPending || isPendingRating ? (
           <Text style={styles.submitButtonText}>Posting...</Text>
         ) : (
           <Text style={styles.submitButtonText}>Post Review</Text>

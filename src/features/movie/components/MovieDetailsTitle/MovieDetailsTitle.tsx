@@ -3,10 +3,13 @@ import PlayVideoButton from '@/src/shared/components/PlayVideoButton/PlayVideoBu
 import IconToggleButton from '@/src/shared/components/UI/IconToggleButton/IconToggleButton'
 import { MovieDetailsType } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
+import * as FileSystem from 'expo-file-system'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
+
 import React from 'react'
 import {
+  Alert,
   Dimensions,
   Image,
   Share,
@@ -45,12 +48,20 @@ const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
 
   const handleShare = async () => {
     try {
+      const imageUrl = `${process.env.EXPO_PUBLIC_IMG_W500}${movie?.poster_path}`
+      const fileUri = FileSystem.documentDirectory + `${movieId}.jpg`
+
+      const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri)
+
       await Share.share({
-        message: `Check out "${movie?.title}" on MovieApp!`,
-        url: `https://www.themoviedb.org/movie/${movieId}`,
+        message: `🎥 ${movie?.title}\n⭐ Rating: ${movie?.vote_average}/10\n\n${movie?.overview?.substring(0, 120)}...\n\nDownload MovieApp: [app link]`,
+        url: uri,
+        title: `Share ${movie?.title}`,
       })
     } catch (error) {
-      console.error('Error sharing:', error)
+      if (error instanceof Error) {
+        Alert.alert('Error sharing with image:', error.message)
+      }
     }
   }
 
@@ -71,7 +82,6 @@ const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
         style={styles.backdropGradient}
       />
 
-      {/* Header Actions */}
       <View style={styles.headerActions}>
         <TouchableOpacity
           style={styles.backButton}
