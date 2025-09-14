@@ -8,10 +8,13 @@ const AccountActions = () => {
   return (
     <View style={styles.dangerSection}>
       <Text style={styles.sectionTitle}>Account Actions</Text>
-
       <TouchableOpacity
         style={styles.dangerButton}
-        onPress={() => router.push('/change-password')}
+        onPress={() =>
+          router.push({
+            pathname: '/(auth)/reset-password',
+          })
+        }
       >
         <Ionicons name="key" size={20} color="#007AFF" />
         <Text style={styles.dangerButtonText}>Change Password</Text>

@@ -24,7 +24,7 @@ const Header = ({ title, subTitle, gradientColors, goBack }: Props) => {
 
     return theme === 'light'
       ? (['#f8f9fa', '#e9ecef'] as const)
-      : (['#1a1a1a', '#2a2a2a'] as const)
+      : (['#0e0e0eff', '#1a1a1aff', '#212121ff'] as const)
   }
 
   const titleColor = theme === 'light' ? '#000' : '#fff'

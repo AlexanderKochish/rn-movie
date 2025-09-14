@@ -1,7 +1,16 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import React from 'react'
 import { Control } from 'react-hook-form'
-import { StyleSheet, Text, View } from 'react-native'
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native'
+import { TextInput } from 'react-native-paper'
 import { useProfile } from '../../hooks/useProfile'
 import { accountSchemaType } from '../../lib/zod/account.schema'
 
@@ -11,83 +20,120 @@ type Props = {
 
 const EditProfileForm = ({ control }: Props) => {
   const { profile } = useProfile()
+  const { theme } = useTheme()
+  const isDark = theme === 'dark' ? 'light' : 'dark'
 
   return (
-    <View style={styles.formSection}>
-      <Text style={styles.sectionTitle}>Personal Information</Text>
+    <KeyboardAvoidingView
+      style={globalStyles.flex}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <View style={[styles.form, isDark && styles.darkForm]}>
+        <Text style={styles.sectionTitle}>Personal Information</Text>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputLabel}>Full Name</Text>
         <ControlledTextInput
           control={control}
-          mode="outlined"
           name="fullName"
+          textColor={isDark ? '#fff' : '#000'}
+          mode="outlined"
+          left={
+            <TextInput.Icon
+              icon={'pen'}
+              color={isDark ? '#64b5f6' : '#007AFF'}
+            />
+          }
           defaultValue={profile?.full_name}
           style={styles.input}
           placeholder="Enter your full name"
-          placeholderTextColor="#666"
+          label={'Full name'}
+          placeholderTextColor={isDark ? '#888' : '#666'}
+          outlineColor={isDark ? '#333' : '#ddd'}
+          activeOutlineColor={isDark ? '#64b5f6' : '#007AFF'}
         />
-      </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputLabel}>Username</Text>
         <ControlledTextInput
           control={control}
           name="username"
+          textColor={isDark ? '#fff' : '#000'}
           mode="outlined"
+          left={
+            <TextInput.Icon
+              icon={'lead-pencil'}
+              color={isDark ? '#64b5f6' : '#007AFF'}
+            />
+          }
+          label={'Username'}
+          placeholderTextColor={isDark ? '#888' : '#666'}
+          outlineColor={isDark ? '#333' : '#ddd'}
+          activeOutlineColor={isDark ? '#64b5f6' : '#007AFF'}
           style={styles.input}
-          placeholder="Choose a username"
-          defaultValue={profile?.username}
-          placeholderTextColor="#666"
         />
-      </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputLabel}>Email Address</Text>
         <ControlledTextInput
           control={control}
           name="email"
+          style={[styles.disabledInput]}
+          textColor={isDark ? '#fff' : '#000'}
           mode="outlined"
-          style={[styles.input, styles.disabledInput]}
-          placeholder={profile?.email}
-          placeholderTextColor="#666"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          editable={false}
+          left={
+            <TextInput.Icon
+              icon={'email'}
+              color={isDark ? '#64b5f6' : '#007AFF'}
+            />
+          }
+          value={profile?.email}
+          placeholderTextColor={isDark ? '#888' : '#666'}
+          outlineColor={isDark ? '#333' : '#ddd'}
+          activeOutlineColor={isDark ? '#64b5f6' : '#007AFF'}
+          defaultValue={profile?.email}
+          disabled={true}
         />
-        <Text style={styles.inputHelp}>
-          Email cannot be changed. Contact support if needed.
-        </Text>
-      </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputLabel}>Age</Text>
         <ControlledTextInput
           style={styles.input}
           control={control}
           name="age"
+          textColor={isDark ? '#fff' : '#000'}
           mode="outlined"
-          placeholder="Your age"
-          defaultValue={String(profile?.age)}
-          placeholderTextColor="#666"
           keyboardType="number-pad"
-          maxLength={3}
+          left={
+            <TextInput.Icon
+              icon={'pencil-outline'}
+              color={isDark ? '#64b5f6' : '#007AFF'}
+            />
+          }
+          label={'Age'}
+          placeholderTextColor={isDark ? '#888' : '#666'}
+          outlineColor={isDark ? '#333' : '#ddd'}
+          activeOutlineColor={isDark ? '#64b5f6' : '#007AFF'}
         />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
 export default EditProfileForm
 
 const styles = StyleSheet.create({
-  formSection: {
-    backgroundColor: '#1a1a1a',
+  form: {
+    width: '100%',
+    gap: 5,
+    backgroundColor: '#fff',
     padding: 20,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#333',
-    gap: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  darkForm: {
+    backgroundColor: '#1a1a1a',
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
   },
   sectionTitle: {
     color: '#fff',
@@ -95,24 +141,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 8,
   },
-  inputGroup: {
-    gap: 8,
-  },
-  inputLabel: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
   input: {
-    backgroundColor: '#2a2a2a',
-    color: '#fff',
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#333',
-    fontSize: 16,
+    backgroundColor: 'transparent',
   },
+
   disabledInput: {
+    backgroundColor: 'transparent',
+    borderColor: '#888',
     opacity: 0.7,
     color: '#888',
   },

@@ -1,5 +1,6 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import React from 'react'
 import { Control, FieldValues, Path, useController } from 'react-hook-form'
 import { StyleSheet, View } from 'react-native'
@@ -23,23 +24,16 @@ const ControlledTextInput = <T extends FieldValues>({
   } = useController({ control, name })
   const { theme } = useTheme()
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.flex}>
       <TextInput
-        placeholder={placeholder}
         onBlur={field.onBlur}
         onChangeText={field.onChange}
         value={field.value}
-        style={[styles.input, rest.style]}
-        underlineColor="transparent"
-        activeUnderlineColor="transparent"
-        theme={{
-          colors: {
-            primary: 'transparent',
-            background: 'transparent',
-            text: Colors[theme].text,
-            placeholder: '#666',
-          },
-        }}
+        style={[
+          styles.input,
+          { backgroundColor: Colors[theme].input, color: Colors[theme].text },
+          rest.style,
+        ]}
         {...rest}
       />
 
@@ -51,12 +45,8 @@ const ControlledTextInput = <T extends FieldValues>({
 export default ControlledTextInput
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   input: {
-    borderWidth: 0,
-    backgroundColor: 'transparent',
+    borderWidth: 1,
   },
   error: {
     color: BaseColors.red,
