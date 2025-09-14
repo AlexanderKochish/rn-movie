@@ -15,7 +15,6 @@ type Props<T extends FieldValues> = {
 const ControlledTextInput = <T extends FieldValues>({
   control,
   name,
-  placeholder,
   ...rest
 }: Props<T>) => {
   const {

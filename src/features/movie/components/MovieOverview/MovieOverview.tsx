@@ -16,7 +16,15 @@ const MovieOverview = ({ movie }: Props) => {
   }
   return (
     <Animated.View entering={FadeIn.duration(500)} style={styles.tabContent}>
-      <Text style={styles.overview}>{movie.overview}</Text>
+      <Text style={styles.overview}>
+        {movie.overview} Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Quidem, quaerat nostrum soluta odio fugiat ipsam fugit itaque
+        necessitatibus asperiores natus? Distinctio consequatur enim sequi
+        beatae animi saepe quisquam. Perspiciatis, asperiores. Lorem ipsum dolor
+        sit amet consectetur adipisicing elit. Debitis, sunt minus. Corrupti
+        odio at quod modi enim ullam doloremque ipsam porro voluptas voluptate,
+        earum cupiditate quam. Earum excepturi sapiente ullam.
+      </Text>
 
       {movie.genres && movie.genres.length > 0 && (
         <View style={styles.genres}>
@@ -35,7 +43,7 @@ export default MovieOverview
 
 const styles = StyleSheet.create({
   tabContent: {
-    marginBottom: 20,
+    paddingBottom: 40,
   },
   overview: {
     color: '#fff',

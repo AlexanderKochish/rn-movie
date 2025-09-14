@@ -36,7 +36,7 @@ const SignInScreen = () => {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          <AppLogo text="Create an account" />
+          <AppLogo size="regular" text="Login" />
           <View style={[styles.form, isDark && styles.darkForm]}>
             <ControlledTextInput
               control={control}
@@ -90,7 +90,7 @@ const SignInScreen = () => {
               onPress={handleSubmit}
               mode="contained"
             >
-              Sign Up
+              Sign In
             </Button>
           </View>
 

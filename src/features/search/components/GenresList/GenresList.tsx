@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
 
   genresSection: {
     backgroundColor: '#1a1a1a',
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#333',
   },

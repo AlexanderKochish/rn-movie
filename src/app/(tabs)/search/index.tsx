@@ -63,7 +63,8 @@ export default function SearchScreen() {
 
 const styles = StyleSheet.create({
   searchContainer: {
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     borderBottomWidth: 1,
   },
 })

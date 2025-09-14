@@ -37,7 +37,6 @@ export default DiscoverTab
 
 const styles = StyleSheet.create({
   contentContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    padding: 16,
   },
 })

@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   actionBar: {
     flexDirection: 'row',
     paddingHorizontal: 20,
-    paddingTop: 10,
+    paddingVertical: 10,
     backgroundColor: '#1a1a1a',
     borderTopWidth: 1,
     borderTopColor: '#333',

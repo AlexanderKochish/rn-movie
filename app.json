@@ -31,7 +31,11 @@
           "image": "./assets/images/logo-text-icon.png",
           "imageWidth": 100,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "image": "./assets/images/logo-text-icon.png",
+            "backgroundColor": "#000000"
+          }
         }
       ],
       [

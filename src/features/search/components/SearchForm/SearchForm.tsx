@@ -1,11 +1,10 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
 import { Colors } from '@/src/shared/styles/Colors'
-import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { Control, FieldValues, Path, UseFormReset } from 'react-hook-form'
 import { StyleSheet, View } from 'react-native'
-import { IconButton } from 'react-native-paper'
+import { TextInput } from 'react-native-paper'
 
 type Props<T extends FieldValues> = {
   control: Control<T>
@@ -33,28 +32,42 @@ const SearchForm = <T extends FieldValues>({
         { borderColor: Colors[theme].border },
       ]}
     >
-      <Ionicons
-        name="search"
-        size={20}
-        color={Colors[theme].placeholder}
-        style={styles.searchIcon}
-      />
       <ControlledTextInput
-        placeholder="Search movies by title..."
-        placeholderTextColor={Colors[theme].placeholder}
         control={control}
         name={name}
+        mode="flat"
+        underlineColor="transparent"
+        activeUnderlineColor="transparent"
+        cursorColor={Colors[theme].activeTab}
+        placeholder="Search movies by title..."
+        placeholderTextColor={Colors[theme].placeholder}
         returnKeyType="search"
+        theme={{
+          colors: {
+            text: Colors[theme].text,
+            placeholder: Colors[theme].placeholder,
+            primary: 'transparent',
+          },
+        }}
+        left={
+          <TextInput.Icon
+            icon={'magnify'}
+            color={Colors[theme].placeholder}
+            size={28}
+          />
+        }
+        right={
+          typingText.length > 0 && (
+            <TextInput.Icon
+              onPress={clearSearch}
+              icon={'close-circle'}
+              color={Colors[theme].placeholder}
+              size={20}
+            />
+          )
+        }
+        style={styles.input}
       />
-      {typingText.length > 0 && (
-        <IconButton
-          icon="close-circle"
-          size={20}
-          iconColor={Colors[theme].placeholder}
-          onPress={clearSearch}
-          style={styles.clearButton}
-        />
-      )}
     </View>
   )
 }
@@ -65,14 +78,13 @@ const styles = StyleSheet.create({
   searchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 14,
-    paddingHorizontal: 16,
+    height: 50,
+    borderRadius: 16,
     borderWidth: 1,
   },
-  searchIcon: {
-    marginRight: 12,
-  },
-  clearButton: {
-    padding: 4,
+  input: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    outlineWidth: 0,
   },
 })
