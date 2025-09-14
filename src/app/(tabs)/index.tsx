@@ -7,23 +7,26 @@ import CustomCarousel from '@/src/shared/components/CustomCarousel/CustomCarouse
 
 import { useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { Animated, RefreshControl, StyleSheet, Text, View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 
 export default function HomeScreen() {
   const router = useRouter()
   const scrollY = useRef(new Animated.Value(0)).current
-  const [refreshing, setRefreshing] = useState(false)
-  const { nowPlaying, popular, topRated, trending, upcoming, isLoading } =
-    useHomeMovies()
-
-  const handleRefresh = () => {
-    setRefreshing(true)
-  }
+  const {
+    nowPlaying,
+    popular,
+    topRated,
+    trending,
+    upcoming,
+    isLoading,
+    refetch,
+    isRefetching,
+  } = useHomeMovies()
 
   const navigateToCategory = (category: string) => {
-    router.push(`/category/${category}`)
+    router.push(`/(category)/${category}`)
   }
 
   if (isLoading) {
@@ -46,8 +49,8 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
+            refreshing={isRefetching}
+            onRefresh={() => refetch.all()}
             tintColor="#007AFF"
             colors={['#007AFF']}
           />

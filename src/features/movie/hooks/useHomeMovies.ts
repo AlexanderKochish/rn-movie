@@ -32,5 +32,14 @@ export const useHomeMovies = () => {
         nowPlaying: queries[4].data?.results,
         isLoading: queries.some((query) => query.isLoading),
         isError: queries.some((query) => query.error),
+        isRefetching: queries.some((query) => query.isRefetching),
+        refetch: {
+            trending: queries[0].refetch,
+            popular: queries[1].refetch,
+            topRated: queries[2].refetch,
+            upcoming: queries[3].refetch,
+            nowPlaying: queries[4].refetch,
+            all: () => queries.forEach((query) => query.refetch()),
+        },
     };
 };
