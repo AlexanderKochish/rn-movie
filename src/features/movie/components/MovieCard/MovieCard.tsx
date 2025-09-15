@@ -1,4 +1,6 @@
-import { MovieCardEntity } from '@/src/shared/types/types'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import { Movie } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import {
@@ -11,7 +13,7 @@ import {
 import { Text } from 'react-native-paper'
 import { useGenres } from '../../hooks/useGenres'
 
-type MovieCardProps<T extends MovieCardEntity> = {
+type MovieCardProps<T extends Movie> = {
   movie: T
   size?: 'small' | 'medium' | 'large'
 }
@@ -20,13 +22,13 @@ const { width } = Dimensions.get('window')
 const POSTER_WIDTH = width / 3 - 20
 const POSTER_HEIGHT = POSTER_WIDTH * 1.5
 
-const MovieCard = <T extends MovieCardEntity>({
+const MovieCard = <T extends Movie>({
   movie,
   size = 'medium',
 }: MovieCardProps<T>) => {
   const { getGenreNames } = useGenres()
   const router = useRouter()
-
+  const { theme } = useTheme()
   const formatDate = (dateString: string) => {
     return new Date(dateString).getFullYear() || 'TBA'
   }
@@ -62,15 +64,17 @@ const MovieCard = <T extends MovieCardEntity>({
         ]}
         resizeMode="cover"
       />
+      <Text
+        style={[styles.title, { color: Colors[theme].text }]}
+        numberOfLines={2}
+      >
+        {movie.title}
+      </Text>
 
-      <View style={styles.info}>
-        <Text style={styles.title} numberOfLines={2}>
-          {movie.title}
-        </Text>
-
+      <View>
         <View style={styles.meta}>
           <View style={styles.rating}>
-            <Ionicons name="star" style={{ color: 'yellow' }} />
+            <Ionicons name="star" style={{ color: BaseColors.yellow }} />
             <Text style={styles.ratingText}>
               {movie.vote_average.toFixed(1)}
             </Text>
@@ -97,16 +101,13 @@ const styles = StyleSheet.create({
   card: {
     width: POSTER_WIDTH,
     marginBottom: 16,
+    justifyContent: 'space-between',
   },
   poster: {
     borderRadius: 12,
     backgroundColor: '#2a2a2a',
   },
-  info: {
-    marginTop: 8,
-  },
   title: {
-    color: '#fff',
     fontSize: 14,
     fontWeight: '600',
     marginBottom: 4,
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   ratingText: {
-    color: '#FFD700',
+    color: BaseColors.yellow,
     fontSize: 12,
     fontWeight: '600',
   },

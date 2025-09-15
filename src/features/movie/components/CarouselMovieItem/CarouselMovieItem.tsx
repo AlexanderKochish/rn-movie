@@ -1,11 +1,13 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import { Movie } from '@/src/shared/types/types'
+import { Colors } from '@/src/shared/styles/Colors'
+import { Movie, ThemeColorType } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
 import React, { useRef } from 'react'
 import {
   Animated,
+  ColorValue,
   Dimensions,
   Image,
   StyleSheet,
@@ -31,6 +33,23 @@ const CarouselItem = ({ item }: Props) => {
     extrapolate: 'clamp',
   })
 
+  const getThemeGradient = (
+    theme: ThemeColorType
+  ): [ColorValue, ColorValue, ...ColorValue[]] => {
+    switch (theme) {
+      case 'light':
+        return [
+          'transparent',
+          'rgba(255, 255, 255, 0.7)',
+          'rgba(255, 255, 255, 0.9)',
+        ]
+      case 'dark':
+        return ['transparent', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.9)']
+      default:
+        return ['transparent', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.9)']
+    }
+  }
+
   const navigateToMovie = (movie: Movie) => {
     router.push({
       pathname: '/(movie)/[movieId]',
@@ -55,14 +74,19 @@ const CarouselItem = ({ item }: Props) => {
         resizeMode="cover"
       />
       <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.9)']}
+        colors={getThemeGradient(theme)}
         style={styles.heroGradient}
       />
 
       <View style={styles.heroContent}>
         <Text style={styles.heroBadge}>🎬 Featured Today</Text>
-        <Text style={styles.heroTitle}>{item.title}</Text>
-        <Text style={styles.heroOverview} numberOfLines={2}>
+        <Text style={[styles.heroTitle, { color: Colors[theme].text }]}>
+          {item.title}
+        </Text>
+        <Text
+          style={[styles.heroOverview, { color: Colors[theme].text }]}
+          numberOfLines={2}
+        >
           {item.overview}
         </Text>
 
@@ -110,7 +134,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    height: '70%',
+    height: '50%',
   },
   heroContent: {
     position: 'absolute',

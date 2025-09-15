@@ -1,3 +1,5 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { Colors } from '@/src/shared/styles/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import React from 'react'
@@ -9,18 +11,23 @@ type Props = {
 
 const QuickActions = ({ navigateToCategory }: Props) => {
   const router = useRouter()
+  const { theme } = useTheme()
   const navigateToSearch = () => {
     router.push('/search')
   }
 
   return (
-    <View style={styles.quickActions}>
+    <View
+      style={[styles.quickActions, { backgroundColor: Colors[theme].card }]}
+    >
       <TouchableOpacity
         style={styles.quickAction}
         onPress={() => navigateToCategory('now_playing')}
       >
         <Ionicons name="film" size={24} color="#007AFF" />
-        <Text style={styles.quickActionText}>In Theaters</Text>
+        <Text style={[styles.quickActionText, { color: Colors[theme].text }]}>
+          In Theaters
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -28,7 +35,9 @@ const QuickActions = ({ navigateToCategory }: Props) => {
         onPress={() => navigateToCategory('popular')}
       >
         <Ionicons name="trending-up" size={24} color="#007AFF" />
-        <Text style={styles.quickActionText}>Popular</Text>
+        <Text style={[styles.quickActionText, { color: Colors[theme].text }]}>
+          Popular
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -36,12 +45,16 @@ const QuickActions = ({ navigateToCategory }: Props) => {
         onPress={() => navigateToCategory('upcoming')}
       >
         <Ionicons name="calendar" size={24} color="#007AFF" />
-        <Text style={styles.quickActionText}>Coming Soon</Text>
+        <Text style={[styles.quickActionText, { color: Colors[theme].text }]}>
+          Coming Soon
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.quickAction} onPress={navigateToSearch}>
         <Ionicons name="search" size={24} color="#007AFF" />
-        <Text style={styles.quickActionText}>Search</Text>
+        <Text style={[styles.quickActionText, { color: Colors[theme].text }]}>
+          Search
+        </Text>
       </TouchableOpacity>
     </View>
   )
@@ -54,7 +67,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 16,
-    backgroundColor: '#1a1a1a',
     marginHorizontal: 16,
     borderRadius: 16,
     marginBottom: 32,
@@ -64,7 +76,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   quickActionText: {
-    color: '#fff',
     fontSize: 12,
     fontWeight: '500',
   },

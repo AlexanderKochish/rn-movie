@@ -1,15 +1,17 @@
 import Footer from '@/src/features/home/components/Footer/Footer'
-import Header from '@/src/features/home/components/Header/Header'
 import QuickActions from '@/src/features/home/components/QuickActions/QuickActions'
 import MovieRow from '@/src/features/movie/components/MovieRow/MovieRow'
 import { useHomeMovies } from '@/src/features/movie/hooks/useHomeMovies'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import CustomCarousel from '@/src/shared/components/CustomCarousel/CustomCarousel'
+import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
+import { Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 
 import { useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useRef } from 'react'
-import { Animated, RefreshControl, StyleSheet, Text, View } from 'react-native'
-import { ActivityIndicator } from 'react-native-paper'
+import { Animated, RefreshControl, StyleSheet, View } from 'react-native'
 
 export default function HomeScreen() {
   const router = useRouter()
@@ -24,28 +26,26 @@ export default function HomeScreen() {
     refetch,
     isRefetching,
   } = useHomeMovies()
-
+  const { theme, statusBarTheme } = useTheme()
   const navigateToCategory = (category: string) => {
     router.push(`/(category)/${category}`)
   }
 
   if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
-        <Text style={styles.loadingText}>Loading amazing movies...</Text>
-      </View>
-    )
+    return <Preloader />
   }
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
-
-      <Header />
+    <View
+      style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
+    >
+      <StatusBar style={statusBarTheme} />
 
       <Animated.ScrollView
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { backgroundColor: Colors[theme].background },
+        ]}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -96,22 +96,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
-    gap: 16,
-  },
-  loadingText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-
   scrollContent: {
     paddingBottom: 40,
   },

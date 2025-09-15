@@ -17,6 +17,7 @@ export const BaseColors = {
   green: "#34C759",
   blue: "#81b0ff",
   blueDark: "#007AFF",
+  lightBlue: "#93c3d657",
   gray: "#666",
   grayLight: "rgba(50, 50, 50, 0.24)",
 };
@@ -57,7 +58,7 @@ export const Colors = {
     text: BaseColors.black,
     input: BaseColors.whiteDark,
     chip: BaseColors.inputBackground,
-    card: BaseColors.orangeOpacity,
+    card: BaseColors.lightBlue,
     stats: BaseColors.white,
     border: BaseColors.grayLight,
     settigsItem: BaseColors.white,

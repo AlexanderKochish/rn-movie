@@ -1,3 +1,5 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { Colors } from '@/src/shared/styles/Colors'
 import { Movie } from '@/src/shared/types/types'
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
@@ -12,12 +14,15 @@ type Props = {
 }
 
 const MovieRow = ({ title, movies, onViewAll }: Props) => {
+  const { theme } = useTheme()
   return (
     <>
       {movies && movies.length > 0 && (
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>{title}</Text>
+            <Text style={[styles.sectionTitle, { color: Colors[theme].text }]}>
+              {title}
+            </Text>
             <TouchableOpacity onPress={onViewAll}>
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
@@ -53,7 +58,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   sectionTitle: {
-    color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
   },
