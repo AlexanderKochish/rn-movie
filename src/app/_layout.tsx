@@ -59,12 +59,12 @@ export default function RootLayout() {
     <GestureHandlerRootView onLayout={onLayoutRootView}>
       <SafeAreaProvider>
         <QueryClientProvider client={queryClientRef.current}>
-          <AuthProvider>
-            <ThemeProvider>
+          <ThemeProvider>
+            <AuthProvider>
               <RootStack />
               <CustomToast />
-            </ThemeProvider>
-          </AuthProvider>
+            </AuthProvider>
+          </ThemeProvider>
         </QueryClientProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

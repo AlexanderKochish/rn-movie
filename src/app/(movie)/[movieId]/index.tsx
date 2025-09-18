@@ -12,8 +12,11 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 export default function MovieDetailsScreen() {
   const router = useRouter()
   const movieId = useMovieId()
-  const { data: movie, isLoading } = useMovieDetails(movieId)
 
+  const { data: movie, isLoading } = useMovieDetails(movieId)
+  if (!movieId) {
+    return null
+  }
   if (isLoading || !movie) {
     return <Preloader />
   }

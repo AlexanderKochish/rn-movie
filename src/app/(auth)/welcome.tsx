@@ -1,13 +1,13 @@
+import { useAuthWithOAuth } from '@/src/features/auth/hooks/useAuthWithOAuth'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import CustomButton from '@/src/shared/components/UI/Button/Button'
 import { Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
-import { Typography } from '@/src/shared/styles/Typography'
-import { ThemeColorType } from '@/src/shared/types/types'
+import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useRouter } from 'expo-router'
+import { useEffect, useRef } from 'react'
 import {
-  ColorValue,
+  Animated,
+  Easing,
   Image,
   ImageBackground,
   StyleSheet,
@@ -20,21 +20,28 @@ const WelcomeImage = require('../../../assets/images/welcome.png')
 const Logo = require('../../../assets/images/logo-white.png')
 
 export default function WelcomeScreen() {
-  const router = useRouter()
-  const { theme } = useTheme()
+  const { theme, getThemeGradient } = useTheme()
+  const fadeAnim = useRef(new Animated.Value(0)).current
+  const slideAnim = useRef(new Animated.Value(50)).current
+  const { signInWithOAuth } = useAuthWithOAuth()
 
-  const getThemeGradient = (
-    theme: ThemeColorType
-  ): [ColorValue, ColorValue, ...ColorValue[]] => {
-    switch (theme) {
-      case 'light':
-        return ['transparent', Colors[theme].background]
-      case 'dark':
-        return ['transparent', Colors[theme].background]
-      default:
-        return ['transparent', 'rgba(0,0,0,0.8)']
-    }
-  }
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 900,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+    ]).start()
+  }, [fadeAnim, slideAnim])
+
   return (
     <View
       style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
@@ -44,92 +51,272 @@ export default function WelcomeScreen() {
         style={styles.imageBackground}
         resizeMode="cover"
       >
-        <View style={styles.overlay}>
-          <Image
-            source={Logo}
-            style={styles.logo}
-            tintColor={Colors[theme].text}
-          />
-          <Text style={[styles.title, { color: Colors[theme].text }]}>
-            Watcher
-          </Text>
-          <Text style={[styles.subtitle, { color: Colors[theme].text }]}>
-            Your Ticket to Screen Satisfaction:{'\n'}Rate, Review, Reel in the
-            Best!
-          </Text>
-        </View>
         <LinearGradient
           colors={getThemeGradient(theme)}
-          style={styles.background}
+          style={styles.backgroundOverlay}
         />
+
+        <View style={styles.overlay}>
+          <Animated.View
+            style={{
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }],
+            }}
+          >
+            <Image source={Logo} style={styles.logo} tintColor="#FFFFFF" />
+          </Animated.View>
+
+          <Animated.View
+            style={{
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }],
+            }}
+          >
+            <Text style={styles.title}>Watcher</Text>
+            <Text style={styles.subtitle}>
+              Your Ticket to Screen Satisfaction:{'\n'}Rate, Review, Reel in the
+              Best!
+            </Text>
+          </Animated.View>
+        </View>
       </ImageBackground>
 
-      <View
+      <Animated.View
         style={[
           styles.bottomContainer,
           { backgroundColor: Colors[theme].background },
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }],
+          },
         ]}
       >
-        <CustomButton
-          title="Sign Up"
-          fullWidth
-          variant="primary"
-          onPress={() => router.replace('/(auth)/sign-up')}
-        />
-
-        <TouchableOpacity onPress={() => router.replace('/(auth)/sign-in')}>
-          <Text style={[styles.bottomText, { color: Colors[theme].text }]}>
-            I already have an account
+        <View style={styles.oauthContainer}>
+          <Text
+            style={[styles.oauthTitle, { color: Colors[theme].textSecondary }]}
+          >
+            Continue with
           </Text>
-        </TouchableOpacity>
-      </View>
+
+          <TouchableOpacity
+            style={[styles.oauthButton, styles.googleButton]}
+            onPress={() => signInWithOAuth('google')}
+            activeOpacity={0.9}
+          >
+            <View style={styles.buttonContent}>
+              <View style={[styles.iconContainer, styles.googleIcon]}>
+                <Ionicons name="logo-google" size={20} color="#FFFFFF" />
+              </View>
+              <Text style={[styles.oauthButtonText, styles.googleText]}>
+                Continue with Google
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.oauthButton, styles.githubButton]}
+            onPress={() => signInWithOAuth('github')}
+            activeOpacity={0.9}
+          >
+            <View style={styles.buttonContent}>
+              <View style={[styles.iconContainer, styles.githubIcon]}>
+                <Ionicons name="logo-github" size={20} color="#FFFFFF" />
+              </View>
+              <Text style={[styles.oauthButtonText, styles.githubText]}>
+                Continue with GitHub
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* <TouchableOpacity
+            style={[styles.oauthButton, styles.facebookButton]}
+            onPress={() => handleOAuthSignIn('facebook')}
+            activeOpacity={0.9}
+          >
+            <View style={styles.buttonContent}>
+              <View style={[styles.iconContainer, styles.facebookIcon]}>
+                <Ionicons name="logo-facebook" size={20} color="#FFFFFF" />
+              </View>
+              <Text style={[styles.oauthButtonText, styles.facebookText]}>
+                Continue with Facebook
+              </Text>
+            </View>
+          </TouchableOpacity> */}
+        </View>
+      </Animated.View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  background: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 300,
+  backgroundOverlay: {
+    ...StyleSheet.absoluteFillObject,
   },
   imageBackground: {
-    height: 580,
+    height: 500,
     width: '100%',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   overlay: {
     alignItems: 'center',
-    paddingHorizontal: 20,
-    zIndex: 1,
+    paddingHorizontal: 24,
+    zIndex: 2,
+    marginBottom: 10,
   },
   logo: {
-    width: 115,
-    height: 115,
+    width: 100,
+    height: 100,
     resizeMode: 'contain',
+    marginBottom: 16,
   },
   title: {
-    fontSize: 54,
-    fontWeight: 'bold',
+    fontSize: 48,
+    fontWeight: '800',
     marginBottom: 12,
+    fontFamily: 'Inter-ExtraBold',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: Typography.title.fontSize,
+    fontSize: 18,
     textAlign: 'center',
-    lineHeight: 28,
+    lineHeight: 24,
+    fontFamily: 'Inter-Regular',
+    color: 'rgba(255,255,255,0.9)',
+    letterSpacing: 0.3,
   },
   bottomContainer: {
     flex: 1,
+    paddingHorizontal: 28,
+    paddingTop: 36,
+    paddingBottom: 18,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    marginTop: 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  oauthContainer: {
+    marginBottom: 10,
+  },
+  oauthTitle: {
+    textAlign: 'center',
+    marginBottom: 24,
+    fontSize: 15,
+    fontWeight: '600',
+    fontFamily: 'Inter-SemiBold',
+    letterSpacing: 0.5,
+    opacity: 0.8,
+  },
+  oauthButton: {
+    height: 58,
+    borderRadius: 18,
+    marginBottom: 14,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 4,
+    borderWidth: 0,
+    overflow: 'hidden',
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 24,
-    paddingTop: 32,
+  },
+  iconContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  googleIcon: {
+    backgroundColor: '#DB4437',
+  },
+  githubIcon: {
+    backgroundColor: '#000000',
+  },
+  facebookIcon: {
+    backgroundColor: '#1877F2',
+  },
+  oauthButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    fontFamily: 'Inter-SemiBold',
+    letterSpacing: 0.2,
+  },
+  googleButton: {
+    shadowColor: '#DB4437',
+  },
+  googleText: {
+    color: '#1F2937',
+  },
+  githubButton: {
+    shadowColor: '#000000',
+  },
+  githubText: {
+    color: '#1F2937',
+  },
+  facebookButton: {
+    shadowColor: '#1877F2',
+  },
+  facebookText: {
+    color: '#1F2937',
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 28,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    opacity: 0.2,
+  },
+  dividerText: {
+    marginHorizontal: 20,
+    fontSize: 14,
+    fontWeight: '500',
+    fontFamily: 'Inter-Medium',
+    opacity: 0.6,
+    letterSpacing: 0.5,
+  },
+  emailButton: {
+    borderRadius: 18,
+    height: 58,
   },
   bottomText: {
-    marginTop: 20,
     textAlign: 'center',
-    fontSize: Typography.title.fontSize,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: '500',
+    fontFamily: 'Inter-Medium',
+    letterSpacing: 0.3,
+  },
+  signInLink: {
+    marginTop: 24,
+    padding: 12,
+    borderRadius: 12,
+  },
+  signInHighlight: {
+    color: '#6366F1',
+    fontWeight: '600',
+    fontFamily: 'Inter-SemiBold',
   },
 })

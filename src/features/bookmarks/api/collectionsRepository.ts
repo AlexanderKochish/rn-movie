@@ -40,6 +40,16 @@ export const addMovieToCollection = async (
     });
 
     if (error) throw new Error(error.message);
+
+    const { error: counterError } = await supabase.rpc("update_stat_counter", {
+        p_user_id: userId,
+        p_column_name: collection,
+        p_increment: 1,
+    });
+
+    if (counterError) {
+        throw counterError;
+    }
 };
 
 export const removeFromCollection = async (
@@ -54,4 +64,14 @@ export const removeFromCollection = async (
         .eq("movie_id", movieId);
 
     if (error) throw new Error(error.message);
+
+    const { error: counterError } = await supabase.rpc("update_stat_counter", {
+        p_user_id: userId,
+        p_column_name: collection,
+        p_increment: -1,
+    });
+
+    if (counterError) {
+        throw counterError;
+    }
 };
