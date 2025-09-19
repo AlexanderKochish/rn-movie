@@ -2,14 +2,12 @@ import { supabase } from "@/src/shared/services/supabase";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as Linking from "expo-linking";
-import { useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export const useGithubSignIn = () => {
   const redirectTo = makeRedirectUri();
-  const router = useRouter();
 
   const createSessionFromUrl = async (url: string) => {
     const { params, errorCode } = QueryParams.getQueryParams(url);
@@ -32,7 +30,9 @@ export const useGithubSignIn = () => {
         skipBrowserRedirect: true,
       },
     });
+
     if (error) throw error;
+
     const res = await WebBrowser.openAuthSessionAsync(
       data?.url ?? "",
       redirectTo,

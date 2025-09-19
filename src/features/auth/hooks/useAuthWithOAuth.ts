@@ -1,4 +1,5 @@
 import { useRouter } from "expo-router";
+import { Alert } from "react-native";
 import { useAuth } from "./useAuth";
 import { useGithubSignIn } from "./useGithubSignIn";
 import { useGoogleSignIn } from "./useGoogleSignIn";
@@ -6,25 +7,33 @@ import { useGoogleSignIn } from "./useGoogleSignIn";
 type OAuthProviders = "google" | "github" | "facebook";
 
 export const useAuthWithOAuth = () => {
-    const { user } = useAuth();
-    const router = useRouter();
     const { signInWithGithub } = useGithubSignIn();
     const { signInWithGoogle } = useGoogleSignIn();
-    const signInWithOAuth = (provider: OAuthProviders) => {
-        if (!user?.user_metadata.accepted_terms) {
-            router.push("/(auth)/accept-terms");
-        }
+    const { user } = useAuth();
+    const router = useRouter();
+    const signInWithOAuth = async (provider: OAuthProviders) => {
         switch (provider) {
             case "github":
-                return signInWithGithub();
+                return await signInWithGithub();
             case "google":
-                return signInWithGoogle();
+                return await signInWithGoogle();
             default:
-                return null;
+                break;
+        }
+    };
+
+    const handleSignInWitOAuth = async (provider: OAuthProviders) => {
+        try {
+            await signInWithOAuth(provider);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                Alert.alert("Error", "Failed to sign in try again");
+            }
+            throw error;
         }
     };
 
     return {
-        signInWithOAuth,
+        handleSignInWitOAuth,
     };
 };

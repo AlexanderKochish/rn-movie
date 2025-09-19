@@ -9,7 +9,7 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { useColorScheme } from 'react-native'
+import { ColorValue, useColorScheme } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { ThemeContext } from './ThemeContext'
 
@@ -53,6 +53,27 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
     handleSetTheme(newTheme)
   }, [handleSetTheme, theme])
 
+  const getThemeGradient = (
+    theme: ThemeColorType,
+    customColors?: readonly [ColorValue, ColorValue, ...ColorValue[]],
+    reverse = false
+  ): readonly [ColorValue, ColorValue, ...ColorValue[]] => {
+    const defaultColors: readonly [ColorValue, ColorValue] =
+      theme === 'light'
+        ? ['transparent', 'rgba(255,255,255,1)']
+        : ['transparent', 'rgba(0,0,0,0.8)']
+
+    const base: readonly ColorValue[] = customColors ?? defaultColors
+
+    if (base.length < 2) {
+      throw new Error('Gradient must have at least two colors')
+    }
+
+    const result = reverse ? [...base].reverse() : base
+
+    return result as readonly [ColorValue, ColorValue, ...ColorValue[]]
+  }
+
   const statusBarTheme: StatusBarStyle = theme === 'dark' ? 'light' : 'dark'
 
   const value = useMemo(
@@ -61,6 +82,7 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
       toggleTheme,
       isThemeReady,
       statusBarTheme,
+      getThemeGradient,
     }),
     [theme, toggleTheme, isThemeReady, statusBarTheme]
   )

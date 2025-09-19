@@ -1,24 +1,26 @@
 import { useTermsAcceptance } from '@/src/features/auth/hooks/useTermsAcceptance'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import React from 'react'
+import React, { useState } from 'react'
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Text } from 'react-native-paper'
 
 export default function AcceptTermsScreen() {
   const router = useRouter()
   const { theme } = useTheme()
-  const { setAccepted, handleAccept, accepted } = useTermsAcceptance()
+  const { handleAccept, isPending } = useTermsAcceptance()
+  const [accepted, setAccepted] = useState(false)
 
   return (
     <View
-      style={[styles.container, { backgroundColor: Colors[theme].background }]}
+      style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
     >
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() => router.replace('/(auth)/welcome')}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color={Colors[theme].text} />
@@ -88,6 +90,7 @@ export default function AcceptTermsScreen() {
             { borderColor: Colors[theme].border },
           ]}
           onPress={() => setAccepted(!accepted)}
+          disabled={isPending}
         >
           <View
             style={[
@@ -97,7 +100,7 @@ export default function AcceptTermsScreen() {
             ]}
           >
             {accepted && (
-              <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+              <Ionicons name="checkmark" size={16} color={Colors[theme].text} />
             )}
           </View>
           <Text style={[styles.checkboxLabel, { color: Colors[theme].text }]}>
@@ -112,8 +115,8 @@ export default function AcceptTermsScreen() {
               ? { backgroundColor: Colors[theme].text }
               : styles.acceptButtonDisabled,
           ]}
-          onPress={handleAccept}
-          disabled={!accepted}
+          onPress={() => handleAccept()}
+          disabled={!accepted || isPending}
         >
           <Text style={styles.acceptButtonText}>Accept & Continue</Text>
         </TouchableOpacity>
@@ -123,9 +126,6 @@ export default function AcceptTermsScreen() {
 }
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -1,4 +1,5 @@
 import Footer from '@/src/features/home/components/Footer/Footer'
+import { useProfile } from '@/src/features/profile/hooks/useProfile'
 import TermsLegalLinks from '@/src/features/terms/components/TermsLegalLinks/TermsLegalLinks'
 import TermsList from '@/src/features/terms/components/TermsList/TermsList'
 import { useTermsOfService } from '@/src/features/terms/hooks/useTermsOfService'
@@ -21,7 +22,8 @@ import Toast from 'react-native-toast-message'
 export default function TermsOfServiceScreen() {
   const router = useRouter()
   const { terms, isError, isLoading } = useTermsOfService()
-  const [accepted, setAccepted] = useState(false)
+  const { profile } = useProfile()
+  const [accepted, setAccepted] = useState(profile?.terms_accepted)
 
   useEffect(() => {
     if (accepted) {
