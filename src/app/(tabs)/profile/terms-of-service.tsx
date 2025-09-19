@@ -3,9 +3,12 @@ import { useProfile } from '@/src/features/profile/hooks/useProfile'
 import TermsLegalLinks from '@/src/features/terms/components/TermsLegalLinks/TermsLegalLinks'
 import TermsList from '@/src/features/terms/components/TermsList/TermsList'
 import { useTermsOfService } from '@/src/features/terms/hooks/useTermsOfService'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
 import Header from '@/src/shared/components/Header/Header'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
+import { Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -21,6 +24,7 @@ import Toast from 'react-native-toast-message'
 
 export default function TermsOfServiceScreen() {
   const router = useRouter()
+  const { theme } = useTheme()
   const { terms, isError, isLoading } = useTermsOfService()
   const { profile } = useProfile()
   const [accepted, setAccepted] = useState(profile?.terms_accepted)
@@ -32,7 +36,7 @@ export default function TermsOfServiceScreen() {
         text1: 'Saved successfully',
       })
     }
-  }, [accepted])
+  }, [])
 
   if (isLoading) {
     return <Preloader />
@@ -77,7 +81,9 @@ export default function TermsOfServiceScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
+    >
       <StatusBar style="light" />
 
       <Header
@@ -86,16 +92,16 @@ export default function TermsOfServiceScreen() {
         subTitle={`Last updated: ${currentDate}`}
       />
 
-      {/* Content */}
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Introduction */}
         <View style={styles.introSection}>
           <Ionicons name="document-text" size={48} color="#007AFF" />
-          <Text style={styles.introTitle}>Welcome to MovieApp</Text>
+          <Text style={[styles.introTitle, { color: Colors[theme].text }]}>
+            Welcome to Watcher
+          </Text>
           <Text style={styles.introText}>
             Please read these Terms of Service carefully before using our
             application. By using MovieApp, you agree to be bound by these
@@ -106,7 +112,6 @@ export default function TermsOfServiceScreen() {
         <TermsList terms={terms} />
 
         <TermsLegalLinks />
-        {/* Acceptance Section */}
         <View style={styles.acceptanceSection}>
           <View style={styles.acceptanceHeader}>
             <Ionicons
@@ -114,7 +119,9 @@ export default function TermsOfServiceScreen() {
               size={24}
               color={accepted ? '#4CD964' : '#666'}
             />
-            <Text style={styles.acceptanceTitle}>
+            <Text
+              style={[styles.acceptanceTitle, { color: Colors[theme].text }]}
+            >
               {accepted ? 'Terms Accepted' : 'Accept Terms of Service'}
             </Text>
           </View>
@@ -135,7 +142,6 @@ export default function TermsOfServiceScreen() {
           ) : (
             <View style={styles.acceptedContainer}>
               <Text style={styles.acceptedText}>Thank you for accepting!</Text>
-              <Text style={styles.acceptedSubtext}>Redirecting back...</Text>
             </View>
           )}
         </View>
@@ -147,10 +153,6 @@ export default function TermsOfServiceScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
   scrollView: {
     flex: 1,
   },
@@ -197,7 +199,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   acceptanceTitle: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -230,9 +231,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 4,
-  },
-  acceptedSubtext: {
-    color: '#888',
-    fontSize: 14,
   },
 })

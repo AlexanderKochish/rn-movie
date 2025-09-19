@@ -87,6 +87,7 @@ const LibraryCollection = ({
       <FlatList
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.moviesGrid}
+        numColumns={2}
         data={collection}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item: movie }) => (
@@ -139,7 +140,6 @@ const styles = StyleSheet.create({
   },
   moviesGrid: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: 16,
     justifyContent: 'space-between',
     paddingBottom: 35,

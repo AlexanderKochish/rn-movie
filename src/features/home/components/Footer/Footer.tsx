@@ -8,7 +8,7 @@ type Props = {
 
 const Footer = ({
   title = 'Made with ❤️ using TMDB API',
-  subtitle = '© 2025 MovieApp, Inc.',
+  subtitle = '© 2025 Watcher, Inc.',
 }: Props) => {
   return (
     <View style={styles.footer}>
