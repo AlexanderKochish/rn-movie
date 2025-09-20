@@ -1,4 +1,6 @@
 export const BaseColors = {
+  secondaryLight: "#6B7280",
+  secondaryDark: "#A1A1AA",
   orange: "#FA6207",
   brown: "#4C1C00",
   yellow: "#FFD700",
@@ -10,6 +12,7 @@ export const BaseColors = {
   white: "#FBFAF5",
   lightBlack: "#1a1a1a",
   inputBackground: "#2a2a2a",
+  inputBackgroundLight: "rgba(0, 122, 255, 0.1)",
   whiteDark: "#F5F5F5",
   borderGray: "#333",
   orangeOpacity: "rgba(255, 60, 0, 0.13)",
@@ -20,6 +23,8 @@ export const BaseColors = {
   lightBlue: "#93c3d657",
   gray: "#666",
   grayLight: "rgba(50, 50, 50, 0.24)",
+  infoButton: "rgba(50, 50, 50, 0.24)",
+  infoButtonLight: "rgba(255, 255, 255, 0.29)",
 };
 export const Colors = {
   dark: {
@@ -45,6 +50,8 @@ export const Colors = {
     emptyStateBackground: BaseColors.lightBlack,
     tabBackground: BaseColors.lightBlack,
     inputBackground: BaseColors.inputBackground,
+    infoBtn: BaseColors.infoButtonLight,
+    textSecondary: BaseColors.secondaryDark,
   },
   light: {
     title: BaseColors.dark,
@@ -57,7 +64,7 @@ export const Colors = {
     bookmark: BaseColors.orangeLight,
     text: BaseColors.black,
     input: BaseColors.whiteDark,
-    chip: BaseColors.inputBackground,
+    chip: BaseColors.inputBackgroundLight,
     card: BaseColors.lightBlue,
     stats: BaseColors.white,
     border: BaseColors.grayLight,
@@ -69,5 +76,7 @@ export const Colors = {
     emptyStateBackground: BaseColors.whiteDark,
     tabBackground: BaseColors.whiteDark,
     inputBackground: BaseColors.white,
+    infoBtn: BaseColors.infoButton,
+    textSecondary: BaseColors.secondaryLight,
   },
 };

@@ -1,3 +1,5 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { Colors } from '@/src/shared/styles/Colors'
 import { openSupportEmail } from '@/src/shared/utils/openSupportEmail'
 import { Ionicons } from '@expo/vector-icons'
 import React, { memo } from 'react'
@@ -17,16 +19,25 @@ const FaqQuestionItem = ({
   categories,
   toggleQuestion,
 }: Props) => {
+  const { theme } = useTheme()
   return (
-    <View key={item.id} style={styles.faqItem}>
+    <View
+      key={item.id}
+      style={[styles.faqItem, { backgroundColor: Colors[theme].background }]}
+    >
       <TouchableOpacity
         accessibilityRole="button"
-        style={styles.questionContainer}
+        style={[
+          styles.questionContainer,
+          { borderColor: Colors[theme].border },
+        ]}
         onPress={() => toggleQuestion(item.id)}
         activeOpacity={0.7}
       >
-        <View style={styles.questionContent}>
-          <Text style={styles.questionText}>{item.question}</Text>
+        <View style={[styles.questionContent]}>
+          <Text style={[styles.questionText, { color: Colors[theme].text }]}>
+            {item.question}
+          </Text>
           <Ionicons
             name={expanded ? 'chevron-up' : 'chevron-down'}
             size={20}
@@ -36,14 +47,19 @@ const FaqQuestionItem = ({
       </TouchableOpacity>
 
       {expanded && (
-        <View style={styles.answerContainer}>
+        <View
+          style={[
+            styles.answerContainer,
+            { borderColor: Colors[theme].border },
+          ]}
+        >
           <Text style={styles.answerText}>{item.answer}</Text>
 
           {categories?.find((category) => category.name === 'Technical') && (
             <TouchableOpacity
               accessibilityRole="button"
               style={styles.supportLink}
-              onPress={openSupportEmail}
+              onPress={() => openSupportEmail()}
             >
               <Text style={styles.supportLinkText}>Contact support now</Text>
               <Ionicons name="arrow-forward" size={16} color="#007AFF" />
@@ -59,13 +75,14 @@ export default memo(FaqQuestionItem)
 
 const styles = StyleSheet.create({
   faqItem: {
-    backgroundColor: '#1a1a1a',
     borderRadius: 12,
     marginBottom: 12,
     overflow: 'hidden',
   },
   questionContainer: {
     padding: 16,
+    borderWidth: 1,
+    borderRadius: 12,
   },
   questionContent: {
     flexDirection: 'row',
@@ -73,7 +90,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   questionText: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
     flex: 1,
@@ -81,7 +97,11 @@ const styles = StyleSheet.create({
   },
   answerContainer: {
     padding: 16,
-    borderTopWidth: 1,
+    borderWidth: 1,
+    borderRadius: 12,
+    borderTopEndRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopWidth: 0,
     borderTopColor: '#333',
   },
   answerText: {

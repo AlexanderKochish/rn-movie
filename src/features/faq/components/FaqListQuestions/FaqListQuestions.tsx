@@ -1,5 +1,7 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
+import { Colors } from '@/src/shared/styles/Colors'
 import { openSupportEmail } from '@/src/shared/utils/openSupportEmail'
 import { Ionicons } from '@expo/vector-icons'
 import React, { useCallback } from 'react'
@@ -27,6 +29,7 @@ const FaqListQuestions = ({
   isLoading,
   isError,
 }: Props) => {
+  const { theme } = useTheme()
   const renderQuestion = useCallback(
     (item: FAQQuestionType) => (
       <View key={item.id}>
@@ -83,7 +86,7 @@ const FaqListQuestions = ({
       contentContainerStyle={styles.faqContent}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.sectionTitle}>
+      <Text style={[styles.sectionTitle, { color: Colors[theme].text }]}>
         {isAllQuestions ? 'All Questions' : selectedCategory?.name}{' '}
         {!!faq?.length && `(${faq.length})`}
       </Text>
@@ -92,7 +95,9 @@ const FaqListQuestions = ({
 
       <View style={styles.helpSection}>
         <Ionicons name="help-buoy" size={48} color="#007AFF" />
-        <Text style={styles.helpTitle}>Still need help?</Text>
+        <Text style={[styles.helpTitle, { color: Colors[theme].text }]}>
+          Still need help?
+        </Text>
         <Text style={styles.helpText}>
           Our support team is here to assist you with any questions or issues
           you might have.

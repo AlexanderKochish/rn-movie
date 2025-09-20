@@ -1,61 +1,60 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
-import { Typography } from '@/src/shared/styles/Typography'
-import { Href, useRouter } from 'expo-router'
-import React from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
-import { Icon, IconButton, MD3TypescaleKey, Text } from 'react-native-paper'
+import { Ionicons } from '@expo/vector-icons'
+import React, { ComponentProps } from 'react'
+import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Text } from 'react-native-paper'
+
+type IoniconsIcons = ComponentProps<typeof Ionicons>['name']
 
 type Props = {
-  icon?: string
-  onPress?: () => void
-  settingName?: string
-  titleSize?: keyof typeof MD3TypescaleKey
-  link?: Href
+  onOpenLink: () => void
+  leftIcon: IoniconsIcons
+  rightIcon?: IoniconsIcons
+  text: string
 }
 
 const NavigationItem = ({
-  settingName,
-  onPress,
-  icon,
-  link,
-  titleSize = 'titleLarge',
+  onOpenLink,
+  leftIcon,
+  rightIcon = 'arrow-forward',
+  text,
 }: Props) => {
   const { theme } = useTheme()
-  const router = useRouter()
+
   return (
-    <Pressable style={styles.wrapper} onPress={onPress}>
-      <View style={styles.titleWrapper}>
-        <Icon source={icon} size={24} color={Colors[theme].text} />
-        <Text variant={titleSize}>{settingName}</Text>
-      </View>
-      {link && (
-        <IconButton
-          icon={'chevron-right'}
-          size={24}
-          iconColor={Colors[theme].text}
-          onPress={() => router.push(link)}
-        />
-      )}
-    </Pressable>
+    <TouchableOpacity
+      style={[
+        styles.legalLink,
+        {
+          backgroundColor: Colors[theme].background,
+          borderColor: Colors[theme].border,
+        },
+      ]}
+      onPress={onOpenLink}
+    >
+      {leftIcon && <Ionicons name={leftIcon} size={20} color="#007AFF" />}
+      <Text style={[styles.legalLinkText, { color: Colors[theme].text }]}>
+        {text}
+      </Text>
+      {rightIcon && <Ionicons name={rightIcon} size={16} color="#666" />}
+    </TouchableOpacity>
   )
 }
 
-export default NavigationItem
-
 const styles = StyleSheet.create({
-  wrapper: {
-    width: '100%',
+  legalLink: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    padding: 16,
+    borderRadius: 12,
+    gap: 12,
+    borderWidth: 1,
   },
-  titleWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  title: {
-    fontSize: Typography.title.fontSize,
+  legalLinkText: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: '500',
   },
 })
+export default NavigationItem

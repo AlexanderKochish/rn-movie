@@ -1,3 +1,5 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { Colors } from '@/src/shared/styles/Colors'
 import { openSupportEmail } from '@/src/shared/utils/openSupportEmail'
 import { Ionicons } from '@expo/vector-icons'
 import React, { ComponentProps } from 'react'
@@ -16,13 +18,20 @@ const FaqQuickActions = ({
   selectedCategoryId,
   setSelectedCategoryId,
 }: Props) => {
+  const { theme } = useTheme()
+
   const openHelpCenter = () => {
-    Linking.openURL('https://help.movieapp.com')
+    Linking.openURL(process.env.EXPO_PUBLIC_HELP_CENTER ?? '')
   }
 
   return (
-    <View style={{ height: 150 }}>
-      <View style={styles.quickActions}>
+    <View style={{ height: 140 }}>
+      <View
+        style={[
+          styles.quickActions,
+          { backgroundColor: Colors[theme].background },
+        ]}
+      >
         <TouchableOpacity
           style={styles.actionButton}
           onPress={() => openSupportEmail('FAQ Movie Team')}
@@ -41,7 +50,13 @@ const FaqQuickActions = ({
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={styles.categoriesContainer}
+        style={[
+          styles.categoriesContainer,
+          {
+            backgroundColor: Colors[theme].background,
+            borderColor: Colors[theme].border,
+          },
+        ]}
         contentContainerStyle={styles.categoriesContent}
       >
         {categories?.map((category) => (
@@ -49,6 +64,7 @@ const FaqQuickActions = ({
             key={category.id}
             style={[
               styles.categoryButton,
+              { backgroundColor: Colors[theme].chip },
               selectedCategoryId === category.id && styles.categoryButtonActive,
             ]}
             onPress={() => setSelectedCategoryId(category.id)}
@@ -80,7 +96,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 16,
     gap: 12,
-    backgroundColor: '#1a1a1a',
   },
   actionButton: {
     flex: 1,
@@ -98,7 +113,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   categoriesContainer: {
-    backgroundColor: '#1a1a1a',
     borderBottomWidth: 1,
     borderBottomColor: '#333',
   },
@@ -111,7 +125,7 @@ const styles = StyleSheet.create({
   categoryButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2a2a2a',
+    // backgroundColor: '#2a2a2a',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
