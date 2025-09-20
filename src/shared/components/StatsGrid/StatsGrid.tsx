@@ -1,44 +1,36 @@
-import { useBookmark } from '@/src/features/bookmarks/hooks/useBookmark'
-import { useFavorite } from '@/src/features/bookmarks/hooks/useFavorite'
 import { useProfile } from '@/src/features/profile/hooks/useProfile'
+import { useProfileStatistics } from '@/src/features/profile/hooks/useProfileStatistics'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Ionicons } from '@expo/vector-icons'
-import { useQuery } from '@tanstack/react-query'
 import React, { ComponentProps } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { supabase } from '../../services/supabase'
-import { Colors } from '../../styles/Colors'
+import { BaseColors, Colors } from '../../styles/Colors'
 
 const StatsGrid = () => {
   const { profile } = useProfile()
-  const { items } = useBookmark()
-  const { items: favorites } = useFavorite()
+  const { data } = useProfileStatistics(profile?.id!)
   const { theme } = useTheme()
-
-  const { data } = useQuery({
-    queryKey: ['ratings-result'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('reviews')
-        .select('rating')
-        .eq('user_id', profile?.id)
-
-      if (error) throw error
-
-      return data
-    },
-  })
 
   const stats = [
     {
       icon: 'heart',
       label: 'Watchlist',
-      value: favorites?.length,
-      color: '#FF3B30',
+      value: data?.liked_movies,
+      color: BaseColors.red,
     },
-    { icon: 'star', label: 'Ratings', value: data?.length, color: '#FFCC00' },
-    { icon: 'eye', label: 'Watched', value: items?.length, color: '#34C759' },
-    { icon: 'time', label: 'Hours', value: 0, color: '#007AFF' },
+    {
+      icon: 'star',
+      label: 'Ratings',
+      value: data?.ratings,
+      color: BaseColors.yellow,
+    },
+    {
+      icon: 'eye',
+      label: 'Watched',
+      value: data?.watched,
+      color: BaseColors.green,
+    },
+    { icon: 'time', label: 'Hours', value: 0, color: BaseColors.blueDark },
   ]
   return (
     <View style={styles.statsGrid}>
@@ -63,7 +55,7 @@ const StatsGrid = () => {
             />
           </View>
           <Text style={[styles.statValue, { color: Colors[theme].text }]}>
-            {stat.value}
+            {stat.value ?? 0}
           </Text>
           <Text style={styles.statLabel}>{stat.label}</Text>
         </View>
@@ -83,11 +75,9 @@ const styles = StyleSheet.create({
   },
   statItem: {
     width: '48%',
-    // backgroundColor: '#1a1a1a',
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    // borderColor: '#333',
   },
   statIcon: {
     width: 40,
@@ -98,7 +88,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   statValue: {
-    color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 4,

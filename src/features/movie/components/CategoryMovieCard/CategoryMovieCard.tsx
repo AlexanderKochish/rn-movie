@@ -1,3 +1,5 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { Colors } from '@/src/shared/styles/Colors'
 import { Movie } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -21,6 +23,8 @@ type Props = {
 }
 const CategoryMovieCard = ({ movie, index }: Props) => {
   const router = useRouter()
+  const { theme, getThemeGradient } = useTheme()
+
   return (
     <TouchableOpacity
       onPress={() =>
@@ -31,19 +35,25 @@ const CategoryMovieCard = ({ movie, index }: Props) => {
           },
         })
       }
-      style={[styles.movieCard, { marginLeft: index % 2 === 0 ? 0 : 10 }]}
+      style={[
+        styles.movieCard,
+        {
+          borderColor: Colors[theme].border,
+        },
+        { marginLeft: index % 2 === 0 ? 0 : 10 },
+      ]}
       activeOpacity={0.8}
     >
       <View style={styles.posterContainer}>
         <Image
           source={{
-            uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            uri: `${process.env.EXPO_PUBLIC_IMG_W500}${movie.poster_path}`,
           }}
           style={styles.poster}
           resizeMode="cover"
         />
         <LinearGradient
-          colors={['transparent', 'rgba(0,0,0,0.8)']}
+          colors={getThemeGradient(theme)}
           style={styles.gradientOverlay}
         />
 
@@ -55,8 +65,11 @@ const CategoryMovieCard = ({ movie, index }: Props) => {
         </View>
       </View>
 
-      <View style={styles.movieInfo}>
-        <Text style={styles.movieTitle} numberOfLines={2}>
+      <View style={[styles.movieInfo]}>
+        <Text
+          style={[styles.movieTitle, { color: Colors[theme].text }]}
+          numberOfLines={2}
+        >
           {movie.title}
         </Text>
         <Text style={styles.movieYear}>

@@ -9,10 +9,7 @@ import { useMovieId } from '../../hooks/useMovieId'
 const MovieDetails = () => {
   const movieId = useMovieId()
   const { data: movie } = useMovieDetails(movieId)
-  // const producer = useMemo(
-  //   () => credits?.crew.find((item) => item.job === 'Producer'),
-  //   [credits]
-  // )
+  if (!movieId) return null
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',

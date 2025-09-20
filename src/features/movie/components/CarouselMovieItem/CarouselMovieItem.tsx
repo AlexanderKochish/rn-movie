@@ -1,13 +1,12 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
-import { Movie, ThemeColorType } from '@/src/shared/types/types'
+import { Movie } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
 import React, { useRef } from 'react'
 import {
   Animated,
-  ColorValue,
   Dimensions,
   Image,
   StyleSheet,
@@ -24,7 +23,7 @@ const { width } = Dimensions.get('window')
 const HERO_HEIGHT = width - 50 * 0.7
 
 const CarouselItem = ({ item }: Props) => {
-  const { theme } = useTheme()
+  const { theme, getThemeGradient } = useTheme()
   const router = useRouter()
   const scrollY = useRef(new Animated.Value(0)).current
   const heroScale = scrollY.interpolate({
@@ -32,23 +31,6 @@ const CarouselItem = ({ item }: Props) => {
     outputRange: [1.2, 1],
     extrapolate: 'clamp',
   })
-
-  const getThemeGradient = (
-    theme: ThemeColorType
-  ): [ColorValue, ColorValue, ...ColorValue[]] => {
-    switch (theme) {
-      case 'light':
-        return [
-          'transparent',
-          'rgba(255, 255, 255, 0.7)',
-          'rgba(255, 255, 255, 0.9)',
-        ]
-      case 'dark':
-        return ['transparent', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.9)']
-      default:
-        return ['transparent', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.9)']
-    }
-  }
 
   const navigateToMovie = (movie: Movie) => {
     router.push({
@@ -108,7 +90,10 @@ const CarouselItem = ({ item }: Props) => {
                 },
               })
             }
-            style={styles.infoButton}
+            style={[
+              styles.infoButton,
+              { backgroundColor: Colors[theme].infoBtn },
+            ]}
           >
             <Ionicons name="information" size={20} color="#fff" />
           </TouchableOpacity>
@@ -180,7 +165,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   infoButton: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
     padding: 12,
     borderRadius: 25,
     borderWidth: 1,
