@@ -1,5 +1,5 @@
-import { MoviesResponse } from "@/src/shared/types/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { MoviesResponse } from "../types/types";
 
 type Props = {
     queryKey: string[];

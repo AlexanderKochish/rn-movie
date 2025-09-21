@@ -1,6 +1,6 @@
 import MovieCard from '@/src/features/movie/components/MovieCard/MovieCard'
+import { MovieDetailsType } from '@/src/features/movie/types/types'
 import { BaseColors } from '@/src/shared/styles/Colors'
-import { MovieDetailsType } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
 import { UseMutateFunction } from '@tanstack/react-query'
 import React from 'react'

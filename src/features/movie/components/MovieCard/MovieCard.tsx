@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native'
 import { Text } from 'react-native-paper'
-import { useGenres } from '../../hooks/useGenres'
+import { useGenres } from '../../../genres/hooks/useGenres'
 
 type MovieCardProps = {
   movie: MovieCardEntity

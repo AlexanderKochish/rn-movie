@@ -1,28 +1,38 @@
 import { supabase } from "@/src/shared/services/supabase";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { FAQCategoryType, FAQQuestionType } from "../types/types";
 
-export const getFaqCategories = async () => {
-    const { data, error } = await supabase
-        .from("faq_categories")
-        .select("*");
+class Faq {
+    constructor(private readonly db: SupabaseClient) {}
 
-    if (error) {
-        throw new Error(error.message);
-    }
+    getFaqCategories = async (): Promise<FAQCategoryType[] | null> => {
+        const { data, error } = await this.db
+            .from("faq_categories")
+            .select("*");
 
-    return data;
-};
+        if (error) {
+            throw new Error(error.message);
+        }
 
-export const getFaqQuestionsByCategory = async (selectedCategoryId: string) => {
-    const { data, error } = await supabase
-        .from("faq")
-        .select("*")
-        .eq("category_id", selectedCategoryId)
-        .eq("is_active", true)
-        .order("sort_order", { ascending: true });
+        return data;
+    };
 
-    if (error) {
-        throw new Error(error.message);
-    }
+    getFaqQuestionsByCategory = async (
+        selectedCategoryId: string,
+    ): Promise<FAQQuestionType[] | null> => {
+        const { data, error } = await this.db
+            .from("faq")
+            .select("*")
+            .eq("category_id", selectedCategoryId)
+            .eq("is_active", true)
+            .order("sort_order", { ascending: true });
 
-    return data;
-};
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        return data;
+    };
+}
+
+export const faqRepository = new Faq(supabase);

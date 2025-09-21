@@ -1,11 +1,11 @@
-import React from 'react'
-import { FlatList, StyleSheet, View } from 'react-native'
-import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
-import { useCredits } from '@/src/features/movie/hooks/useCredits'
+import CastCard from '@/src/features/cast-and-crew/components/CastCard/CastCard'
 import CrewList from '@/src/features/cast-and-crew/components/CrewList/CrewList'
+import { useCredits } from '@/src/features/cast-and-crew/hooks/useCredits'
+import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
-import CastCard from '@/src/features/cast-and-crew/components/CastCard/CastCard'
+import React from 'react'
+import { FlatList, StyleSheet, View } from 'react-native'
 
 const CreditsScreen = () => {
   const movieId = useMovieId()

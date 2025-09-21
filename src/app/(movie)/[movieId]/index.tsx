@@ -3,8 +3,11 @@ import MovieDetailsTabs from '@/src/features/movie/components/MovieDetailsTabs/M
 import MovieDetailsTitle from '@/src/features/movie/components/MovieDetailsTitle/MovieDetailsTitle'
 import { useMovieDetails } from '@/src/features/movie/hooks/useMovieDetails'
 import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
-import { Ionicons } from '@expo/vector-icons'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
@@ -12,32 +15,31 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 export default function MovieDetailsScreen() {
   const router = useRouter()
   const movieId = useMovieId()
+  const { theme } = useTheme()
 
   const { data: movie, isLoading } = useMovieDetails(movieId)
-  if (!movieId) {
-    return null
-  }
+
   if (isLoading || !movie) {
     return <Preloader />
   }
 
   if (!movieId) {
     return (
-      <View style={styles.errorContainer}>
-        <Ionicons name="sad-outline" size={64} color="#666" />
-        <Text style={styles.errorText}>Movie not found</Text>
+      <EmptyState icon="sad-outline" title="Movie not found">
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
         >
           <Text style={styles.backButtonText}>Go Back</Text>
         </TouchableOpacity>
-      </View>
+      </EmptyState>
     )
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
+    >
       <MovieDetailsTitle movieId={movieId} data={movie} />
 
       <MovieDetailsTabs movie={movie} />
@@ -48,30 +50,13 @@ export default function MovieDetailsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
-    gap: 20,
-    padding: 20,
-  },
-  errorText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
   backButton: {
     backgroundColor: 'rgba(0,0,0,0.6)',
     padding: 8,
     borderRadius: 20,
   },
   backButtonText: {
-    color: '#007AFF',
+    color: BaseColors.blueDark,
     fontSize: 16,
     fontWeight: '600',
   },

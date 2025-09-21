@@ -5,7 +5,7 @@ import { useHomeMovies } from '@/src/features/movie/hooks/useHomeMovies'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import CustomCarousel from '@/src/shared/components/CustomCarousel/CustomCarousel'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
-import { Colors } from '@/src/shared/styles/Colors'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 
 import { useRouter } from 'expo-router'
@@ -51,8 +51,8 @@ export default function HomeScreen() {
           <RefreshControl
             refreshing={isRefetching}
             onRefresh={() => refetch.all()}
-            tintColor="#007AFF"
-            colors={['#007AFF']}
+            tintColor={BaseColors.blueDark}
+            colors={[BaseColors.blueDark]}
           />
         }
         onScroll={Animated.event(
@@ -98,11 +98,5 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 40,
-  },
-
-  viewAllText: {
-    color: '#007AFF',
-    fontSize: 14,
-    fontWeight: '600',
   },
 })

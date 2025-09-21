@@ -3,12 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
 import { useProfile } from "../../profile/hooks/useProfile";
-import {
-  addRatingForMovie,
-  getExistingRatingOfMovie,
-  removeRatinOfMovie,
-  updateRatingOfMovie,
-} from "../api/ratingRepository";
+import { ratingsRepository } from "../api/ratingRepository";
 import { ratingSchema, ratingSchemaType } from "../lib/rating.schema";
 
 export const useRating = (movieId: number) => {
@@ -26,7 +21,10 @@ export const useRating = (movieId: number) => {
     mutationFn: async (data: ratingSchemaType) => {
       if (!user || !userId) throw new Error("User not authenticated");
 
-      const existing = await getExistingRatingOfMovie(userId, movieId);
+      const existing = await ratingsRepository.getExistingRatingOfMovie(
+        userId,
+        movieId,
+      );
 
       const ratingValue = Math.round(data.rating * 2);
 
@@ -34,22 +32,22 @@ export const useRating = (movieId: number) => {
         ratingValue === 0 &&
         (!existing?.review || existing.review.trim() === "")
       ) {
-        await removeRatinOfMovie(userId, movieId);
+        await ratingsRepository.removeRatinOfMovie(userId, movieId);
         Toast.show({ type: "customSuccess", text1: "Rating removed" });
         return;
       }
 
       if (ratingValue === null && existing?.review) {
-        await updateRatingOfMovie(existing.id, null);
+        await ratingsRepository.updateRatingOfMovie(existing.id, null);
         Toast.show({ type: "customSuccess", text1: "Rating removed" });
         return;
       }
 
       if (existing) {
-        await updateRatingOfMovie(existing.id, ratingValue);
+        await ratingsRepository.updateRatingOfMovie(existing.id, ratingValue);
         Toast.show({ type: "customSuccess", text1: "Rating updated" });
       } else {
-        await addRatingForMovie(
+        await ratingsRepository.addRatingForMovie(
           userId,
           movieId,
           ratingValue,

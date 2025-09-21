@@ -1,14 +1,14 @@
-import { getMoviesByGenre } from "@/src/shared/api";
-import { MoviesResponse } from "@/src/shared/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
+import { MoviesResponse } from "../../movie/types/types";
+import { genresRepository } from "../api/genres.repository";
 
 export const useMoviesByGenres = () => {
   const [genreIds, setGenreId] = useState<number[]>([]);
 
   const { data: moviesByGenres, ...rest } = useQuery<MoviesResponse, Error>({
     queryKey: ["moviesByGenres", genreIds],
-    queryFn: () => getMoviesByGenre(genreIds),
+    queryFn: () => genresRepository.getMoviesByGenre(genreIds),
     enabled: !!genreIds.length,
     retry: false,
   });

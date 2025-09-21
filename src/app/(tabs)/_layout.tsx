@@ -41,7 +41,7 @@ export default function TabLayout() {
             <View style={focused ? styles.focusedTab : undefined}>
               <TabIcon
                 size={24}
-                name="home-outline"
+                name={focused ? 'home' : 'home-outline'}
                 color={focused ? BaseColors.blueDark : color}
               />
             </View>
@@ -73,7 +73,7 @@ export default function TabLayout() {
             <View style={focused ? styles.focusedTab : undefined}>
               <TabIcon
                 size={24}
-                name="bookmark-outline"
+                name={focused ? 'bookmark' : 'bookmark-outline'}
                 color={focused ? BaseColors.blueDark : color}
               />
             </View>
@@ -88,7 +88,7 @@ export default function TabLayout() {
             <View style={focused ? styles.focusedTab : undefined}>
               <TabIcon
                 size={24}
-                name="person-outline"
+                name={focused ? 'person' : 'person-outline'}
                 color={focused ? BaseColors.blueDark : color}
               />
             </View>

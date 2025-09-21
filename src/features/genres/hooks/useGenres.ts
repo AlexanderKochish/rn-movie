@@ -1,11 +1,11 @@
-import { getGenres } from "@/src/shared/api";
-import { Genres } from "@/src/shared/types/types";
 import { useQuery } from "@tanstack/react-query";
+import { genresRepository } from "../api/genres.repository";
+import { Genres } from "../types/types";
 
 export const useGenres = () => {
   const { data, ...rest } = useQuery<{ genres: Genres[] }, Error>({
     queryKey: ["genres"],
-    queryFn: getGenres,
+    queryFn: genresRepository.getGenres,
     retry: false,
   });
 

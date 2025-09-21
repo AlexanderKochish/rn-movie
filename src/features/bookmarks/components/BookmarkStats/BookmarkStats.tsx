@@ -1,6 +1,7 @@
+import { MovieDetailsType } from '@/src/features/movie/types/types'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { MovieDetailsType } from '@/src/shared/types/types'
+
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'

@@ -1,4 +1,3 @@
-import { supabase } from "@/src/shared/services/supabase";
 import { uploadToCloudinary } from "@/src/shared/utils/fileUploader";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -7,7 +6,9 @@ import { Resolver, useForm } from "react-hook-form";
 import { Alert } from "react-native";
 import Toast from "react-native-toast-message";
 import { useAuth } from "../../auth/hooks/useAuth";
+import { profileRepository } from "../api/profile.repository";
 import { accountSchema, accountSchemaType } from "../lib/zod/account.schema";
+import { ProfileUpdate } from "../types/types";
 
 export const useAccountForm = () => {
   const { user } = useAuth();
@@ -55,21 +56,13 @@ export const useAccountForm = () => {
         ? await uploadToCloudinary(formData.avatar)
         : null;
 
-      const updateData: Record<string, any> = {};
+      const updateData: ProfileUpdate = {};
       if (imageUrl) updateData.avatar_url = imageUrl;
       if (formData.username) updateData.username = formData.username;
       if (formData.fullName) updateData.full_name = formData.fullName;
       if (formData.age) updateData.age = Number(formData.age);
 
-      const { error } = await supabase
-        .from("profiles")
-        .update(updateData)
-        .eq("id", user.id)
-        .single();
-
-      if (error) throw error;
-
-      return updateData;
+      return await profileRepository.updateProfile(user?.id, updateData);
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
@@ -78,7 +71,7 @@ export const useAccountForm = () => {
         avatar: data.avatar_url ?? "",
         username: data.username ?? "",
         fullName: data.full_name ?? "",
-        age: data.age ?? "",
+        age: Number(data.age) ?? "",
       });
 
       Toast.show({

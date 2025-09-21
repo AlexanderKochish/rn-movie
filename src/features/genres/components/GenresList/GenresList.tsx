@@ -1,4 +1,4 @@
-import { useGenres } from '@/src/features/movie/hooks/useGenres'
+import { useGenres } from '@/src/features/genres/hooks/useGenres'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import React from 'react'

@@ -1,4 +1,4 @@
-import { useGenres } from '@/src/features/movie/hooks/useGenres'
+import { useGenres } from '@/src/features/genres/hooks/useGenres'
 import { useMoviesByCategory } from '@/src/features/movie/hooks/useMoviesByCategory'
 import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
 import Header from '@/src/shared/components/Header/Header'

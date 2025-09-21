@@ -1,13 +1,9 @@
-import { MovieDetailsType } from "@/src/shared/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import Toast from "react-native-toast-message";
+import { MovieDetailsType } from "../../movie/types/types";
 import { useProfile } from "../../profile/hooks/useProfile";
-import {
-  addMovieToCollection,
-  getFavoritesCollection,
-  removeFromCollection,
-} from "../api/collectionsRepository";
+import { bookmarkRepository } from "../api/collectionsRepository";
 import { FavoriteCollection } from "../types/types";
 
 export const useCollection = (collection: FavoriteCollection) => {
@@ -22,7 +18,8 @@ export const useCollection = (collection: FavoriteCollection) => {
   >(
     {
       queryKey,
-      queryFn: () => getFavoritesCollection(collection, userId),
+      queryFn: () =>
+        bookmarkRepository.getFavoritesCollection(collection, userId),
       enabled: !!userId,
       retry: 1,
     },
@@ -40,14 +37,23 @@ export const useCollection = (collection: FavoriteCollection) => {
       if (!userId || !movie?.id) return;
 
       if (isItemToggled(movie.id)) {
-        await removeFromCollection(collection, userId, String(movie.id));
+        await bookmarkRepository.removeFromCollection(
+          collection,
+          userId,
+          String(movie.id),
+        );
 
         Toast.show({
           type: "customRemoved",
           text1: "Removed from saved",
         });
       } else {
-        await addMovieToCollection(collection, userId, String(movie.id), movie);
+        await bookmarkRepository.addMovieToCollection(
+          collection,
+          userId,
+          String(movie.id),
+          movie,
+        );
 
         Toast.show({
           type: "customSuccess",

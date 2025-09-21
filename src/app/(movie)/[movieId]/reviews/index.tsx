@@ -8,7 +8,7 @@ import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { ScrollView } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -38,11 +38,5 @@ const ReviewScreen = () => {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  backButton: {
-    padding: 8,
-  },
-})
 
 export default ReviewScreen

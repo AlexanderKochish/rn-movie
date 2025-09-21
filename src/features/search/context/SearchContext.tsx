@@ -1,10 +1,11 @@
-import { Movie, MoviesResponse } from '@/src/shared/types/types'
+import { Movie } from '@/supabase/functions/types'
 import {
   FetchNextPageOptions,
   InfiniteData,
   InfiniteQueryObserverResult,
 } from '@tanstack/react-query'
 import { createContext } from 'react'
+import { MoviesResponse } from '../../movie/types/types'
 
 export type SearchContextType = {
   movies?: Movie[]

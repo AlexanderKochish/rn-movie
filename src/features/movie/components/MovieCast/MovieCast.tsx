@@ -1,8 +1,8 @@
 import CastList from '@/src/features/cast-and-crew/components/CastList/CastList'
+import { useCredits } from '@/src/features/cast-and-crew/hooks/useCredits'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
-import { useCredits } from '../../hooks/useCredits'
 import { useMovieId } from '../../hooks/useMovieId'
 
 const MovieCast = () => {

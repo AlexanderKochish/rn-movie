@@ -1,77 +1,90 @@
 import { supabase } from "@/src/shared/services/supabase";
-import { MovieDetailsType } from "@/src/shared/types/types";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { MovieDetailsType } from "../../movie/types/types";
 import { FavoriteCollection } from "../types/types";
 
-export const getFavoritesCollection = async (
-    collection: FavoriteCollection,
-    userId?: string,
-): Promise<MovieDetailsType[] | null> => {
-    if (!userId) return null;
+class Bookmark {
+    constructor(private readonly db: SupabaseClient) {}
 
-    const { data, error } = await supabase
-        .from(collection)
-        .select("movie_id, data, created_at")
-        .eq("user_id", userId);
+    getFavoritesCollection = async (
+        collection: FavoriteCollection,
+        userId?: string,
+    ): Promise<MovieDetailsType[] | null> => {
+        if (!userId) return null;
 
-    if (error) {
-        if (error.code === "PGRST116") return null;
-        throw new Error(error.message);
-    }
+        const { data, error } = await this.db
+            .from(collection)
+            .select("movie_id, data, created_at")
+            .eq("user_id", userId);
 
-    const favorites = data?.map((row) => ({
-        id: row.movie_id,
-        ...row.data,
-        createdAt: row.created_at,
-    })) ?? [];
+        if (error) {
+            if (error.code === "PGRST116") return null;
+            throw new Error(error.message);
+        }
 
-    return favorites;
-};
+        const favorites = data?.map((row) => ({
+            id: row.movie_id,
+            ...row.data,
+            createdAt: row.created_at,
+        })) ?? [];
 
-export const addMovieToCollection = async (
-    collection: FavoriteCollection,
-    userId: string,
-    movieId: string,
-    movie: MovieDetailsType,
-) => {
-    const { error } = await supabase.from(collection).insert({
-        user_id: userId,
-        movie_id: movieId,
-        data: movie,
-    });
+        return favorites;
+    };
 
-    if (error) throw new Error(error.message);
+    addMovieToCollection = async (
+        collection: FavoriteCollection,
+        userId: string,
+        movieId: string,
+        movie: MovieDetailsType,
+    ) => {
+        const { error } = await this.db.from(collection).insert({
+            user_id: userId,
+            movie_id: movieId,
+            data: movie,
+        });
 
-    const { error: counterError } = await supabase.rpc("update_stat_counter", {
-        p_user_id: userId,
-        p_column_name: collection,
-        p_increment: 1,
-    });
+        if (error) throw new Error(error.message);
 
-    if (counterError) {
-        throw counterError;
-    }
-};
+        const { error: counterError } = await this.db.rpc(
+            "update_stat_counter",
+            {
+                p_user_id: userId,
+                p_column_name: collection,
+                p_increment: 1,
+            },
+        );
 
-export const removeFromCollection = async (
-    collection: FavoriteCollection,
-    userId: string,
-    movieId: string,
-) => {
-    const { error } = await supabase
-        .from(collection)
-        .delete()
-        .eq("user_id", userId)
-        .eq("movie_id", movieId);
+        if (counterError) {
+            throw counterError;
+        }
+    };
 
-    if (error) throw new Error(error.message);
+    removeFromCollection = async (
+        collection: FavoriteCollection,
+        userId: string,
+        movieId: string,
+    ) => {
+        const { error } = await this.db
+            .from(collection)
+            .delete()
+            .eq("user_id", userId)
+            .eq("movie_id", movieId);
 
-    const { error: counterError } = await supabase.rpc("update_stat_counter", {
-        p_user_id: userId,
-        p_column_name: collection,
-        p_increment: -1,
-    });
+        if (error) throw new Error(error.message);
 
-    if (counterError) {
-        throw counterError;
-    }
-};
+        const { error: counterError } = await this.db.rpc(
+            "update_stat_counter",
+            {
+                p_user_id: userId,
+                p_column_name: collection,
+                p_increment: -1,
+            },
+        );
+
+        if (counterError) {
+            throw counterError;
+        }
+    };
+}
+
+export const bookmarkRepository = new Bookmark(supabase);

@@ -2,6 +2,7 @@ import { usePushNotifications } from "@/src/shared/hooks/usePushNotifications";
 import { supabase } from "@/src/shared/services/supabase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Alert } from "react-native";
+import { profileRepository } from "../api/profile.repository";
 import { useProfile } from "./useProfile";
 
 export const useProfileNotificationPreferences = () => {
@@ -15,21 +16,9 @@ export const useProfileNotificationPreferences = () => {
     error,
   } = useQuery({
     queryKey: ["profile-notification-preferences", user?.id],
-    queryFn: async () => {
-      if (!user?.id) throw new Error("User not authenticated");
+    queryFn: () =>
+      profileRepository.getProfileNotificationPreferences(user?.id),
 
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("marketing_emails, notifications, expo_push_token")
-        .eq("id", user.id)
-        .single();
-
-      if (error) {
-        console.error("Error fetching preferences:", error);
-        throw error;
-      }
-      return data;
-    },
     enabled: !!user?.id,
   });
 

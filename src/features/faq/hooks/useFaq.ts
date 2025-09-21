@@ -1,9 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
-import {
-    getFaqCategories,
-    getFaqQuestionsByCategory,
-} from "../api/faqRepository";
+import { faqRepository } from "../api/faqRepository";
 import { FAQCategoryType, FAQQuestionType } from "../types/types";
 
 export const useFaq = () => {
@@ -23,13 +20,11 @@ export const useFaq = () => {
     const { data: faqCategory } = useQuery<FAQCategoryType[] | null, Error>({
         queryKey: ["faq-categories"],
         queryFn: async (): Promise<FAQCategoryType[]> => {
-            const data = await getFaqCategories();
+            const data = await faqRepository.getFaqCategories();
 
-            if (!selectedCategoryId) {
-                setSelectedCategoryId(
-                    data?.find((category) => category.name === "All Questions")
-                        .id,
-                );
+            if (!selectedCategoryId && data) {
+                const id = data.find((c) => c.name === "All Questions")?.id;
+                if (id) setSelectedCategoryId(id);
             }
 
             return data ?? [];
@@ -43,18 +38,12 @@ export const useFaq = () => {
         >({
             queryKey: ["faq", selectedCategoryId],
             queryFn: async (): Promise<FAQQuestionType[]> => {
-                try {
-                    const data = await getFaqQuestionsByCategory(
-                        selectedCategoryId,
-                    );
-                    setExpandedQuestionIds(data);
-                    return data ?? [];
-                } catch (error: unknown) {
-                    if (error instanceof Error) {
-                        throw new Error(error.message);
-                    }
-                    throw error;
-                }
+                if (!selectedCategoryId) return [];
+                const data = await faqRepository.getFaqQuestionsByCategory(
+                    selectedCategoryId,
+                );
+                setExpandedQuestionIds(data ? data.map((q) => q.id) : []);
+                return data ?? [];
             },
             enabled: !!selectedCategoryId,
             retry: false,

@@ -1,4 +1,4 @@
-import { getMoviesByName } from "@/src/shared/api";
+import { movieRepository } from "@/src/shared/api";
 import { useDebounce } from "@/src/shared/hooks/useDebounce";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -20,7 +20,8 @@ export const useSearchMovies = () => {
 
   const { data: movies, ...rest } = useInfiniteMovies({
     queryKey: ["search-movies", debounceValue],
-    fetchFunction: (page: number) => getMoviesByName(debounceValue, page),
+    fetchFunction: (page: number) =>
+      movieRepository.getMoviesByName(debounceValue, page),
     enabled: !!debounceValue.trim(),
   });
 

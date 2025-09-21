@@ -4,12 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
 import { useProfile } from "../../profile/hooks/useProfile";
-import {
-  addNewReview,
-  getAllReviewsOfMovie,
-  getUserReview,
-  updateUserReview,
-} from "../api/reviewsRepository";
+import { reviewRepository } from "../api/reviewsRepository";
 import { reviewSchema, reviewSchemaType } from "../lib/zod/review.schema";
 
 export const useReview = (movieId: number) => {
@@ -36,7 +31,7 @@ export const useReview = (movieId: number) => {
     ReviewType[]
   >({
     queryKey: ["reviews", movieId],
-    queryFn: () => getAllReviewsOfMovie(movieId),
+    queryFn: () => reviewRepository.getAllReviewsOfMovie(movieId),
   });
 
   const { data: userReview, isLoading: isLoadingUserReview, isPending } =
@@ -48,7 +43,7 @@ export const useReview = (movieId: number) => {
       queryFn: async () => {
         if (!userId && !movieId) return null;
 
-        const data = await getUserReview(movieId, userId);
+        const data = await reviewRepository.getUserReview(movieId, userId);
 
         return data;
       },
@@ -60,10 +55,10 @@ export const useReview = (movieId: number) => {
       if (!userId || !user) throw new Error("Unauthorized");
 
       if (userReview) {
-        await updateUserReview(review, userReview);
+        await reviewRepository.updateUserReview(review, userReview);
         return "updated";
       } else {
-        await addNewReview(userId, movieId, review, user);
+        await reviewRepository.addNewReview(userId, movieId, review, user);
         return "created";
       }
     },

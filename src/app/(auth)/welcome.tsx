@@ -14,7 +14,6 @@ import {
   View,
 } from 'react-native'
 import { Text } from 'react-native-paper'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 const WelcomeImage = require('../../../assets/images/welcome.png')
 const Logo = require('../../../assets/images/logo-white.png')
@@ -44,8 +43,7 @@ export default function WelcomeScreen() {
   }, [fadeAnim, slideAnim])
 
   return (
-    <SafeAreaView
-      edges={['bottom']}
+    <View
       style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
     >
       <ImageBackground
@@ -135,7 +133,7 @@ export default function WelcomeScreen() {
           />
         </View>
       </Animated.View>
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -144,7 +142,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   imageBackground: {
-    height: 530,
+    height: 500,
     width: '100%',
     justifyContent: 'flex-end',
     alignItems: 'center',

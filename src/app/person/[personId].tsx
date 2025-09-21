@@ -1,5 +1,5 @@
+import { useProfileDetails } from '@/src/features/cast-and-crew/hooks/useProfileDetails'
 import MovieCard from '@/src/features/movie/components/MovieCard/MovieCard'
-import { useProfileDetails } from '@/src/features/profile/hooks/useProfileDetails'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import GoBackButton from '@/src/shared/components/GoBackButton/GoBackButton'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'

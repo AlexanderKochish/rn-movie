@@ -22,7 +22,7 @@ const Reviews = () => {
   }) => <ReviewCard index={index} review={item} />
 
   if (isLoadingReviews) {
-    return <Preloader />
+    return <Preloader text="Loading new reviews..." icon="chatbubble" />
   }
 
   return (

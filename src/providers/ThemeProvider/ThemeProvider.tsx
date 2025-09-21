@@ -61,7 +61,7 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
     const defaultColors: readonly [ColorValue, ColorValue] =
       theme === 'light'
         ? ['transparent', 'rgba(255,255,255,1)']
-        : ['transparent', 'rgba(0,0,0,0.8)']
+        : ['transparent', 'rgba(0, 0, 0, 1)']
 
     const base: readonly ColorValue[] = customColors ?? defaultColors
 

@@ -1,7 +1,7 @@
-import { getMoviesByCategory } from "@/src/shared/api";
-import { MoviesCategories, MoviesResponse } from "@/src/shared/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { movieRepository } from "../api/movie.api";
+import { MoviesCategories, MoviesResponse } from "../types/types";
 
 export const useMoviesByCategory = () => {
     const [selectedCategory, setSelectedCategory] = useState<MoviesCategories>(
@@ -17,7 +17,7 @@ export const useMoviesByCategory = () => {
 
     const { data, ...rest } = useQuery<MoviesResponse, Error>({
         queryKey: ["movies-by-category", selectedCategory],
-        queryFn: () => getMoviesByCategory(selectedCategory),
+        queryFn: () => movieRepository.getMoviesByCategory(selectedCategory),
         enabled: !!selectedCategory,
         retry: false,
     });

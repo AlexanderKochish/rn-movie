@@ -1,9 +1,9 @@
+import { useMoviesByGenres } from '@/src/features/genres/hooks/useMoviesByGenres'
 import MoviesGrid from '@/src/features/movie/components/MoviesGrid/MoviesGrid'
-import { useMoviesByGenres } from '@/src/features/movie/hooks/useMoviesByGenres'
 import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import GenresList from '../GenresList/GenresList'
+import GenresList from '../../../genres/components/GenresList/GenresList'
 
 const DiscoverTab = () => {
   const {

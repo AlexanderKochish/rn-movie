@@ -1,4 +1,5 @@
 import { useReview } from '@/src/features/reviews/hooks/useReview'
+import { BaseColors } from '@/src/shared/styles/Colors'
 import { MovieDetailsType } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
@@ -26,7 +27,7 @@ const MovieInfoCard = ({ movie }: Props) => {
       <View style={styles.movieDetails}>
         <Text style={styles.movieTitle}>{movie?.title}</Text>
         <View style={styles.ratingSummary}>
-          <Ionicons name="star" size={20} color="#FFD700" />
+          <Ionicons name="star" size={20} color={BaseColors.yellow} />
           <Text style={styles.ratingText}>
             {movie?.vote_average.toFixed(1)} • {reviews?.length} reviews
           </Text>
