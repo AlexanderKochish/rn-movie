@@ -1,6 +1,7 @@
 import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
+import { Colors } from '@/src/shared/styles/Colors'
 import { ReviewType } from '@/src/shared/types/types'
 import React from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
@@ -26,7 +27,7 @@ const Reviews = () => {
 
   return (
     <View style={styles.reviewsSection}>
-      <Text style={styles.sectionTitle}>
+      <Text style={[styles.sectionTitle, { color: Colors[theme].text }]}>
         Community Reviews ({reviews?.length})
       </Text>
       <FlatList
@@ -46,7 +47,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
     marginBottom: 16,
   },
 

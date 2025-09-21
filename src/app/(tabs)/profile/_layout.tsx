@@ -60,12 +60,6 @@ const ProfileLayout = () => {
             headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="security"
-          options={{
-            headerShown: false,
-          }}
-        />
       </Stack>
     </>
   )

@@ -1,15 +1,14 @@
 import { useTermsAcceptance } from '@/src/features/auth/hooks/useTermsAcceptance'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import Header from '@/src/shared/components/Header/Header'
 import { Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { Ionicons } from '@expo/vector-icons'
-import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Text } from 'react-native-paper'
 
 export default function AcceptTermsScreen() {
-  const router = useRouter()
   const { theme } = useTheme()
   const { handleAccept, isPending } = useTermsAcceptance()
   const [accepted, setAccepted] = useState(false)
@@ -18,17 +17,7 @@ export default function AcceptTermsScreen() {
     <View
       style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
     >
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => router.replace('/(auth)/welcome')}
-          style={styles.backButton}
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors[theme].text} />
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: Colors[theme].text }]}>
-          Terms of Service
-        </Text>
-      </View>
+      <Header title="Terms of Service" goBack />
 
       <ScrollView
         style={styles.termsContainer}
@@ -126,23 +115,6 @@ export default function AcceptTermsScreen() {
 }
 
 export const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    paddingTop: 60,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.1)',
-  },
-  backButton: {
-    padding: 8,
-    marginRight: 16,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    fontFamily: 'Inter-SemiBold',
-  },
   termsContainer: {
     flex: 1,
     padding: 24,
