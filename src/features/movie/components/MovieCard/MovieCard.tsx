@@ -1,6 +1,6 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { Movie } from '@/src/shared/types/types'
+import { MovieCardEntity } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import {
@@ -13,8 +13,8 @@ import {
 import { Text } from 'react-native-paper'
 import { useGenres } from '../../hooks/useGenres'
 
-type MovieCardProps<T extends Movie> = {
-  movie: T
+type MovieCardProps = {
+  movie: MovieCardEntity
   size?: 'small' | 'medium' | 'large'
 }
 
@@ -22,10 +22,7 @@ const { width } = Dimensions.get('window')
 const POSTER_WIDTH = width / 3 - 20
 const POSTER_HEIGHT = POSTER_WIDTH * 1.5
 
-const MovieCard = <T extends Movie>({
-  movie,
-  size = 'medium',
-}: MovieCardProps<T>) => {
+const MovieCard = ({ movie, size = 'medium' }: MovieCardProps) => {
   const { getGenreNames } = useGenres()
   const router = useRouter()
   const { theme } = useTheme()

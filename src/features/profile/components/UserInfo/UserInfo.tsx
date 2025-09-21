@@ -1,5 +1,6 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
 import React from 'react'
 import {
   Image,
@@ -13,6 +14,7 @@ import { useProfile } from '../../hooks/useProfile'
 
 const UserInfo = () => {
   const { profile } = useProfile()
+  const router = useRouter()
   const { theme } = useTheme()
   return (
     <ImageBackground
@@ -41,7 +43,10 @@ const UserInfo = () => {
           <Text style={styles.userName}>{profile?.username}</Text>
           <Text style={styles.userEmail}>{profile?.email}</Text>
         </View>
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => router.push('/profile/edit-profile')}
+        >
           <Ionicons name="create-outline" size={20} color="#64b5f6" />
         </TouchableOpacity>
       </View>

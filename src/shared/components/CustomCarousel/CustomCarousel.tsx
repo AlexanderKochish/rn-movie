@@ -1,8 +1,8 @@
 import CarouselItem from '@/src/features/movie/components/CarouselMovieItem/CarouselMovieItem'
-import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import React, { useState } from 'react'
 import { Dimensions, StyleSheet, View } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel'
+import { BaseColors } from '../../styles/Colors'
 import { Movie } from '../../types/types'
 
 const SLIDER_WIDTH = Dimensions.get('window').width
@@ -16,7 +16,7 @@ const HERO_HEIGHT = width - 50 * 0.7
 
 const CustomCarousel = <T extends Movie>({ items }: Props<T>) => {
   const [activeIndex, setActiveIndex] = useState(0)
-  const { theme } = useTheme()
+
   return (
     <View style={styles.wrapper}>
       <Carousel
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   activeDot: {
-    backgroundColor: '#ff5a00',
+    backgroundColor: BaseColors.blueDark,
     transform: [{ scale: 1.2 }],
   },
   dots: {

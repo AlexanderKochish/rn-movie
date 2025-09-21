@@ -14,7 +14,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 const ProfileScreen = () => {
   const { signOut } = useSignOut()
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true)
   const router = useRouter()
   const [isSwitchOn, setIsSwitchOn] = useState(false)
   const { theme, toggleTheme } = useTheme()
@@ -23,9 +22,6 @@ const ProfileScreen = () => {
     setIsSwitchOn(!isSwitchOn)
     toggleTheme()
   }
-
-  const toggleNotifications = () =>
-    setNotificationsEnabled((previousState) => !previousState)
 
   return (
     <SafeAreaView
@@ -51,19 +47,6 @@ const ProfileScreen = () => {
             title="Email settings"
             subtitle="Manage notifications"
             onPress={() => router.push('/(tabs)/profile/email-settings')}
-          />
-          <ProfileMenuItem
-            icon="lock-closed-outline"
-            title="Safety"
-            subtitle="Password and 2FA"
-            onPress={() => router.push('/(tabs)/profile/security')}
-          />
-          <ProfileMenuItem
-            icon="notifications-outline"
-            title="Notifications"
-            hasSwitch
-            value={notificationsEnabled}
-            onValueChange={toggleNotifications}
           />
         </MenuSection>
 

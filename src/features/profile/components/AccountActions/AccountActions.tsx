@@ -1,3 +1,5 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import React from 'react'
@@ -5,27 +7,20 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const AccountActions = () => {
   const router = useRouter()
+  const { theme } = useTheme()
   return (
-    <View style={styles.dangerSection}>
-      <Text style={styles.sectionTitle}>Account Actions</Text>
-      <TouchableOpacity
-        style={styles.dangerButton}
-        onPress={() =>
-          router.push({
-            pathname: '/(auth)/reset-password',
-          })
-        }
-      >
-        <Ionicons name="key" size={20} color="#007AFF" />
-        <Text style={styles.dangerButtonText}>Change Password</Text>
-        <Ionicons name="chevron-forward" size={20} color="#666" />
-      </TouchableOpacity>
+    <View
+      style={[styles.dangerSection, { backgroundColor: Colors[theme].stats }]}
+    >
+      <Text style={[styles.sectionTitle, { color: Colors[theme].text }]}>
+        Account Actions
+      </Text>
 
       <TouchableOpacity
         style={[styles.dangerButton, styles.deleteButton]}
         onPress={() => router.push('/delete-account')}
       >
-        <Ionicons name="trash" size={20} color="#FF3B30" />
+        <Ionicons name="trash" size={20} color={BaseColors.red} />
         <Text style={[styles.dangerButtonText, styles.deleteButtonText]}>
           Delete Account
         </Text>
@@ -39,7 +34,6 @@ export default AccountActions
 
 const styles = StyleSheet.create({
   sectionTitle: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,

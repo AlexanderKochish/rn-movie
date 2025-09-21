@@ -86,6 +86,10 @@ const LibraryCollection = ({
       )}
       <FlatList
         showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        columnWrapperStyle={{
+          justifyContent: 'space-between',
+        }}
         contentContainerStyle={styles.moviesGrid}
         numColumns={2}
         data={collection}
@@ -124,11 +128,10 @@ export default LibraryCollection
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 10,
+    padding: 16,
   },
   exploreButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: BaseColors.blueDark,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 25,
@@ -139,9 +142,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   moviesGrid: {
-    flexDirection: 'row',
-    gap: 16,
-    justifyContent: 'space-between',
+    paddingTop: 8,
     paddingBottom: 35,
+  },
+  separator: {
+    height: 16,
   },
 })

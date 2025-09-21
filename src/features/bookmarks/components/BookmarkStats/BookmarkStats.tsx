@@ -33,21 +33,21 @@ const BookmarkStats = ({ collection }: Props) => {
 
       <View style={styles.statItem}>
         <Ionicons name="star" size={20} color={BaseColors.yellow} />
-        <Text style={styles.statNumber}>
-          {/* {(
-                       collection.reduce(
-                         (sum, movie) => sum + (movie.rating || 0),
-                         0
-                       ) / currentList.length
-                     ).toFixed(1)} */}
+        <Text style={[styles.statNumber, { color: Colors[theme].text }]}>
+          {(
+            collection.reduce(
+              (sum, movie) => sum + (movie.popularity || 0),
+              0
+            ) / collection.length
+          ).toFixed(1)}
         </Text>
         <Text style={styles.statLabel}>Avg rating</Text>
       </View>
 
       <View style={styles.statItem}>
-        <Ionicons name="time" size={20} color="#34C759" />
-        <Text style={styles.statNumber}>
-          {Math.floor(collection.length * 2.5)}h
+        <Ionicons name="time" size={20} color={BaseColors.green} />
+        <Text style={[styles.statNumber, { color: Colors[theme].text }]}>
+          0 h
         </Text>
         <Text style={styles.statLabel}>Watch time</Text>
       </View>

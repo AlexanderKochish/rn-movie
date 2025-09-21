@@ -13,7 +13,7 @@ import {
 } from 'react-native'
 import MovieCard from '../MovieCard/MovieCard'
 
-interface MoviesGridProps {
+type MoviesGridProps = {
   movies?: Movie[]
   isLoading?: boolean
 }
@@ -25,7 +25,7 @@ const VERTICAL_GAP = 16
 
 const CARD_WIDTH = (width - HORIZONTAL_GAP * (NUM_COLUMNS + 1)) / NUM_COLUMNS
 
-const MoviesGrid: React.FC<MoviesGridProps> = ({ movies, isLoading }) => {
+const MoviesGrid = ({ movies, isLoading }: MoviesGridProps) => {
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = useSearchContext()
   const handleScroll = useCallback(
     ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {

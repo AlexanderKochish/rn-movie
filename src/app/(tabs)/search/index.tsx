@@ -21,7 +21,7 @@ export default function SearchScreen() {
     hasNextPage,
     isFetchingNextPage,
   } = useSearchMovies()
-  const { theme } = useTheme()
+  const { theme, statusBarTheme } = useTheme()
   return (
     <SearchProvider
       value={{
@@ -39,13 +39,13 @@ export default function SearchScreen() {
           { backgroundColor: Colors[theme].background },
         ]}
       >
-        <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
+        <StatusBar style={statusBarTheme} />
         <Header title="Search Movies" subTitle="Find your next favorite film" />
         <View
           style={[
             styles.searchContainer,
             { backgroundColor: Colors[theme].emptyStateBackground },
-            { borderBottomColor: '#333' },
+            { borderBottomColor: Colors[theme].border },
           ]}
         >
           <SearchForm
