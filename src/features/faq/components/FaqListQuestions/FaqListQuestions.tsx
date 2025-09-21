@@ -1,7 +1,7 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
-import { Colors } from '@/src/shared/styles/Colors'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { openSupportEmail } from '@/src/shared/utils/openSupportEmail'
 import { Ionicons } from '@expo/vector-icons'
 import React, { useCallback } from 'react'
@@ -94,7 +94,7 @@ const FaqListQuestions = ({
       {faq && faq?.map(renderQuestion)}
 
       <View style={styles.helpSection}>
-        <Ionicons name="help-buoy" size={48} color="#007AFF" />
+        <Ionicons name="help-buoy" size={48} color={BaseColors.blueDark} />
         <Text style={[styles.helpTitle, { color: Colors[theme].text }]}>
           Still need help?
         </Text>
@@ -106,7 +106,7 @@ const FaqListQuestions = ({
         <TouchableOpacity
           accessibilityRole="button"
           style={styles.helpButton}
-          onPress={() => openSupportEmail('FAQ Movie Team')}
+          onPress={() => openSupportEmail('FAQ Watcher Team')}
         >
           <Text style={styles.helpButtonText}>Get Help</Text>
           <Ionicons name="arrow-forward" size={16} color="#fff" />

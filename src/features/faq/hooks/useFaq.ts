@@ -22,9 +22,11 @@ export const useFaq = () => {
         queryFn: async (): Promise<FAQCategoryType[]> => {
             const data = await faqRepository.getFaqCategories();
 
-            if (!selectedCategoryId && data) {
-                const id = data.find((c) => c.name === "All Questions")?.id;
-                if (id) setSelectedCategoryId(id);
+            const allQuestionsCategory = data?.find((category) =>
+                category.name === "All Questions"
+            );
+            if (allQuestionsCategory) {
+                setSelectedCategoryId(allQuestionsCategory.id);
             }
 
             return data ?? [];
@@ -38,12 +40,18 @@ export const useFaq = () => {
         >({
             queryKey: ["faq", selectedCategoryId],
             queryFn: async (): Promise<FAQQuestionType[]> => {
-                if (!selectedCategoryId) return [];
-                const data = await faqRepository.getFaqQuestionsByCategory(
-                    selectedCategoryId,
-                );
-                setExpandedQuestionIds(data ? data.map((q) => q.id) : []);
-                return data ?? [];
+                try {
+                    const data = await faqRepository.getFaqQuestionsByCategory(
+                        selectedCategoryId,
+                    );
+
+                    return data ?? [];
+                } catch (error: unknown) {
+                    if (error instanceof Error) {
+                        throw new Error(error.message);
+                    }
+                    throw error;
+                }
             },
             enabled: !!selectedCategoryId,
             retry: false,

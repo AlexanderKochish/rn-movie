@@ -122,7 +122,7 @@ export default function WelcomeScreen() {
             // disabled={!termsAccepted}
           />
 
-          <OAuthButton
+          {/* <OAuthButton
             icon="logo-facebook"
             text="Continue with Facebook"
             onPress={() => handleSignInWitOAuth('facebook')}
@@ -130,7 +130,7 @@ export default function WelcomeScreen() {
             textColor="#1F2937"
             btnShadowColor="#1877F2"
             // disabled={!termsAccepted}
-          />
+          /> */}
         </View>
       </Animated.View>
     </View>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   imageBackground: {
-    height: 500,
+    height: 530,
     width: '100%',
     justifyContent: 'flex-end',
     alignItems: 'center',
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 24,
     zIndex: 2,
-    marginBottom: 35,
+    marginBottom: 100,
   },
   logo: {
     width: 100,
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     paddingBottom: 18,
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
-    marginTop: -25,
+    marginTop: -85,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

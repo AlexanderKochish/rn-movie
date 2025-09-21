@@ -75,6 +75,18 @@ class Review {
         });
         if (error) throw new Error(error.message);
     };
+
+    removeReviewById = async (userId: string, id: string) => {
+        const { data, error } = await this.db
+            .from("reviews")
+            .delete()
+            .eq("id", id)
+            .eq("user_id", userId);
+
+        if (error) throw error;
+
+        return data;
+    };
 }
 
 export const reviewRepository = new Review(supabase);

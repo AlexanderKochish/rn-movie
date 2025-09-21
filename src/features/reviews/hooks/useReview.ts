@@ -90,6 +90,28 @@ export const useReview = (movieId: number) => {
     },
   });
 
+  const { mutate: removeReview } = useMutation({
+    mutationKey: ["remove-review", userId],
+    mutationFn: (reviewId: string) =>
+      reviewRepository.removeReviewById(userId, reviewId),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ["reviews", movieId] });
+      queryClient.invalidateQueries({
+        queryKey: ["user-review", movieId, userId],
+      });
+
+      Toast.show({
+        type: "customRemove",
+        text1: "Review was removed!",
+      });
+    },
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        Error(error.message);
+      }
+    },
+  });
+
   const onSubmit = (data: reviewSchemaType) => mutation.mutate(data);
 
   return {
@@ -103,5 +125,6 @@ export const useReview = (movieId: number) => {
     hasUserReview: !!userReview,
     isEditing: !!userReview,
     refetch,
+    removeReview,
   };
 };

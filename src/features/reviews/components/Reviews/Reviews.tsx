@@ -10,7 +10,7 @@ import ReviewCard from '../ReviewCard/ReviewCard'
 
 const Reviews = () => {
   const movieId = useMovieId()
-  const { reviews, isLoadingReviews } = useReview(+movieId)
+  const { reviews, isLoadingReviews, removeReview } = useReview(+movieId)
   const { theme } = useTheme()
 
   const renderReviewItem = ({
@@ -19,7 +19,7 @@ const Reviews = () => {
   }: {
     item: ReviewType
     index: number
-  }) => <ReviewCard index={index} review={item} />
+  }) => <ReviewCard index={index} review={item} removeReview={removeReview} />
 
   if (isLoadingReviews) {
     return <Preloader text="Loading new reviews..." icon="chatbubble" />

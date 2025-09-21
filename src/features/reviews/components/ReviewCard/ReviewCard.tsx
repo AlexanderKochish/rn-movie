@@ -1,64 +1,162 @@
 import RatingResult from '@/src/features/rating/components/RatingResult/RatingResult'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { BaseColors } from '@/src/shared/styles/Colors'
 import { ReviewType } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
-import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import Animated, { FadeInUp } from 'react-native-reanimated'
+import React, { useState } from 'react'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import Animated, {
+  FadeInUp,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated'
 
 type Props = {
   review: ReviewType
   index: number
+  removeReview: (id: string) => void
 }
 
-const ReviewCard = ({ review, index }: Props) => {
+const ReviewCard = ({ review, index, removeReview }: Props) => {
   const { theme } = useTheme()
-  return (
-    <Animated.View
-      style={[styles.reviewCard]}
-      entering={FadeInUp.delay(index * 100).springify()}
-    >
-      <View style={styles.reviewHeader}>
-        <Image
-          source={{
-            uri: review.photo_url
-              ? review.photo_url
-              : process.env.EXPO_PUBLIC_POSTER_HOLDER,
-          }}
-          style={styles.avatar}
-        />
-        <View style={styles.reviewerInfo}>
-          <Text style={styles.userName}>{review.display_name}</Text>
-          <Text style={styles.reviewDate}>{review.updatedAt}</Text>
-        </View>
-        {review.rating && <RatingResult voteAverage={review.rating} />}
-      </View>
 
-      <Text style={styles.reviewText}>{review.review}</Text>
-      <View style={styles.reviewActions}>
-        <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="thumbs-up-outline" size={16} color="#64b5f6" />
-          <Text style={styles.actionText}>Helpful</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="chatbubble-outline" size={16} color="#64b5f6" />
-          <Text style={styles.actionText}>Reply</Text>
-        </TouchableOpacity>
+  const translateX = useSharedValue(0)
+  const [isSwiping, setIsSwiping] = useState(false)
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }],
+    }
+  })
+  const deleteButtonStyle = useAnimatedStyle(() => {
+    const opacity = translateX.value < -10 ? 1 : 0
+    return {
+      opacity: withSpring(opacity, { damping: 20 }),
+    }
+  })
+
+  const handleSwipe = (event: any) => {
+    const { translationX } = event.nativeEvent
+
+    if (translationX < -20 && !isSwiping) {
+      setIsSwiping(true)
+      translateX.value = withSpring(-80, { damping: 20 })
+    } else if (translationX > -10 && isSwiping) {
+      setIsSwiping(false)
+      translateX.value = withSpring(0, { damping: 20 })
+    }
+  }
+
+  const handlePressDelete = () => {
+    translateX.value = withSpring(0, { damping: 20 })
+    Alert.alert('Remove', `Review with id: ${review.id} is was deleted`)
+    removeReview(review.id)
+  }
+
+  const resetSwipe = () => {
+    if (isSwiping) {
+      setIsSwiping(false)
+      translateX.value = withSpring(0, { damping: 20 })
+    }
+  }
+
+  return (
+    <GestureHandlerRootView>
+      <View style={styles.swipeContainer}>
+        <Animated.View
+          style={[styles.deleteButtonContainer, deleteButtonStyle]}
+        >
+          <TouchableOpacity
+            style={[styles.deleteButton, { backgroundColor: BaseColors.red }]}
+            onPress={handlePressDelete}
+          >
+            <Ionicons name="trash" size={20} color="white" />
+            <Text style={styles.deleteButtonText}>Delete</Text>
+          </TouchableOpacity>
+        </Animated.View>
+
+        <Animated.View
+          onTouchMove={handleSwipe}
+          onTouchEnd={resetSwipe}
+          style={[styles.reviewCard, animatedStyle]}
+          entering={FadeInUp.delay(index * 100).springify()}
+        >
+          <View style={styles.reviewHeader}>
+            <Image
+              source={{
+                uri: review.photo_url
+                  ? review.photo_url
+                  : process.env.EXPO_PUBLIC_POSTER_HOLDER,
+              }}
+              style={styles.avatar}
+            />
+            <View style={styles.reviewerInfo}>
+              <Text style={styles.userName}>{review.display_name}</Text>
+              <Text style={styles.reviewDate}>{review.updatedAt}</Text>
+            </View>
+            {review.rating && <RatingResult voteAverage={review.rating} />}
+          </View>
+
+          <Text style={styles.reviewText}>{review.review}</Text>
+          <View style={styles.reviewActions}>
+            <TouchableOpacity style={styles.actionButton}>
+              <Ionicons name="thumbs-up-outline" size={16} color="#64b5f6" />
+              <Text style={styles.actionText}>Helpful</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionButton}>
+              <Ionicons name="chatbubble-outline" size={16} color="#64b5f6" />
+              <Text style={styles.actionText}>Reply</Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
       </View>
-    </Animated.View>
+    </GestureHandlerRootView>
   )
 }
 
 export default ReviewCard
 
 const styles = StyleSheet.create({
+  swipeHint: {
+    marginLeft: 8,
+  },
+  swipeContainer: {
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius: 12,
+  },
+  deleteButtonContainer: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 80,
+    zIndex: 1,
+  },
+  deleteButton: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 17,
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontSize: 12,
+    marginTop: 4,
+    fontWeight: '600',
+  },
   reviewCard: {
     backgroundColor: '#1a1a1a',
     padding: 20,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: '#2a2a2a',
+    elevation: 3,
+    zIndex: 2,
   },
   spoilerCard: {
     borderColor: '#ff6b6b',
