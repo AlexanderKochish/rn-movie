@@ -18,7 +18,7 @@ class Profile {
             .from("statistics")
             .select("liked_movies,bookmarks,ratings,watched")
             .eq("user_id", userId)
-            .single();
+            .maybeSingle();
 
         if (error) throw error;
 

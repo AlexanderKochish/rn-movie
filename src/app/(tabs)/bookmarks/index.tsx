@@ -8,12 +8,12 @@ import React from 'react'
 import { View } from 'react-native'
 
 export default function BookmarksScreen() {
-  const { theme } = useTheme()
+  const { theme, statusBarTheme } = useTheme()
   return (
     <View
       style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
     >
-      <StatusBar style={theme} />
+      <StatusBar style={statusBarTheme} />
       <Header title="My Library" subTitle="Your personal collection" />
       <BookmarksTabs />
     </View>

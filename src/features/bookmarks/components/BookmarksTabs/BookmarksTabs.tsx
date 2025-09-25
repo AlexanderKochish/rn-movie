@@ -34,13 +34,6 @@ const BookmarksTabs = () => {
       inactiveColor: Colors[theme].inactiveColor,
     },
     {
-      id: 'rated',
-      label: 'Rated',
-      iconName: 'star' as const,
-      activeColor: Colors[theme].activeTab,
-      inactiveColor: Colors[theme].inactiveColor,
-    },
-    {
       id: 'watchlist',
       label: 'Watchlist',
       iconName: 'search' as const,
@@ -60,7 +53,6 @@ const BookmarksTabs = () => {
           isError={isErrorFavorites}
         />
       )}
-      {activeTab === 'rated' && <></>}
       {activeTab === 'watchlist' && (
         <LibraryCollection
           collection={bookmarks}

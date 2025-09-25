@@ -1,7 +1,7 @@
 import { useTermsAcceptance } from '@/src/features/auth/hooks/useTermsAcceptance'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import Header from '@/src/shared/components/Header/Header'
-import { Colors } from '@/src/shared/styles/Colors'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { Ionicons } from '@expo/vector-icons'
 import React, { useState } from 'react'
@@ -17,16 +17,12 @@ export default function AcceptTermsScreen() {
     <View
       style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
     >
-      <Header title="Terms of Service" goBack />
+      <Header title="Terms of Service" />
 
       <ScrollView
         style={styles.termsContainer}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={[styles.termsTitle, { color: Colors[theme].text }]}>
-          Terms of Service
-        </Text>
-
         <Text
           style={[styles.termsContent, { color: Colors[theme].textSecondary }]}
         >
@@ -89,7 +85,7 @@ export default function AcceptTermsScreen() {
             ]}
           >
             {accepted && (
-              <Ionicons name="checkmark" size={16} color={Colors[theme].text} />
+              <Ionicons name="checkmark" size={16} color={BaseColors.white} />
             )}
           </View>
           <Text style={[styles.checkboxLabel, { color: Colors[theme].text }]}>
@@ -118,13 +114,6 @@ export const styles = StyleSheet.create({
   termsContainer: {
     flex: 1,
     padding: 24,
-  },
-  termsTitle: {
-    fontSize: 28,
-    fontWeight: '700',
-    fontFamily: 'Inter-Bold',
-    marginBottom: 24,
-    textAlign: 'center',
   },
   termsContent: {
     fontSize: 14,

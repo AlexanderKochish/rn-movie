@@ -1,4 +1,3 @@
-import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { usePushNotifications } from '@/src/shared/hooks/usePushNotifications'
 import { supabase } from '@/src/shared/services/supabase'
 import { User } from '@supabase/supabase-js'
@@ -11,6 +10,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [isLogged, setIsLogged] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
   const { saveError } = usePushNotifications()
   const router = useRouter()
   const segments = useSegments() as string[]
@@ -18,27 +19,32 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (saveError) {
       console.error('Push notification error:', saveError)
-      Alert.alert('Error', 'Failed to set up push notifications')
+      setError('Failed to set up push notifications')
     }
   }, [saveError])
 
-  const checkAcceptedTerms = (currentUser: User | null) => {
+  const checkAcceptedTerms = useCallback((currentUser: User | null) => {
     const accepted = !!currentUser?.user_metadata?.accepted_terms
     setIsLogged(!!currentUser && accepted)
     return accepted
-  }
+  }, [])
 
-  const acceptTerms = async () => {
+  const acceptTerms = useCallback(async () => {
+    if (!user) return
     try {
-      if (!user) return
+      const now = new Date().toISOString()
 
-      const { error } = await supabase.auth.updateUser({
-        data: {
-          accepted_terms: true,
-          accepted_terms_date: new Date().toISOString(),
-        },
+      const { error: updateError } = await supabase.auth.updateUser({
+        data: { accepted_terms: true, accepted_terms_date: now },
       })
-      if (error) throw error
+      if (updateError) throw updateError
+
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({ terms_accepted: true, terms_accepted_at: now })
+        .eq('id', user.id)
+        .single()
+      if (profileError) throw profileError
 
       const {
         data: { user: refreshed },
@@ -47,22 +53,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
       setUser(refreshed)
       checkAcceptedTerms(refreshed)
-
-      await supabase
-        .from('profiles')
-        .update({
-          terms_accepted: true,
-          terms_accepted_at: new Date().toISOString(),
-        })
-        .eq('id', refreshed.id)
-        .single()
-
       router.replace('/')
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error accepting terms:', err)
-      Alert.alert('Error', 'Failed to accept terms')
+      setError('Failed to accept terms')
     }
-  }
+  }, [user, router, checkAcceptedTerms])
 
   const handleRedirect = useCallback(
     (currentUser: User | null, accepted: boolean) => {
@@ -75,7 +71,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     },
     [router, segments]
   )
+
   useEffect(() => {
+    let mounted = true
+
     const initAuth = async () => {
       try {
         const {
@@ -83,11 +82,16 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         } = await supabase.auth.getSession()
         const currentUser = session?.user ?? null
 
+        if (!mounted) return
+
         setUser(currentUser)
         const accepted = checkAcceptedTerms(currentUser)
         handleRedirect(currentUser, accepted)
+      } catch (err) {
+        console.error('Auth initialization error:', err)
+        setError('Failed to initialize authentication')
       } finally {
-        setLoading(false)
+        if (mounted) setLoading(false)
       }
     }
 
@@ -99,18 +103,21 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       const currentUser = session?.user ?? null
       setUser(currentUser)
       const accepted = checkAcceptedTerms(currentUser)
-
       handleRedirect(currentUser, accepted)
     })
 
     return () => {
+      mounted = false
       subscription.unsubscribe()
     }
-  }, [handleRedirect])
+  }, [checkAcceptedTerms, handleRedirect])
 
-  if (loading) {
-    return <Preloader />
-  }
+  useEffect(() => {
+    if (error) {
+      Alert.alert('Error', error)
+      setError(null)
+    }
+  }, [error])
 
   return (
     <AuthContext.Provider value={{ user, loading, isLogged, acceptTerms }}>

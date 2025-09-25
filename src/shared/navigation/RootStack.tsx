@@ -4,7 +4,7 @@ import Preloader from '../components/UI/Preloader/Preloader'
 
 export const RootStack = () => {
   const { isLogged, user, loading } = useAuth()
-  if (loading || (user && !isLogged)) {
+  if (loading) {
     return <Preloader />
   }
   return (

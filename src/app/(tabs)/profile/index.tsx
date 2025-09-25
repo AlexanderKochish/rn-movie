@@ -69,11 +69,11 @@ const ProfileScreen = () => {
             title="FAQ"
             onPress={() => router.push('/(tabs)/profile/faq')}
           />
-          <ProfileMenuItem
+          {/* <ProfileMenuItem
             icon="star-outline"
             title="Rate the application"
             onPress={() => router.push('/(tabs)/profile/rate')}
-          />
+          /> */}
         </MenuSection>
 
         <SectionHeader title="LEGAL INFORMATION" />
@@ -103,7 +103,6 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#0a0a0a',
   },
 
   scrollView: {

@@ -35,13 +35,14 @@ export type CrewMember = {
 
 export type ReviewType = {
   id: string;
-  userId: string;
-  photo_url: string | null;
-  display_name: string | null;
-  email: string;
-  rating: number | null;
+  user_id: string;
+  movie_id: number;
   review: string | null;
-  updatedAt: string;
+  rating: number | null;
+  created_at: string;
+  username: string;
+  email: string;
+  avatar_url: string | null;
 };
 
 export type ThemeColorType = "dark" | "light";

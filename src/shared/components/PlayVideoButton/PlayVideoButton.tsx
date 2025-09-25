@@ -6,13 +6,38 @@ import { Text } from 'react-native-paper'
 
 type Props = {
   movieId: number
+  size?: 'small' | 'regular'
 }
 
-const PlayVideoButton = ({ movieId }: Props) => {
+const PlayVideoButton = ({ movieId, size = 'regular' }: Props) => {
+  const buttonSizes = {
+    regular: {
+      paddingHorizontal: 20,
+      paddingVertical: 12,
+      borderRadius: 25,
+    },
+    small: {
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 20,
+    },
+  }
+
+  const buttonFontSize = {
+    regular: {
+      fontSize: 16,
+      fontWeight: '600' as const,
+    },
+    small: {
+      fontSize: 14,
+      fontWeight: '600' as const,
+    },
+  }
+
   const router = useRouter()
   return (
     <TouchableOpacity
-      style={styles.trailerButton}
+      style={[styles.trailerButton, buttonSizes[size]]}
       onPress={() => {
         router.push({
           pathname: '/trailer',
@@ -23,7 +48,9 @@ const PlayVideoButton = ({ movieId }: Props) => {
       }}
     >
       <Ionicons name="play" size={16} color="#fff" />
-      <Text style={styles.trailerButtonText}>Watch Trailer</Text>
+      <Text style={[styles.trailerButtonText, buttonFontSize[size]]}>
+        Watch Trailer
+      </Text>
     </TouchableOpacity>
   )
 }
@@ -35,15 +62,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#007AFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
     gap: 8,
     alignSelf: 'flex-start',
   },
   trailerButtonText: {
     color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
   },
 })

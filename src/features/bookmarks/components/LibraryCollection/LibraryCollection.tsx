@@ -14,7 +14,7 @@ import BookmarkStats from '../BookmarkStats/BookmarkStats'
 
 type Props = {
   collection: MovieDetailsType[] | null
-  activeTab: 'rated' | 'favorites' | 'watchlist'
+  activeTab: 'favorites' | 'watchlist'
   isLoading: boolean
   toggleItem: UseMutateFunction<
     void,
@@ -42,12 +42,7 @@ const LibraryCollection = ({
           title: 'No favorites yet',
           subtitle: 'Movies you love will appear here',
         }
-      case 'rated':
-        return {
-          icon: 'star',
-          title: 'No rated movies',
-          subtitle: 'Rate movies to see them here',
-        }
+
       case 'watchlist':
         return {
           icon: 'bookmark',

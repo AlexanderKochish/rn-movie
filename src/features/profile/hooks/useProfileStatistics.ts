@@ -4,7 +4,8 @@ import { profileRepository } from "../api/profile.repository";
 export const useProfileStatistics = (userId: string) => {
     const { data, ...rest } = useQuery({
         queryKey: ["statistics", userId],
-        queryFn: () => profileRepository.getProfileStatistics(userId),
+        queryFn: async () =>
+            await profileRepository.getProfileStatistics(userId),
         enabled: !!userId,
     });
 

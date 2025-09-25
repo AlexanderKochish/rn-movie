@@ -1,6 +1,7 @@
 import RatingStars from '@/src/features/rating/components/RatingStars/RatingStars'
 import { useRating } from '@/src/features/rating/hooks/useRating'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { Colors } from '@/src/shared/styles/Colors'
 import { adaptOnChange } from '@/src/shared/utils/adaptOnChange'
 import React from 'react'
 import { Controller } from 'react-hook-form'
@@ -15,7 +16,7 @@ type Props = {
 
 const ReviewForm = ({ movieId }: Props) => {
   const { theme } = useTheme()
-  const { handleSubmit, control, isLoadingReviews, isPending } =
+  const { handleSubmit, control, isLoadingReviews, isPending, reviewInput } =
     useReview(movieId)
   const {
     control: controllRating,
@@ -25,12 +26,34 @@ const ReviewForm = ({ movieId }: Props) => {
   } = useRating(movieId)
 
   const rating = ratingWatch('rating')
+
+  const onPressSubmit = () => {
+    const hasText = reviewInput && reviewInput?.trim().length > 0
+    const hasRating = rating > 0
+
+    if (hasRating) {
+      handleSubmitRating()
+    }
+
+    if (hasText) {
+      handleSubmit()
+    }
+  }
+
   return (
     <Animated.View
-      style={styles.addReviewSection}
+      style={[
+        styles.addReviewSection,
+        {
+          backgroundColor: Colors[theme].input,
+          borderColor: Colors[theme].border,
+        },
+      ]}
       entering={FadeInDown.delay(200).springify()}
     >
-      <Text style={styles.sectionTitle}>Your Review</Text>
+      <Text style={[styles.sectionTitle, { color: Colors[theme].text }]}>
+        Your Review
+      </Text>
 
       <View style={styles.ratingSelector}>
         <Text style={styles.ratingLabel}>Your rating:</Text>
@@ -55,7 +78,14 @@ const ReviewForm = ({ movieId }: Props) => {
         name="review"
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
-            style={styles.commentInput}
+            style={[
+              styles.commentInput,
+              {
+                backgroundColor: Colors[theme].inputBackground,
+                borderColor: Colors[theme].border,
+                color: Colors[theme].text,
+              },
+            ]}
             placeholder="Share your thoughts about this movie..."
             placeholderTextColor="#888"
             multiline
@@ -72,14 +102,7 @@ const ReviewForm = ({ movieId }: Props) => {
           styles.submitButton,
           isLoadingReviews && styles.submitButtonDisabled,
         ]}
-        onPress={() => {
-          if (rating > 0) {
-            handleSubmitRating()
-            handleSubmit()
-          }
-
-          handleSubmit()
-        }}
+        onPress={onPressSubmit}
         disabled={isLoadingReviews}
       >
         {isPending || isPendingRating ? (
@@ -96,17 +119,14 @@ export default ReviewForm
 
 const styles = StyleSheet.create({
   addReviewSection: {
-    backgroundColor: '#1a1a1a',
     margin: 16,
     padding: 20,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#2a2a2a',
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#ffffff',
     marginBottom: 16,
   },
   ratingSelector: {
@@ -123,16 +143,14 @@ const styles = StyleSheet.create({
     width: '70%',
   },
   commentInput: {
-    backgroundColor: '#2a2a2a',
     borderRadius: 12,
     padding: 16,
-    color: '#ffffff',
+
     fontSize: 14,
     textAlignVertical: 'top',
     minHeight: 100,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#3a3a3a',
   },
   spoilerToggle: {
     flexDirection: 'row',

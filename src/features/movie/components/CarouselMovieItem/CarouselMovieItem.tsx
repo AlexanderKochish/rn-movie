@@ -1,6 +1,6 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import PlayVideoButton from '@/src/shared/components/PlayVideoButton/PlayVideoButton'
 import { Colors } from '@/src/shared/styles/Colors'
-import { Movie } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
@@ -14,6 +14,7 @@ import {
   View,
 } from 'react-native'
 import { Text } from 'react-native-paper'
+import { Movie } from '../../types/types'
 
 type Props = {
   item: Movie
@@ -73,23 +74,10 @@ const CarouselItem = ({ item }: Props) => {
         </Text>
 
         <View style={styles.heroActions}>
-          <TouchableOpacity
-            style={styles.playButton}
-            onPress={() => navigateToMovie(item)}
-          >
-            <Ionicons name="play" size={20} color="#fff" />
-            <Text style={styles.playButtonText}>Watch Now</Text>
-          </TouchableOpacity>
+          <PlayVideoButton movieId={item.id} />
 
           <TouchableOpacity
-            onPress={() =>
-              router.push({
-                pathname: '/(movie)/[movieId]',
-                params: {
-                  movieId: item.id,
-                },
-              })
-            }
+            onPress={() => navigateToMovie(item)}
             style={[
               styles.infoButton,
               { backgroundColor: Colors[theme].infoBtn },
@@ -150,20 +138,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
   },
-  playButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 25,
-    gap: 8,
-  },
-  playButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
+
   infoButton: {
     padding: 12,
     borderRadius: 25,

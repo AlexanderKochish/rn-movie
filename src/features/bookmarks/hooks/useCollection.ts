@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import Toast from "react-native-toast-message";
 import { MovieDetailsType } from "../../movie/types/types";
+import { statsRepository } from "../../profile/api/stats.repository";
 import { useProfile } from "../../profile/hooks/useProfile";
 import { bookmarkRepository } from "../api/collectionsRepository";
 import { FavoriteCollection } from "../types/types";
@@ -43,6 +44,14 @@ export const useCollection = (collection: FavoriteCollection) => {
           String(movie.id),
         );
 
+        if (items) {
+          await statsRepository.upsertProfileStats(
+            userId,
+            collection,
+            Math.max(items.length - 1, 0),
+          );
+        }
+
         Toast.show({
           type: "customRemoved",
           text1: "Removed from saved",
@@ -54,20 +63,30 @@ export const useCollection = (collection: FavoriteCollection) => {
           String(movie.id),
           movie,
         );
-
+        if (items) {
+          await statsRepository.upsertProfileStats(
+            userId,
+            collection,
+            items.length + 1,
+          );
+        }
         Toast.show({
           type: "customSuccess",
           text1: "Saved successfully",
         });
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey }),
+        queryClient.invalidateQueries({ queryKey: ["statistics", userId] }),
+      ]);
     },
     onError: (error: unknown) => {
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
+      const message = error instanceof Error
+        ? error.message
+        : "Unfortunately, saving failed.";
+      Toast.show({ type: "customError", text1: message });
     },
   });
 

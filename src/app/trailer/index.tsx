@@ -1,5 +1,5 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import { getTrailerVideoById } from '@/src/shared/api'
+import { movieRepository } from '@/src/shared/api'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { Colors } from '@/src/shared/styles/Colors'
 import { VideosResponse } from '@/src/shared/types/types'
@@ -15,7 +15,7 @@ const TrailerScreen = () => {
   const { theme } = useTheme()
   const { data, isLoading } = useQuery<VideosResponse, Error>({
     queryKey: ['video-trailer', id],
-    queryFn: () => getTrailerVideoById(+id),
+    queryFn: () => movieRepository.getTrailerVideoById(+id),
     enabled: !!id,
     retry: false,
   })
@@ -34,7 +34,7 @@ const TrailerScreen = () => {
     >
       <WebView
         source={{
-          uri: `https://www.youtube.com/embed/${data?.results[0].key}?controls=1&autoplay=1`,
+          uri: `https://www.youtube.com/embed/${data?.results[0 || 1].key}?controls=1&autoplay=1`,
         }}
         style={{ flex: 1 }}
         allowsFullscreenVideo

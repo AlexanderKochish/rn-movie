@@ -1,7 +1,6 @@
 import { useFavorite } from '@/src/features/bookmarks/hooks/useFavorite'
 import PlayVideoButton from '@/src/shared/components/PlayVideoButton/PlayVideoButton'
 import IconToggleButton from '@/src/shared/components/UI/IconToggleButton/IconToggleButton'
-import { MovieDetailsType } from '@/src/shared/types/types'
 import { Ionicons } from '@expo/vector-icons'
 import * as FileSystem from 'expo-file-system'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -18,6 +17,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
+import { MovieDetailsType } from '../../types/types'
 
 type Props = {
   movieId: number
@@ -159,7 +159,7 @@ const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
             )}
           </View>
 
-          <PlayVideoButton movieId={movieId} />
+          <PlayVideoButton size="small" movieId={movieId} />
         </View>
       </View>
     </View>

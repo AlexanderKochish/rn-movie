@@ -10,7 +10,6 @@ const StatsGrid = () => {
   const { profile } = useProfile()
   const { data } = useProfileStatistics(profile?.id!)
   const { theme } = useTheme()
-
   const stats = [
     {
       icon: 'heart',
@@ -24,13 +23,13 @@ const StatsGrid = () => {
       value: data?.ratings,
       color: BaseColors.yellow,
     },
-    {
-      icon: 'eye',
-      label: 'Watched',
-      value: data?.watched,
-      color: BaseColors.green,
-    },
-    { icon: 'time', label: 'Hours', value: 0, color: BaseColors.blueDark },
+    // {
+    //   icon: 'eye',
+    //   label: 'Watched',
+    //   value: data?.watched,
+    //   color: BaseColors.green,
+    // },
+    // { icon: 'time', label: 'Hours', value: 0, color: BaseColors.blueDark },
   ]
   return (
     <View style={styles.statsGrid}>

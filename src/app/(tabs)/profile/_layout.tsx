@@ -5,10 +5,10 @@ import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 
 const ProfileLayout = () => {
-  const { theme } = useTheme()
+  const { theme, statusBarTheme } = useTheme()
   return (
     <>
-      <StatusBar style={theme} />
+      <StatusBar style={statusBarTheme} />
       <Stack
         screenOptions={{
           headerStyle: {

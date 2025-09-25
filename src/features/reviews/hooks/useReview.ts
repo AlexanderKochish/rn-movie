@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
 import { useProfile } from "../../profile/hooks/useProfile";
+import { ratingsRepository } from "../../rating/api/ratingRepository";
 import { reviewRepository } from "../api/reviewsRepository";
 import { reviewSchema, reviewSchemaType } from "../lib/zod/review.schema";
 
@@ -31,7 +32,7 @@ export const useReview = (movieId: number) => {
     ReviewType[]
   >({
     queryKey: ["reviews", movieId],
-    queryFn: () => reviewRepository.getAllReviewsOfMovie(movieId),
+    queryFn: async () => await reviewRepository.getAllReviewsOfMovie(movieId),
   });
 
   const { data: userReview, isLoading: isLoadingUserReview, isPending } =
@@ -41,7 +42,7 @@ export const useReview = (movieId: number) => {
     >({
       queryKey: ["user-review", movieId, userId],
       queryFn: async () => {
-        if (!userId && !movieId) return null;
+        if (!userId || !movieId) return null;
 
         const data = await reviewRepository.getUserReview(movieId, userId);
 
@@ -58,7 +59,7 @@ export const useReview = (movieId: number) => {
         await reviewRepository.updateUserReview(review, userReview);
         return "updated";
       } else {
-        await reviewRepository.addNewReview(userId, movieId, review, user);
+        await reviewRepository.addNewReview(userId, movieId, review);
         return "created";
       }
     },
@@ -75,7 +76,7 @@ export const useReview = (movieId: number) => {
       } else {
         Toast.show({
           type: "customSuccess",
-          text1: "Review added!",
+          text1: "Review updated!",
         });
       }
 
@@ -91,24 +92,18 @@ export const useReview = (movieId: number) => {
   });
 
   const { mutate: removeReview } = useMutation({
-    mutationKey: ["remove-review", userId],
-    mutationFn: (reviewId: string) =>
-      reviewRepository.removeReviewById(userId, reviewId),
+    mutationKey: ["user-review", userId, movieId],
+    mutationFn: async (reviewId: string) => {
+      await Promise.all([
+        reviewRepository.removeReviewById(userId, reviewId),
+        ratingsRepository.removeRatinOfMovie(userId, movieId),
+      ]);
+    },
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ["reviews", movieId] });
       queryClient.invalidateQueries({
         queryKey: ["user-review", movieId, userId],
       });
-
-      Toast.show({
-        type: "customRemove",
-        text1: "Review was removed!",
-      });
-    },
-    onError: (error: unknown) => {
-      if (error instanceof Error) {
-        Error(error.message);
-      }
     },
   });
 
@@ -126,5 +121,6 @@ export const useReview = (movieId: number) => {
     isEditing: !!userReview,
     refetch,
     removeReview,
+    reviewInput,
   };
 };

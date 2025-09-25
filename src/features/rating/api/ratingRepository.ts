@@ -1,18 +1,51 @@
 import { supabase } from "@/src/shared/services/supabase";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { ProfileType } from "../../profile/types/types";
+import { statsRepository } from "../../profile/api/stats.repository";
+import { MovieRating } from "../types/types";
 
 class Rating {
     constructor(
         private readonly db: SupabaseClient,
     ) {}
+
+    getUserRatingsSum = async (userId: string) => {
+        const { data, error } = await this.db
+            .from("ratings")
+            .select("rating")
+            .eq("user_id", userId)
+            .neq("rating", 0);
+
+        if (error) throw error;
+        return (data ?? []).reduce((acc, row) => acc + (row.rating ?? 0), 0);
+    };
+
+    async updateUserRatingsStat(userId: string) {
+        const sum = await this.getUserRatingsSum(userId);
+        await statsRepository.upsertProfileStats(userId, "ratings", sum);
+        return sum;
+    }
+    getAllUserRatingsOfMovie = async (
+        movieId: number,
+    ): Promise<MovieRating[]> => {
+        const { data, error } = await this.db
+            .from("ratings")
+            .select("*")
+            .eq(
+                "movie_id",
+                movieId,
+            );
+
+        if (error) throw error;
+
+        return data;
+    };
     getExistingRatingOfMovie = async (
         userId: string,
         movieId: number,
-    ) => {
+    ): Promise<MovieRating> => {
         const { data: existing, error } = await this.db
-            .from("reviews")
-            .select("id, rating, review")
+            .from("ratings")
+            .select("*")
             .eq("user_id", userId)
             .eq("movie_id", movieId)
             .maybeSingle();
@@ -27,7 +60,7 @@ class Rating {
         movieId: number,
     ) => {
         const { error } = await this.db
-            .from("reviews")
+            .from("ratings")
             .delete()
             .eq("user_id", userId)
             .eq("movie_id", movieId);
@@ -37,13 +70,17 @@ class Rating {
     updateRatingOfMovie = async (
         existingId: string,
         ratingValue: number | null,
+        movieId: number,
+        userId: string,
     ) => {
         const { error } = await this.db
-            .from("reviews")
+            .from("ratings")
             .update({
                 rating: ratingValue,
                 updated_at: new Date().toISOString(),
             })
+            .eq("user_id", userId)
+            .eq("movie_id", movieId)
             .eq("id", existingId);
         if (error) throw new Error(error.message);
     };
@@ -52,17 +89,12 @@ class Rating {
         userId: string,
         movieId: number,
         ratingValue: number,
-        user: ProfileType,
     ) => {
-        const { error } = await this.db.from("reviews").insert({
+        const { error } = await this.db.from("ratings").insert({
             user_id: userId,
             movie_id: movieId,
             rating: ratingValue,
             updated_at: new Date().toISOString(),
-            email: user.email ?? null,
-            display_name: (user.username || user.email) ?? null,
-            photo_url: user.avatar_url ?? null,
-            review: null,
         });
         if (error) throw new Error(error.message);
     };

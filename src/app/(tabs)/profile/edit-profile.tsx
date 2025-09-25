@@ -2,6 +2,9 @@ import AccountActions from '@/src/features/profile/components/AccountActions/Acc
 import EditAvatar from '@/src/features/profile/components/EditAvatar/EditAvatar'
 import EditProfileForm from '@/src/features/profile/components/EditProfileForm/EditProfileForm'
 import { useAccountForm } from '@/src/features/profile/hooks/useAccountForm'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
@@ -18,6 +21,7 @@ import {
 
 export default function EditProfileScreen() {
   const router = useRouter()
+  const { theme, statusBarTheme } = useTheme()
   const {
     control,
     handleSubmit,
@@ -39,8 +43,10 @@ export default function EditProfileScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
+    <View
+      style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
+    >
+      <StatusBar style={statusBarTheme} />
 
       <LinearGradient colors={['#1a1a1a', '#2a2a2a']} style={styles.header}>
         <View style={styles.headerContent}>
@@ -48,7 +54,7 @@ export default function EditProfileScreen() {
             style={styles.backButton}
             onPress={() => router.back()}
           >
-            <Ionicons name="close" size={24} color="#fff" />
+            <Ionicons name="close" size={24} color={Colors[theme].text} />
           </TouchableOpacity>
 
           <Text style={styles.headerTitle}>Edit Profile</Text>
@@ -59,7 +65,7 @@ export default function EditProfileScreen() {
             disabled={isLoading}
           >
             {isLoading ? (
-              <ActivityIndicator size="small" color="#007AFF" />
+              <ActivityIndicator size="small" color={BaseColors.blueDark} />
             ) : (
               <Text
                 style={[
@@ -92,21 +98,6 @@ export default function EditProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
-    gap: 16,
-  },
-  loadingText: {
-    color: '#fff',
-    fontSize: 16,
-  },
   header: {
     paddingTop: 60,
     paddingBottom: 20,
