@@ -77,7 +77,7 @@ This project showcases my skills in creating full-fledged React Native apps for 
 
 - Write clean, maintainable, and structured code across the entire project stack.
 
-### Home
+<!-- ### Home
 
 ![Home Screen](./screenshots/main.png)
 
@@ -85,4 +85,11 @@ This project showcases my skills in creating full-fledged React Native apps for 
 
 ![Search Screen](./screenshots/search-page.png)
 ![Tab Search](./screenshots/search.png)
-![Tab Discover](./screenshots/search-page_discover.png)
+![Tab Discover](./screenshots/search-page_discover.png) -->
+
+<!-- markdownlint-disable MD033 -->
+<p align="center">
+  <img src="./screenshots/main.png" width="30%" alt="Home screen" />
+  <img src="./screenshots/search-page.png" width="30%" alt="Search screen" />
+  <img src="./screenshots/search-page_discover.png" width="30%" alt="Search screen" />
+</p>
