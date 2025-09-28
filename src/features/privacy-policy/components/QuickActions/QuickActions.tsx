@@ -4,7 +4,7 @@ import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { openSupportEmail } from '@/src/shared/utils/openSupportEmail'
 import { useRouter } from 'expo-router'
 import React from 'react'
-import { Linking, StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 
 const QuickActions = () => {
   const router = useRouter()
@@ -14,7 +14,7 @@ const QuickActions = () => {
   }
 
   const openDataRequest = () => {
-    Linking.openURL('https://movieapp.com/data-request')
+    Alert.alert('Message', 'This feature will be available very soon.')
   }
 
   return (

@@ -44,7 +44,7 @@ const NavigationItem = ({
         </Text>
         {subText && <Text style={styles.subText}>{subText}</Text>}
       </View>
-      {rightIcon && <Ionicons name={rightIcon} size={16} color="#666" />}
+      {rightIcon && <Ionicons name={rightIcon} size={20} color="#666" />}
     </TouchableOpacity>
   )
 }

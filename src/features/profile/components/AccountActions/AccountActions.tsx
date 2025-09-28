@@ -1,8 +1,9 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import NavigationItem from '@/src/shared/components/UI/NavigationItem/NavigationItem'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
-import { Ionicons } from '@expo/vector-icons'
+import { openSupportEmail } from '@/src/shared/utils/openSupportEmail'
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 const AccountActions = () => {
   const { theme } = useTheme()
@@ -14,22 +15,13 @@ const AccountActions = () => {
         Account Actions
       </Text>
 
-      <TouchableOpacity
-        style={[
-          styles.dangerButton,
-          {
-            backgroundColor: Colors[theme].input,
-            borderColor: Colors[theme].border,
-          },
-        ]}
-        onPress={() => console.log('delete')}
-      >
-        <Ionicons name="trash" size={20} color={BaseColors.red} />
-        <Text style={[styles.dangerButtonText, styles.deleteButtonText]}>
-          Delete Account
-        </Text>
-        <Ionicons name="chevron-forward" size={20} color={Colors[theme].text} />
-      </TouchableOpacity>
+      <NavigationItem
+        leftIcon="trash"
+        onOpenLink={() => openSupportEmail('Permanently remove your data')}
+        text="Delete Account"
+        leftIconColor={BaseColors.red}
+        rightIcon="chevron-forward"
+      />
     </View>
   )
 }
@@ -55,24 +47,5 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     gap: 12,
-  },
-  dangerButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    gap: 12,
-  },
-  dangerButtonText: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  deleteButton: {
-    borderColor: 'rgba(255, 59, 48, 0.3)',
-  },
-  deleteButtonText: {
-    color: '#FF3B30',
   },
 })

@@ -1,6 +1,9 @@
 import { useTermsAcceptance } from '@/src/features/auth/hooks/useTermsAcceptance'
+import { useTermsOfService } from '@/src/features/terms/hooks/useTermsOfService'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
 import Header from '@/src/shared/components/Header/Header'
+import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { Ionicons } from '@expo/vector-icons'
@@ -12,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 export default function AcceptTermsScreen() {
   const { theme } = useTheme()
   const { handleAccept, isPending } = useTermsAcceptance()
+  const { terms, isLoading, isError } = useTermsOfService()
   const [accepted, setAccepted] = useState(false)
 
   return (
@@ -21,54 +25,34 @@ export default function AcceptTermsScreen() {
     >
       <Header title="Terms of Service" />
 
-      <ScrollView
-        style={styles.termsContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text
-          style={[styles.termsContent, { color: Colors[theme].textSecondary }]}
+      {isLoading && <Preloader icon="document-text" text="Loading..." />}
+
+      {isError && (
+        <EmptyState
+          icon="warning"
+          title="Error"
+          description="Try again later or send message to our support team!"
+        />
+      )}
+      {terms && (
+        <ScrollView
+          style={styles.termsContainer}
+          contentContainerStyle={{ paddingBottom: 40 }}
+          showsVerticalScrollIndicator={false}
         >
-          Last updated: {new Date().toLocaleDateString()}
-          {'\n\n'}
-          **1. Acceptance of Terms**
-          {'\n'}
-          By using Watcher, you agree to these Terms of Service and our Privacy
-          Policy.
-          {'\n\n'}
-          **2. User Accounts**
-          {'\n'}
-          You are responsible for maintaining the confidentiality of your
-          account and password.
-          {'\n\n'}
-          **3. Content Guidelines**
-          {'\n'}
-          You agree not to post content that is illegal, offensive, or violates
-          others&apos; rights.
-          {'\n\n'}
-          **4. Intellectual Property**
-          {'\n'}
-          All content remains your property, but you grant us license to display
-          it on our platform.
-          {'\n\n'}
-          **5. Termination**
-          {'\n'}
-          We may suspend or terminate your account for violations of these
-          terms.
-          {'\n\n'}
-          **6. Limitation of Liability**
-          {'\n'}
-          Watcher is not liable for any indirect damages resulting from your use
-          of the service.
-          {'\n\n'}
-          **7. Changes to Terms**
-          {'\n'}
-          We may update these terms periodically. Continued use constitutes
-          acceptance.
-          {'\n\n'}
-          By clicking &quot;Accept & Continue&quot;, you acknowledge that you
-          have read and understood these terms.
-        </Text>
-      </ScrollView>
+          <Text>Last updated: {new Date().toLocaleDateString()}</Text>
+          {terms.map((term, i) => (
+            <View key={term.id} style={styles.termContainer}>
+              <Text style={[styles.termsContent]}>
+                {`**${i + 1}.${' '}${term.title}`}
+              </Text>
+              <Text style={{ color: Colors[theme].textSecondary }}>
+                {term.description}
+              </Text>
+            </View>
+          ))}
+        </ScrollView>
+      )}
 
       <View style={styles.footer}>
         <TouchableOpacity
@@ -122,10 +106,15 @@ export const styles = StyleSheet.create({
     lineHeight: 22,
     fontFamily: 'Inter-Regular',
   },
+  termContainer: {
+    gap: 10,
+    paddingVertical: 5,
+  },
   footer: {
     padding: 24,
     borderTopWidth: 1,
     borderTopColor: 'rgba(0,0,0,0.1)',
+    paddingBottom: 40,
   },
   checkboxContainer: {
     flexDirection: 'row',

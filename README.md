@@ -76,3 +76,13 @@ This project showcases my skills in creating full-fledged React Native apps for 
 - Optimize API interactions: Use techniques to reduce the number of requests (e.g. debouncing for searches) and efficient data caching.
 
 - Write clean, maintainable, and structured code across the entire project stack.
+
+### Home
+
+![Home Screen](./screenshots/main.png)
+
+### Search
+
+![Search Screen](./screenshots/search-page.png)
+![Tab Search](./screenshots/search.png)
+![Tab Discover](./screenshots/search-page_discover.png)
