@@ -33,6 +33,7 @@ export const AccordionSection: React.FC<AccordionSectionProps> = ({
   iconColor = BaseColors.blueDark,
 }) => {
   const { theme } = useTheme()
+
   return (
     <View
       style={[
@@ -49,32 +50,28 @@ export const AccordionSection: React.FC<AccordionSectionProps> = ({
         onPress={onToggle}
         activeOpacity={0.7}
       >
-        <View style={styles.titleContainer}>
-          <View style={styles.title}>
-            {icon && (
-              <Ionicons
-                name={icon}
-                size={20}
-                color={iconColor}
-                style={styles.sectionIcon}
-              />
-            )}
-            <Text
-              style={[
-                styles.titleText,
-                { color: Colors[theme].text },
-                titleStyle,
-              ]}
-            >
-              {title}
-            </Text>
-          </View>
+        {icon && (
           <Ionicons
-            name={expanded ? 'chevron-up' : 'chevron-down'}
+            name={icon}
             size={20}
-            color={BaseColors.gray}
+            color={iconColor}
+            style={styles.sectionIcon}
           />
-        </View>
+        )}
+
+        <Text
+          style={[styles.titleText, { color: Colors[theme].text }, titleStyle]}
+          numberOfLines={0}
+        >
+          {title}
+        </Text>
+
+        <Ionicons
+          name={expanded ? 'chevron-up' : 'chevron-down'}
+          size={20}
+          color={BaseColors.gray}
+          style={styles.chevron}
+        />
       </TouchableOpacity>
 
       {expanded && <View style={styles.content}>{children}</View>}
@@ -85,34 +82,30 @@ export const AccordionSection: React.FC<AccordionSectionProps> = ({
 const styles = StyleSheet.create({
   section: {
     marginBottom: 12,
-    borderBottomWidth: StyleSheet.hairlineWidth,
     borderRadius: 12,
     borderWidth: 1,
     overflow: 'hidden',
   },
   sectionHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 12,
-  },
-  titleContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     paddingHorizontal: 15,
-    paddingVertical: 5,
-  },
-  title: {
-    flexDirection: 'row',
+    paddingVertical: 12,
   },
   sectionIcon: {
     marginRight: 8,
+    marginTop: 2,
   },
   titleText: {
+    flex: 1,
+    flexShrink: 1,
+    flexWrap: 'wrap',
     fontSize: 16,
     fontWeight: '600',
+    marginRight: 8,
+  },
+  chevron: {
+    marginTop: 2,
   },
   content: {
     borderTopColor: '#666',
