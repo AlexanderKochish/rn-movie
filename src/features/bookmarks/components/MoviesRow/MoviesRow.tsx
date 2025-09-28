@@ -3,7 +3,7 @@ import { MovieDetailsType } from '@/src/features/movie/types/types'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
-import { FlatList, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Text } from 'react-native-paper'
 
 type Props<T extends MovieDetailsType> = {
@@ -21,9 +21,7 @@ const MoviesRow = <T extends MovieDetailsType>({
   return (
     <>
       {isLoading && (
-        <View
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-        >
+        <View style={styles.container}>
           <ActivityIndicator
             size={'small'}
             animating={true}
@@ -47,7 +45,8 @@ const MoviesRow = <T extends MovieDetailsType>({
         horizontal
         showsHorizontalScrollIndicator={false}
         data={movies}
-        style={{ flex: 1, height: 260 }}
+        style={{ flex: 1, height: 300 }}
+        contentContainerStyle={{ gap: 10 }}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => <MovieCard movie={item} />}
       />
@@ -56,3 +55,7 @@ const MoviesRow = <T extends MovieDetailsType>({
 }
 
 export default MoviesRow
+
+const styles = StyleSheet.create({
+  container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+})

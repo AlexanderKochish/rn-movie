@@ -1,12 +1,10 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { Ionicons } from '@expo/vector-icons'
-import { useRouter } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const AccountActions = () => {
-  const router = useRouter()
   const { theme } = useTheme()
   return (
     <View
@@ -17,14 +15,20 @@ const AccountActions = () => {
       </Text>
 
       <TouchableOpacity
-        style={[styles.dangerButton, styles.deleteButton]}
-        onPress={() => router.push('/delete-account')}
+        style={[
+          styles.dangerButton,
+          {
+            backgroundColor: Colors[theme].input,
+            borderColor: Colors[theme].border,
+          },
+        ]}
+        onPress={() => console.log('delete')}
       >
         <Ionicons name="trash" size={20} color={BaseColors.red} />
         <Text style={[styles.dangerButtonText, styles.deleteButtonText]}>
           Delete Account
         </Text>
-        <Ionicons name="chevron-forward" size={20} color="#666" />
+        <Ionicons name="chevron-forward" size={20} color={Colors[theme].text} />
       </TouchableOpacity>
     </View>
   )
@@ -39,26 +43,29 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   dangerSection: {
-    backgroundColor: '#1a1a1a',
     padding: 20,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#333',
+    borderWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
     gap: 12,
   },
   dangerButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2a2a2a',
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#333',
     gap: 12,
   },
   dangerButtonText: {
     flex: 1,
-    color: '#fff',
     fontSize: 16,
     fontWeight: '500',
   },

@@ -1,14 +1,15 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
+import { AccordionSection } from '@/src/shared/components/UI/AccordionSection/AccordionSection'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { openSupportEmail } from '@/src/shared/utils/openSupportEmail'
 import { Ionicons } from '@expo/vector-icons'
 import React, { useCallback } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { FAQCategoryType, FAQQuestionType } from '../../types/types'
-import FaqQuestionItem from '../FaqQuestionItem/FaqQuestionItem'
 
 type Props = {
   categories: FAQCategoryType[] | undefined | null
@@ -30,16 +31,33 @@ const FaqListQuestions = ({
   isError,
 }: Props) => {
   const { theme } = useTheme()
+
   const renderQuestion = useCallback(
     (item: FAQQuestionType) => (
-      <View key={item.id}>
-        <FaqQuestionItem
-          categories={categories}
-          expanded={expandedQuestionIds.includes(item.id)}
-          item={item}
-          toggleQuestion={toggleQuestion}
-        />
-      </View>
+      <AccordionSection
+        key={item.id}
+        title={item.question}
+        expanded={expandedQuestionIds.includes(item.id)}
+        onToggle={() => toggleQuestion(item.id)}
+        containerStyle={styles.accordionItem}
+      >
+        <Text style={styles.answerText}>{item.answer}</Text>
+
+        {categories?.some((c) => c.name === 'Technical') && (
+          <TouchableOpacity
+            accessibilityRole="button"
+            style={styles.supportLink}
+            onPress={() => openSupportEmail('FAQ Technical Support')}
+          >
+            <Text style={styles.supportLinkText}>Contact support now</Text>
+            <Ionicons
+              name="arrow-forward"
+              size={16}
+              color={BaseColors.blueDark}
+            />
+          </TouchableOpacity>
+        )}
+      </AccordionSection>
     ),
     [categories, expandedQuestionIds, toggleQuestion]
   )
@@ -53,15 +71,11 @@ const FaqListQuestions = ({
   if (isError) {
     return (
       <EmptyState
-        colorIcon="#ff0000ff"
-        style={{
-          backgroundColor: 'rgba(109, 44, 44, 0.4)',
-          borderColor: 'rgba(120, 43, 43, 0.58)',
-          borderWidth: 1,
-        }}
+        colorIcon={BaseColors.red}
+        style={globalStyles.introSectionError}
         icon="warning"
         title="Error"
-        description="Try again later or send message to our support team!"
+        description="Try again later or contact support."
       />
     )
   }
@@ -71,7 +85,7 @@ const FaqListQuestions = ({
       <EmptyState
         icon="help-buoy"
         title="Questions not found"
-        description="Try again later or send message to our support team!"
+        description="Try again later or contact support."
       />
     )
   }
@@ -82,7 +96,7 @@ const FaqListQuestions = ({
 
   return (
     <ScrollView
-      style={styles.faqContainer}
+      style={globalStyles.flex}
       contentContainerStyle={styles.faqContent}
       showsVerticalScrollIndicator={false}
     >
@@ -91,7 +105,7 @@ const FaqListQuestions = ({
         {!!faq?.length && `(${faq.length})`}
       </Text>
 
-      {faq && faq?.map(renderQuestion)}
+      {faq?.map(renderQuestion)}
 
       <View style={styles.helpSection}>
         <Ionicons name="help-buoy" size={48} color={BaseColors.blueDark} />
@@ -119,20 +133,38 @@ const FaqListQuestions = ({
 export default FaqListQuestions
 
 const styles = StyleSheet.create({
-  faqContainer: {
-    flex: 1,
-  },
   faqContent: {
     padding: 16,
     paddingBottom: 40,
   },
   sectionTitle: {
-    color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
   },
-
+  accordionItem: {
+    borderRadius: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#333',
+  },
+  answerText: {
+    color: '#888',
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  supportLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 8,
+  },
+  supportLinkText: {
+    color: '#007AFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
   helpSection: {
     backgroundColor: 'rgba(0, 122, 255, 0.1)',
     padding: 24,
@@ -143,7 +175,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 122, 255, 0.2)',
   },
   helpTitle: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 12,

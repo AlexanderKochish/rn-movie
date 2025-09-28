@@ -46,7 +46,6 @@ const FaqQuickActions = ({
         </TouchableOpacity>
       </View>
 
-      {/* Categories */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}

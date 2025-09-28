@@ -54,7 +54,6 @@ export const useFaq = () => {
                 }
             },
             enabled: !!selectedCategoryId,
-            retry: false,
         });
 
     return {

@@ -1,6 +1,6 @@
-import React from 'react'
 import PersonCardBase from '@/src/features/cast-and-crew/components/PersonCardBase/PersonCardBase'
 import { CastMember } from '@/src/shared/types/types'
+import React from 'react'
 
 type Props = {
   person: CastMember

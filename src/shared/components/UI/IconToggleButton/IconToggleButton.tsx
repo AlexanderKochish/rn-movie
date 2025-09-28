@@ -1,8 +1,10 @@
+import { MovieDetailsType } from '@/src/features/movie/types/types'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import { MovieDetailsType } from '@/src/shared/types/types'
+import { Colors } from '@/src/shared/styles/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import React, { ComponentProps } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { IconButton } from 'react-native-paper'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -37,17 +39,19 @@ const IconToggleButton = <T extends MovieDetailsType>({
     : (`${icon}-outline` as ComponentProps<typeof Ionicons>['name'])
   return (
     <Animated.View style={animatedHeartStyle}>
-      <TouchableOpacity
-        style={styles.actionButton}
+      <IconButton
+        icon={({ size, color }) => (
+          <Ionicons name={iconName} size={size} color={color} />
+        )}
+        size={24}
+        iconColor={isActive ? '#ff0000' : Colors[theme].text}
+        contentStyle={[
+          styles.actionButton,
+          { backgroundColor: Colors[theme].actionBtn },
+        ]}
         onPress={() => onPress(data)}
         disabled={isLoading}
-      >
-        <Ionicons
-          name={iconName}
-          size={24}
-          color={isActive ? '#ff0000' : '#ffffff'}
-        />
-      </TouchableOpacity>
+      />
     </Animated.View>
   )
 }
@@ -56,7 +60,6 @@ export default IconToggleButton
 
 const styles = StyleSheet.create({
   actionButton: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
     padding: 8,
     borderRadius: 20,
   },

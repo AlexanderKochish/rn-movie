@@ -69,7 +69,10 @@ const MovieDetailsActionBar = () => {
       <View
         style={[
           styles.actionBar,
-          { backgroundColor: Colors[theme].tabBackground },
+          {
+            backgroundColor: Colors[theme].tabBackground,
+            borderTopColor: Colors[theme].border,
+          },
         ]}
       >
         <TouchableOpacity
@@ -107,7 +110,7 @@ const MovieDetailsActionBar = () => {
 
         <TouchableOpacity onPress={showDialog} style={styles.rateButton}>
           {isPending && <ActivityIndicator size={'small'} />}
-          <Ionicons name="star" size={20} color="#FFCC00" />
+          <Ionicons name="star" size={20} color={BaseColors.yellow} />
           <Text style={styles.rateText}>Rate Movie</Text>
         </TouchableOpacity>
       </View>
@@ -122,9 +125,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#1a1a1a',
     borderTopWidth: 1,
-    borderTopColor: '#333',
     gap: 12,
   },
   watchlistButton: {

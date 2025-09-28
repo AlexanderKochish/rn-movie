@@ -1,5 +1,6 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import ControlledTextInput from '@/src/shared/components/UI/ControlledTextInput/ControlledTextInput'
+import { Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import React from 'react'
 import { Control } from 'react-hook-form'
@@ -28,33 +29,15 @@ const EditProfileForm = ({ control }: Props) => {
       style={globalStyles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <View style={[styles.form, isDark && styles.darkForm]}>
-        <Text style={styles.sectionTitle}>Personal Information</Text>
-
-        <ControlledTextInput
-          control={control}
-          name="fullName"
-          textColor={isDark ? '#fff' : '#000'}
-          mode="outlined"
-          left={
-            <TextInput.Icon
-              icon={'pen'}
-              color={isDark ? '#64b5f6' : '#007AFF'}
-            />
-          }
-          defaultValue={profile?.full_name}
-          style={styles.input}
-          placeholder="Enter your full name"
-          label={'Full name'}
-          placeholderTextColor={isDark ? '#888' : '#666'}
-          outlineColor={isDark ? '#333' : '#ddd'}
-          activeOutlineColor={isDark ? '#64b5f6' : '#007AFF'}
-        />
+      <View style={[styles.form, { backgroundColor: Colors[theme].input }]}>
+        <Text style={[styles.sectionTitle, { color: Colors[theme].text }]}>
+          Personal Information
+        </Text>
 
         <ControlledTextInput
           control={control}
           name="username"
-          textColor={isDark ? '#fff' : '#000'}
+          textColor={Colors[theme].text}
           mode="outlined"
           left={
             <TextInput.Icon
@@ -63,6 +46,7 @@ const EditProfileForm = ({ control }: Props) => {
             />
           }
           label={'Username'}
+          placeholder="Enter your username"
           placeholderTextColor={isDark ? '#888' : '#666'}
           outlineColor={isDark ? '#333' : '#ddd'}
           activeOutlineColor={isDark ? '#64b5f6' : '#007AFF'}
@@ -73,7 +57,7 @@ const EditProfileForm = ({ control }: Props) => {
           control={control}
           name="email"
           style={[styles.disabledInput]}
-          textColor={isDark ? '#fff' : '#000'}
+          textColor={Colors[theme].text}
           mode="outlined"
           left={
             <TextInput.Icon
@@ -83,7 +67,7 @@ const EditProfileForm = ({ control }: Props) => {
           }
           value={profile?.email}
           placeholderTextColor={isDark ? '#888' : '#666'}
-          outlineColor={isDark ? '#333' : '#ddd'}
+          outlineColor={Colors[theme].border}
           activeOutlineColor={isDark ? '#64b5f6' : '#007AFF'}
           defaultValue={profile?.email}
           disabled={true}
@@ -118,7 +102,6 @@ const styles = StyleSheet.create({
   form: {
     width: '100%',
     gap: 5,
-    backgroundColor: '#fff',
     padding: 20,
     borderRadius: 16,
     shadowColor: '#000',
@@ -130,13 +113,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  darkForm: {
-    backgroundColor: '#1a1a1a',
-    shadowColor: '#000',
-    shadowOpacity: 0.3,
-  },
+
   sectionTitle: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,

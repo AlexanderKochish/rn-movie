@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const accountSchema = z.object({
   username: z.string().max(20).optional(),
-  fullName: z.string().max(25).optional(),
   age: z
     .preprocess((val) => Number(val), z.number().int().positive().max(120))
     .optional(),

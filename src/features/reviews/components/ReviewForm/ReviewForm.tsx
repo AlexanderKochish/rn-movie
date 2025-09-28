@@ -45,8 +45,9 @@ const ReviewForm = ({ movieId }: Props) => {
       style={[
         styles.addReviewSection,
         {
-          backgroundColor: Colors[theme].input,
+          backgroundColor: Colors[theme].stats,
           borderColor: Colors[theme].border,
+          borderWidth: theme === 'dark' ? 1 : 0,
         },
       ]}
       entering={FadeInDown.delay(200).springify()}
@@ -122,7 +123,14 @@ const styles = StyleSheet.create({
     margin: 16,
     padding: 20,
     borderRadius: 16,
-    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   sectionTitle: {
     fontSize: 16,

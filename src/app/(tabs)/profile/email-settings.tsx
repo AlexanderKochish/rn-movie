@@ -14,13 +14,19 @@ const EmailSettingsScreen = () => {
 
   return (
     <>
-      <Header title="Email Settings" goBack />
+      <Header
+        title="Email Settings"
+        subTitle="Here you can subscribe to our news"
+        goBack
+      />
       <ScrollView style={[{ backgroundColor: Colors[theme].background }]}>
         <View style={styles.container}>
           <BaseCard>
             <Text variant="titleLarge">Email address</Text>
             <View style={styles.borderLine} />
-            <Text variant="titleMedium">{profile?.email}</Text>
+            <Text variant="titleMedium" style={{ color: BaseColors.gray }}>
+              {profile?.email}
+            </Text>
           </BaseCard>
           <AccountNotificationSettings />
         </View>
@@ -40,6 +46,7 @@ const styles = StyleSheet.create({
   borderLine: {
     width: '100%',
     height: 1,
+    marginVertical: 8,
     backgroundColor: BaseColors.gray,
   },
 })

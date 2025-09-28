@@ -14,4 +14,22 @@ export const globalStyles = StyleSheet.create({
   flex: {
     flex: 1,
   },
+  introSection: {
+    alignItems: "center",
+    padding: 24,
+    backgroundColor: "rgba(0, 122, 255, 0.1)",
+    borderRadius: 16,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: "rgba(0, 122, 255, 0.2)",
+  },
+  introSectionError: {
+    alignItems: "center",
+    padding: 24,
+    backgroundColor: "rgba(109, 44, 44, 0.4)",
+    borderRadius: 16,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: "rgba(120, 43, 43, 0.58)",
+  },
 });

@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons'
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Text } from 'react-native-paper'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function AcceptTermsScreen() {
   const { theme } = useTheme()
@@ -14,7 +15,8 @@ export default function AcceptTermsScreen() {
   const [accepted, setAccepted] = useState(false)
 
   return (
-    <View
+    <SafeAreaView
+      edges={['bottom']}
       style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
     >
       <Header title="Terms of Service" />
@@ -106,7 +108,7 @@ export default function AcceptTermsScreen() {
           <Text style={styles.acceptButtonText}>Accept & Continue</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 

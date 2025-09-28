@@ -7,12 +7,12 @@ import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
 import Header from '@/src/shared/components/Header/Header'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
-import { Colors } from '@/src/shared/styles/Colors'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
+import { currentDate } from '@/src/shared/utils/currentDate'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   ScrollView,
   StyleSheet,
@@ -20,7 +20,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import Toast from 'react-native-toast-message'
 
 export default function TermsOfServiceScreen() {
   const router = useRouter()
@@ -29,28 +28,15 @@ export default function TermsOfServiceScreen() {
   const { profile } = useProfile()
   const [accepted, setAccepted] = useState(profile?.terms_accepted)
 
-  useEffect(() => {
-    if (accepted) {
-      Toast.show({
-        type: 'customSuccess',
-        text1: 'Saved successfully',
-      })
-    }
-  }, [])
-
   if (isLoading) {
-    return <Preloader />
+    return <Preloader icon="document-text" text="Loading..." />
   }
 
   if (isError) {
     return (
       <EmptyState
-        colorIcon="#ff0000ff"
-        style={{
-          backgroundColor: 'rgba(109, 44, 44, 0.4)',
-          borderColor: 'rgba(120, 43, 43, 0.58)',
-          borderWidth: 1,
-        }}
+        colorIcon={BaseColors.red}
+        style={globalStyles.introSectionError}
         icon="warning"
         title="Error"
         description="Try again later or send message to our support team!"
@@ -58,7 +44,7 @@ export default function TermsOfServiceScreen() {
     )
   }
 
-  if (terms?.length === 0) {
+  if (!isLoading && terms?.length === 0) {
     return (
       <EmptyState
         icon="document-text"
@@ -68,15 +54,8 @@ export default function TermsOfServiceScreen() {
     )
   }
 
-  const currentDate = new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-
   const handleAccept = () => {
     setAccepted(true)
-
     setTimeout(() => router.back(), 1500)
   }
 
@@ -84,8 +63,6 @@ export default function TermsOfServiceScreen() {
     <View
       style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
     >
-      <StatusBar style="light" />
-
       <Header
         goBack
         title="Terms of Service"
@@ -93,21 +70,19 @@ export default function TermsOfServiceScreen() {
       />
 
       <ScrollView
-        style={styles.scrollView}
+        style={globalStyles.flex}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.introSection}>
-          <Ionicons name="document-text" size={48} color="#007AFF" />
-          <Text style={[styles.introTitle, { color: Colors[theme].text }]}>
-            Welcome to Watcher
-          </Text>
-          <Text style={styles.introText}>
-            Please read these Terms of Service carefully before using our
+        <EmptyState
+          style={globalStyles.introSection}
+          colorIcon={BaseColors.blueDark}
+          icon="document-text"
+          title="Welcome to Watcher"
+          description="Please read these Terms of Service carefully before using our
             application. By using MovieApp, you agree to be bound by these
-            terms.
-          </Text>
-        </View>
+            terms."
+        />
 
         <TermsList terms={terms} />
 
@@ -117,7 +92,7 @@ export default function TermsOfServiceScreen() {
             <Ionicons
               name="checkmark-circle"
               size={24}
-              color={accepted ? '#4CD964' : '#666'}
+              color={accepted ? BaseColors.green : BaseColors.gray}
             />
             <Text
               style={[styles.acceptanceTitle, { color: Colors[theme].text }]}
@@ -153,21 +128,9 @@ export default function TermsOfServiceScreen() {
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
   scrollContent: {
     padding: 20,
     paddingBottom: 40,
-  },
-  introSection: {
-    alignItems: 'center',
-    padding: 24,
-    backgroundColor: 'rgba(0, 122, 255, 0.1)',
-    borderRadius: 16,
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 122, 255, 0.2)',
   },
   introTitle: {
     color: '#fff',

@@ -25,6 +25,8 @@ export const BaseColors = {
   grayLight: "rgba(50, 50, 50, 0.24)",
   infoButton: "rgba(50, 50, 50, 0.24)",
   infoButtonLight: "rgba(255, 255, 255, 0.29)",
+  actionBtnDark: "rgba(0,0,0,0.6)",
+  actionBtnLight: "rgba(255, 255, 255, 0.6)",
 };
 export const Colors = {
   dark: {
@@ -52,6 +54,7 @@ export const Colors = {
     inputBackground: BaseColors.inputBackground,
     infoBtn: BaseColors.infoButtonLight,
     textSecondary: BaseColors.secondaryDark,
+    actionBtn: BaseColors.actionBtnDark,
   },
   light: {
     title: BaseColors.dark,
@@ -78,5 +81,6 @@ export const Colors = {
     inputBackground: BaseColors.white,
     infoBtn: BaseColors.infoButton,
     textSecondary: BaseColors.secondaryLight,
+    actionBtn: BaseColors.actionBtnLight,
   },
 };

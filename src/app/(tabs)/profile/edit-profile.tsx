@@ -8,7 +8,6 @@ import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import {
   ActivityIndicator,
@@ -21,20 +20,21 @@ import {
 
 export default function EditProfileScreen() {
   const router = useRouter()
-  const { theme, statusBarTheme } = useTheme()
+  const { theme, getThemeGradient } = useTheme()
   const {
     control,
     handleSubmit,
     isLoading,
-    isDirty,
+    hasDirtyFields,
+    isValid,
     isSuccess,
     avatar,
     handlePickImage,
   } = useAccountForm()
 
-  const isButtonDisabled = !isDirty || isLoading
+  const isButtonDisabled = !hasDirtyFields || !isValid || isLoading
   const handleSave = async () => {
-    if (!isDirty) {
+    if (!hasDirtyFields) {
       router.back()
       return
     }
@@ -46,9 +46,7 @@ export default function EditProfileScreen() {
     <View
       style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
     >
-      <StatusBar style={statusBarTheme} />
-
-      <LinearGradient colors={['#1a1a1a', '#2a2a2a']} style={styles.header}>
+      <LinearGradient colors={getThemeGradient(theme)} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity
             style={styles.backButton}
@@ -57,7 +55,9 @@ export default function EditProfileScreen() {
             <Ionicons name="close" size={24} color={Colors[theme].text} />
           </TouchableOpacity>
 
-          <Text style={styles.headerTitle}>Edit Profile</Text>
+          <Text style={[styles.headerTitle, { color: Colors[theme].text }]}>
+            Edit Profile
+          </Text>
 
           <TouchableOpacity
             style={styles.saveButton}
@@ -102,8 +102,21 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 20,
     paddingHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+
+    elevation: 1,
   },
   headerContent: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -112,7 +125,6 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   headerTitle: {
-    color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
   },
@@ -120,12 +132,6 @@ const styles = StyleSheet.create({
     padding: 8,
     minWidth: 60,
     alignItems: 'flex-end',
-  },
-  sectionTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
   },
   saveButtonText: {
     color: '#007AFF',

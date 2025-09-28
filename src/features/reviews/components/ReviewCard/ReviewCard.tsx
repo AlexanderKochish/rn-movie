@@ -75,7 +75,7 @@ const ReviewCard = ({ review, removeReview }: Props) => {
             mode="contained"
             icon={'trash-can-outline'}
             size={24}
-            iconColor={Colors[theme].text}
+            iconColor={'#fff'}
             containerColor={BaseColors.red}
             onPress={handlePressDelete}
           />
@@ -86,7 +86,7 @@ const ReviewCard = ({ review, removeReview }: Props) => {
             style={[
               styles.reviewCard,
               {
-                backgroundColor: Colors[theme].input,
+                backgroundColor: Colors[theme].stats,
                 borderColor: Colors[theme].border,
               },
               animatedStyle,
@@ -114,11 +114,19 @@ const ReviewCard = ({ review, removeReview }: Props) => {
             <Text style={styles.reviewText}>{review.review}</Text>
             <View style={styles.reviewActions}>
               <TouchableOpacity style={styles.actionButton}>
-                <Ionicons name="thumbs-up-outline" size={16} color="#64b5f6" />
+                <Ionicons
+                  name="thumbs-up-outline"
+                  size={16}
+                  color={BaseColors.blue}
+                />
                 <Text style={styles.actionText}>Helpful</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.actionButton}>
-                <Ionicons name="chatbubble-outline" size={16} color="#64b5f6" />
+                <Ionicons
+                  name="chatbubble-outline"
+                  size={16}
+                  color={BaseColors.blue}
+                />
                 <Text style={styles.actionText}>Reply</Text>
               </TouchableOpacity>
             </View>
@@ -163,7 +171,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 16,
     borderWidth: 1,
-    elevation: 3,
+    elevation: 5,
     zIndex: 2,
   },
   reviewHeader: {

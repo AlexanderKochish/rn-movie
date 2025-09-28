@@ -1,7 +1,7 @@
-import React from 'react'
-import { StyleSheet, FlatList } from 'react-native'
-import { CastMember } from '@/src/shared/types/types'
 import CastCard from '@/src/features/cast-and-crew/components/CastCard/CastCard'
+import { CastMember } from '@/src/shared/types/types'
+import React from 'react'
+import { FlatList } from 'react-native'
 
 type Props = {
   cast: CastMember[] | undefined

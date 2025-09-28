@@ -1,8 +1,9 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Ionicons } from '@expo/vector-icons'
 import React, { ComponentProps } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { MD3TypescaleKey, Switch, Text } from 'react-native-paper'
-import { BaseColors } from '../../styles/Colors'
+import { BaseColors, Colors } from '../../styles/Colors'
 
 type Props = {
   icon?: ComponentProps<typeof Ionicons>['name']
@@ -27,10 +28,11 @@ const PreferenceSwitchItem = ({
   disabled,
   error,
 }: Props) => {
+  const { theme } = useTheme()
   return (
     <View style={styles.container}>
       <View style={styles.textWrapper}>
-        <Ionicons name={icon} size={iconSize} color={'#ffffff'} />
+        <Ionicons name={icon} size={iconSize} color={Colors[theme].text} />
         <Text variant={titleSize}>{title}</Text>
       </View>
       {showSwitch && (

@@ -5,6 +5,7 @@ import { useMovieId } from '@/src/features/movie/hooks/useMovieId'
 import ReviewForm from '@/src/features/reviews/components/ReviewForm/ReviewForm'
 import Reviews from '@/src/features/reviews/components/Reviews/Reviews'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import Header from '@/src/shared/components/Header/Header'
 import { Colors } from '@/src/shared/styles/Colors'
 import { globalStyles } from '@/src/shared/styles/globalStyles'
 import React from 'react'
@@ -26,6 +27,7 @@ const ReviewScreen = () => {
       style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
       edges={['bottom']}
     >
+      <Header title="Reviews" subTitle="Share your comment and rating" goBack />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} />

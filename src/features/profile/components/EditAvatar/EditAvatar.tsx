@@ -1,3 +1,5 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
@@ -10,12 +12,20 @@ type Props = {
 }
 
 const EditAvatar = ({ avatar, handlePickImage, isLoading }: Props) => {
+  const { theme } = useTheme()
   return (
-    <View style={styles.avatarSection}>
+    <View
+      style={[
+        styles.avatarSection,
+        {
+          backgroundColor: Colors[theme].input,
+        },
+      ]}
+    >
       <View style={styles.avatarContainer}>
         {isLoading ? (
           <View style={styles.avatarPlaceholder}>
-            <ActivityIndicator size="large" color="#007AFF" />
+            <ActivityIndicator size="large" color={BaseColors.blueDark} />
           </View>
         ) : avatar ? (
           <Image source={{ uri: avatar }} style={styles.avatar} />
@@ -26,7 +36,10 @@ const EditAvatar = ({ avatar, handlePickImage, isLoading }: Props) => {
         )}
 
         <TouchableOpacity
-          style={styles.changeAvatarButton}
+          style={[
+            styles.changeAvatarButton,
+            { borderColor: Colors[theme].border },
+          ]}
           onPress={handlePickImage}
           disabled={isLoading}
         >
@@ -34,7 +47,9 @@ const EditAvatar = ({ avatar, handlePickImage, isLoading }: Props) => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.avatarLabel}>Profile Photo</Text>
+      <Text style={[styles.avatarLabel, { color: Colors[theme].text }]}>
+        Profile Photo
+      </Text>
 
       <View style={styles.avatarActions}>
         <TouchableOpacity
@@ -42,7 +57,7 @@ const EditAvatar = ({ avatar, handlePickImage, isLoading }: Props) => {
           onPress={handlePickImage}
           disabled={isLoading}
         >
-          <Ionicons name="image" size={16} color="#007AFF" />
+          <Ionicons name="image" size={16} color={BaseColors.blueDark} />
           <Text style={styles.avatarActionText}>Choose from Library</Text>
         </TouchableOpacity>
 
@@ -51,7 +66,7 @@ const EditAvatar = ({ avatar, handlePickImage, isLoading }: Props) => {
           onPress={handlePickImage}
           disabled={isLoading}
         >
-          <Ionicons name="camera" size={16} color="#007AFF" />
+          <Ionicons name="camera" size={16} color={BaseColors.blueDark} />
           <Text style={styles.avatarActionText}>Take Photo</Text>
         </TouchableOpacity>
       </View>
@@ -64,11 +79,17 @@ export default EditAvatar
 const styles = StyleSheet.create({
   avatarSection: {
     alignItems: 'center',
-    backgroundColor: '#1a1a1a',
     padding: 24,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#333',
+    borderWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   avatarContainer: {
     position: 'relative',
@@ -101,7 +122,6 @@ const styles = StyleSheet.create({
     borderColor: '#1a1a1a',
   },
   avatarLabel: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 16,

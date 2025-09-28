@@ -20,16 +20,16 @@ export const useAccountForm = () => {
     setValue,
     handleSubmit,
     reset,
-    formState: { isDirty },
+    formState: { dirtyFields, isValid },
   } = useForm<
     accountSchemaType
   >({
     defaultValues: {
       username: "",
-      fullName: "",
       email: "",
       avatar: "",
     },
+    mode: "onChange",
     resolver: zodResolver(accountSchema) as Resolver<accountSchemaType>,
   });
 
@@ -59,7 +59,6 @@ export const useAccountForm = () => {
       const updateData: ProfileUpdate = {};
       if (imageUrl) updateData.avatar_url = imageUrl;
       if (formData.username) updateData.username = formData.username;
-      if (formData.fullName) updateData.full_name = formData.fullName;
       if (formData.age) updateData.age = Number(formData.age);
 
       return await profileRepository.updateProfile(user?.id, updateData);
@@ -70,7 +69,6 @@ export const useAccountForm = () => {
       reset({
         avatar: data.avatar_url ?? "",
         username: data.username ?? "",
-        fullName: data.full_name ?? "",
         age: Number(data.age) ?? "",
       });
 
@@ -90,7 +88,8 @@ export const useAccountForm = () => {
     handlePickImage,
     avatar,
     isLoading: mutation.isPending,
-    isDirty,
+    hasDirtyFields: Object.keys(dirtyFields).length > 0,
+    isValid,
     isSuccess: mutation.isSuccess,
   };
 };

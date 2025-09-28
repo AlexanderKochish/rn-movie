@@ -26,12 +26,7 @@ const MovieDetailsLayout = () => {
         <Stack.Screen
           name="[movieId]/reviews/index"
           options={{
-            headerTitle: 'REVIEWS',
-            headerTintColor: Colors[theme].text,
-            headerTitleAlign: 'center',
-            headerTitleStyle: {
-              color: Colors[theme].text,
-            },
+            headerShown: false,
           }}
         />
         <Stack.Screen

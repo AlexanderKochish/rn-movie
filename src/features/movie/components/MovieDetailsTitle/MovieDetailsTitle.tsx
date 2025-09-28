@@ -2,10 +2,12 @@ import { useFavorite } from '@/src/features/bookmarks/hooks/useFavorite'
 import PlayVideoButton from '@/src/shared/components/PlayVideoButton/PlayVideoButton'
 import IconToggleButton from '@/src/shared/components/UI/IconToggleButton/IconToggleButton'
 import { Ionicons } from '@expo/vector-icons'
-import * as FileSystem from 'expo-file-system'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
 
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import * as FileSystem from 'expo-file-system'
 import React from 'react'
 import {
   Alert,
@@ -14,9 +16,9 @@ import {
   Share,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native'
+import { IconButton } from 'react-native-paper'
 import { MovieDetailsType } from '../../types/types'
 
 type Props = {
@@ -28,6 +30,7 @@ const { width } = Dimensions.get('window')
 const BACKDROP_HEIGHT = width * 1
 
 const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
+  const { theme, getThemeGradient } = useTheme()
   const router = useRouter()
   const {
     isItemToggled: isFavoriteToggled,
@@ -48,23 +51,31 @@ const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
 
   const handleShare = async () => {
     try {
-      const imageUrl = `${process.env.EXPO_PUBLIC_IMG_W500}${movie?.poster_path}`
-      const fileUri = FileSystem.documentDirectory + `${movieId}.jpg`
+      const imageUrl = `${process.env.EXPO_PUBLIC_IMG_W500}${movie?.poster_path || movie?.backdrop_path}`
+      const fileUri = `${FileSystem.documentDirectory}${movieId}.jpg`
 
-      const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri)
+      const { uri: localUri } = await FileSystem.downloadAsync(
+        imageUrl,
+        fileUri
+      )
+
+      const description =
+        `🎥 ${movie?.title}\n` +
+        `⭐ Rating: ${movie?.vote_average}/10\n\n` +
+        `${movie?.overview?.substring(0, 120)}...\n\n` +
+        `Watch in the app: rnmovieapp://${movie?.id}`
 
       await Share.share({
-        message: `🎥 ${movie?.title}\n⭐ Rating: ${movie?.vote_average}/10\n\n${movie?.overview?.substring(0, 120)}...\n\nDownload MovieApp: [app link]`,
-        url: uri,
+        message: description,
+        url: localUri,
         title: `Share ${movie?.title}`,
       })
     } catch (error) {
       if (error instanceof Error) {
-        Alert.alert('Error sharing with image:', error.message)
+        Alert.alert('Error', error.message)
       }
     }
   }
-
   return (
     <View style={styles.backdropContainer}>
       <Image
@@ -78,22 +89,29 @@ const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
         resizeMode="cover"
       />
       <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.8)', '#000']}
+        colors={['transparent', ...getThemeGradient(theme)]}
         style={styles.backdropGradient}
       />
 
       <View style={styles.headerActions}>
-        <TouchableOpacity
-          style={styles.backButton}
+        <IconButton
           onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
+          icon={'arrow-left'}
+          iconColor={Colors[theme].text}
+          size={24}
+          contentStyle={styles.backButton}
+          containerColor={Colors[theme].actionBtn}
+        />
 
         <View style={styles.rightActions}>
-          <TouchableOpacity style={styles.actionButton} onPress={handleShare}>
-            <Ionicons name="share-social" size={20} color="#fff" />
-          </TouchableOpacity>
+          <IconButton
+            contentStyle={styles.actionButton}
+            icon={'share-outline'}
+            size={24}
+            iconColor={Colors[theme].text}
+            containerColor={Colors[theme].actionBtn}
+            onPress={handleShare}
+          />
 
           {movie && (
             <IconToggleButton
@@ -105,8 +123,12 @@ const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
             />
           )}
 
-          <TouchableOpacity
-            style={styles.actionButton}
+          <IconButton
+            contentStyle={styles.actionButton}
+            icon={'chat-outline'}
+            size={24}
+            iconColor={Colors[theme].text}
+            containerColor={Colors[theme].actionBtn}
             onPress={() =>
               router.push({
                 pathname: '/(movie)/[movieId]/reviews',
@@ -115,9 +137,7 @@ const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
                 },
               })
             }
-          >
-            <Ionicons name="chatbubble-outline" size={20} color="#fff" />
-          </TouchableOpacity>
+          />
         </View>
       </View>
 
@@ -136,12 +156,14 @@ const MovieDetailsTitle = ({ movieId, data: movie }: Props) => {
         <View style={styles.basicInfo}>
           <Text style={styles.title}>{movie?.title}</Text>
           {movie?.tagline && (
-            <Text style={styles.tagline}>{movie.tagline}</Text>
+            <Text style={[styles.tagline, { color: Colors[theme].text }]}>
+              {movie.tagline}
+            </Text>
           )}
 
           <View style={styles.metaInfo}>
             <View style={styles.rating}>
-              <Ionicons name="star" size={16} color="#FFD700" />
+              <Ionicons name="star" size={16} color={BaseColors.yellow} />
               <Text style={styles.ratingText}>
                 {movie?.vote_average.toFixed(1)} (
                 {movie?.vote_count.toLocaleString()})
@@ -175,12 +197,11 @@ const styles = StyleSheet.create({
   },
 
   backButton: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
     padding: 8,
     borderRadius: 20,
   },
   backButtonText: {
-    color: '#007AFF',
+    color: BaseColors.blueDark,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -211,6 +232,7 @@ const styles = StyleSheet.create({
   },
   rightActions: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
   },
   posterSection: {
@@ -223,8 +245,8 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   actionButton: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 20,
   },
   poster: {

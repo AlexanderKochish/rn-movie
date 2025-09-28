@@ -1,0 +1,123 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
+import { Ionicons } from '@expo/vector-icons'
+import React, { ReactNode } from 'react'
+import {
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native'
+
+type AccordionSectionProps = {
+  title: string
+  icon?: keyof typeof Ionicons.glyphMap
+  expanded: boolean
+  onToggle: () => void
+  children: ReactNode
+  containerStyle?: ViewStyle
+  titleStyle?: TextStyle
+  iconColor?: string
+}
+
+export const AccordionSection: React.FC<AccordionSectionProps> = ({
+  title,
+  icon,
+  expanded,
+  onToggle,
+  children,
+  containerStyle,
+  titleStyle,
+  iconColor = BaseColors.blueDark,
+}) => {
+  const { theme } = useTheme()
+  return (
+    <View
+      style={[
+        styles.section,
+        {
+          borderColor: Colors[theme].border,
+          backgroundColor: Colors[theme].stats,
+        },
+        containerStyle,
+      ]}
+    >
+      <TouchableOpacity
+        style={styles.sectionHeader}
+        onPress={onToggle}
+        activeOpacity={0.7}
+      >
+        <View style={styles.titleContainer}>
+          <View style={styles.title}>
+            {icon && (
+              <Ionicons
+                name={icon}
+                size={20}
+                color={iconColor}
+                style={styles.sectionIcon}
+              />
+            )}
+            <Text
+              style={[
+                styles.titleText,
+                { color: Colors[theme].text },
+                titleStyle,
+              ]}
+            >
+              {title}
+            </Text>
+          </View>
+          <Ionicons
+            name={expanded ? 'chevron-up' : 'chevron-down'}
+            size={20}
+            color={BaseColors.gray}
+          />
+        </View>
+      </TouchableOpacity>
+
+      {expanded && <View style={styles.content}>{children}</View>}
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  section: {
+    marginBottom: 12,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderRadius: 12,
+    borderWidth: 1,
+    overflow: 'hidden',
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+  },
+  titleContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+  },
+  title: {
+    flexDirection: 'row',
+  },
+  sectionIcon: {
+    marginRight: 8,
+  },
+  titleText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  content: {
+    borderTopColor: '#666',
+    borderTopWidth: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+  },
+})

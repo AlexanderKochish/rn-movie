@@ -1,14 +1,17 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import EmptyState from '@/src/shared/components/EmptyState/EmptyState'
-import { MovieDetailsType } from '@/src/shared/types/types'
+import { Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
+import { MovieDetailsType } from '../../types/types'
 
 type Props = {
   movie: MovieDetailsType
 }
 
 const MovieOverview = ({ movie }: Props) => {
+  const { theme } = useTheme()
   if (!movie.overview) {
     return (
       <EmptyState icon="film" title="Overview for current film not found" />
@@ -16,7 +19,9 @@ const MovieOverview = ({ movie }: Props) => {
   }
   return (
     <Animated.View entering={FadeIn.duration(500)} style={styles.tabContent}>
-      <Text style={styles.overview}>{movie.overview}</Text>
+      <Text style={[styles.overview, { color: Colors[theme].text }]}>
+        {movie.overview}
+      </Text>
 
       {movie.genres && movie.genres.length > 0 && (
         <View style={styles.genres}>

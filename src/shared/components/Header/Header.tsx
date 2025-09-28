@@ -53,6 +53,15 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     flexDirection: 'row',
     alignItems: 'center',
+    borderWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   headerContent: {
     flex: 1,

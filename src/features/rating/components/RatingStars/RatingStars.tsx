@@ -1,3 +1,5 @@
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { Colors } from '@/src/shared/styles/Colors'
 import React from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { Icon } from 'react-native-paper'
@@ -9,6 +11,7 @@ type Props = {
 }
 
 const RatingStars = ({ rating, onRate, disabled }: Props) => {
+  const { theme } = useTheme()
   return (
     <View style={styles.btn}>
       {[...Array(5)].map((_, i) => {
@@ -24,7 +27,7 @@ const RatingStars = ({ rating, onRate, disabled }: Props) => {
             <Icon
               source={starNumber <= rating ? 'star' : 'star-outline'}
               size={24}
-              color={starNumber <= rating ? 'yellow' : 'white'}
+              color={starNumber <= rating ? 'yellow' : Colors[theme].text}
             />
           </Pressable>
         )

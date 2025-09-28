@@ -10,7 +10,7 @@ const BaseCard = ({ children }: PropsWithChildren) => {
       style={[
         styles.card,
         {
-          backgroundColor: Colors[theme].background,
+          backgroundColor: Colors[theme].stats,
           borderColor: Colors[theme].border,
         },
       ]}

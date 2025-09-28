@@ -2,7 +2,7 @@ import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Ionicons } from '@expo/vector-icons'
 import React, { ComponentProps, ReactNode } from 'react'
 import { StyleSheet, Text, View, ViewStyle } from 'react-native'
-import { Colors } from '../../styles/Colors'
+import { BaseColors, Colors } from '../../styles/Colors'
 
 type Props = {
   title?: string
@@ -11,27 +11,29 @@ type Props = {
   colorIcon?: string
   children?: ReactNode
   style?: ViewStyle
+  iconSize?: number
 }
 
 const EmptyState = ({
   title,
   description,
   icon,
-  colorIcon = '#666',
+  colorIcon = BaseColors.gray,
   style,
   children,
+  iconSize = 64,
 }: Props) => {
   const { theme } = useTheme()
   return (
     <View
       style={[
         styles.emptyState,
-        { backgroundColor: Colors[theme].emptyStateBackground },
+        { backgroundColor: Colors[theme].stats },
         { borderColor: Colors[theme].border },
         { ...style },
       ]}
     >
-      <Ionicons name={icon} size={64} color={colorIcon} />
+      <Ionicons name={icon} size={iconSize} color={colorIcon} />
       <Text style={[styles.emptyStateTitle, { color: Colors[theme].text }]}>
         {title}
       </Text>

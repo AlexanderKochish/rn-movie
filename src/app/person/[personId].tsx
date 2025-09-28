@@ -1,25 +1,22 @@
+import MoviesRow from '@/src/features/bookmarks/components/MoviesRow/MoviesRow'
 import { useProfileDetails } from '@/src/features/cast-and-crew/hooks/useProfileDetails'
-import MovieCard from '@/src/features/movie/components/MovieCard/MovieCard'
+import { MovieDetailsType } from '@/src/features/movie/types/types'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
-import GoBackButton from '@/src/shared/components/GoBackButton/GoBackButton'
 import Preloader from '@/src/shared/components/UI/Preloader/Preloader'
 import { HEADER_HEIGHT } from '@/src/shared/constants/constants'
 import { useParam } from '@/src/shared/hooks/useParam'
 import { Colors } from '@/src/shared/styles/Colors'
+import { globalStyles } from '@/src/shared/styles/globalStyles'
 import { Typography } from '@/src/shared/styles/Typography'
 import React from 'react'
-import {
-  Animated,
-  FlatList,
-  ImageBackground,
-  StyleSheet,
-  View,
-} from 'react-native'
+import { Animated, ImageBackground, StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const PersonDetailsScreen = () => {
   const personId = Number(useParam('personId'))
-  const { data, personMovieCredits, isLoading } = useProfileDetails(personId)
+  const { data, personMovieCredits, isLoading, isError } =
+    useProfileDetails(personId)
   const { theme } = useTheme()
 
   const scrollY = new Animated.Value(0)
@@ -35,8 +32,10 @@ const PersonDetailsScreen = () => {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors[theme].background }}>
-      <GoBackButton />
+    <SafeAreaView
+      edges={['bottom']}
+      style={[globalStyles.flex, { backgroundColor: Colors[theme].background }]}
+    >
       <Animated.View
         style={[
           styles.header,
@@ -54,6 +53,7 @@ const PersonDetailsScreen = () => {
         />
       </Animated.View>
       <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingTop: HEADER_HEIGHT - 50,
         }}
@@ -87,18 +87,14 @@ const PersonDetailsScreen = () => {
               took part is not provided.
             </Text>
           )}
-
-          <FlatList
-            horizontal
-            contentContainerStyle={{ padding: 15 }}
-            showsHorizontalScrollIndicator={false}
-            data={personMovieCredits?.cast}
-            keyExtractor={(item) => String(item.id)}
-            renderItem={({ item }) => <MovieCard movie={item} />}
+          <MoviesRow
+            movies={personMovieCredits?.cast as MovieDetailsType[] | []}
+            isLoading={isLoading}
+            isError={isError}
           />
         </View>
       </Animated.ScrollView>
-    </View>
+    </SafeAreaView>
   )
 }
 

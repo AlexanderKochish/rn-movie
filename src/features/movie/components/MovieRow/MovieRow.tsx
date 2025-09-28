@@ -1,16 +1,16 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { Colors } from '@/src/shared/styles/Colors'
-import { Movie } from '@/src/shared/types/types'
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { Text } from 'react-native-paper'
+import { Movie } from '../../types/types'
 import MovieCard from '../MovieCard/MovieCard'
 
 type Props = {
   movies: Movie[] | undefined
   title?: string
-  onViewAll: () => void
+  onViewAll?: () => void
 }
 
 const MovieRow = ({ title, movies, onViewAll }: Props) => {

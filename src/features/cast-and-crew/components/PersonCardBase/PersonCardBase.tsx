@@ -1,4 +1,5 @@
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { Colors } from '@/src/shared/styles/Colors'
 import { Link } from 'expo-router'
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
@@ -22,7 +23,10 @@ const PersonCardBase = ({
 
   return (
     <Link href={`/person/${id}`} style={{ padding: 5 }}>
-      <View key={id} style={styles.castCard}>
+      <View
+        key={id}
+        style={[styles.castCard, { backgroundColor: Colors[theme].card }]}
+      >
         <Image
           source={{
             uri: profilePath
@@ -32,7 +36,10 @@ const PersonCardBase = ({
           style={styles.castImage}
           resizeMode="cover"
         />
-        <Text style={styles.castName} numberOfLines={1}>
+        <Text
+          style={[styles.castName, { color: Colors[theme].text }]}
+          numberOfLines={1}
+        >
           {name}
         </Text>
         <Text style={styles.castCharacter} numberOfLines={2}>
@@ -49,7 +56,6 @@ const styles = StyleSheet.create({
   castCard: {
     width: 120,
     marginRight: 16,
-    backgroundColor: '#1a1a1a',
     borderRadius: 12,
     padding: 12,
     alignItems: 'center',
@@ -63,7 +69,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#2a2a2a',
   },
   castName: {
-    color: '#fff',
     fontSize: 14,
     fontWeight: '600',
     textAlign: 'center',

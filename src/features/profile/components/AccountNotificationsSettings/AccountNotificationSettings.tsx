@@ -1,18 +1,16 @@
-import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import BaseCard from '@/src/shared/components/BaseCard/BaseCard'
 import PreferenceSwitchItem from '@/src/shared/components/PreferenceSwitchItem/PreferenceSwitchItem'
 import { BaseColors } from '@/src/shared/styles/Colors'
 import { Typography } from '@/src/shared/styles/Typography'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Button, Text } from 'react-native-paper'
+import { ActivityIndicator, Button, Text } from 'react-native-paper'
 
 import { usePushNotifications } from '@/src/shared/hooks/usePushNotifications'
 import Toast from 'react-native-toast-message'
 import { useProfileNotificationPreferences } from '../../hooks/useProfileNotificationPreferences'
 
 const AccountNotificationSettings = () => {
-  const { theme: theme } = useTheme()
   const [isUnsubscribing, setIsUnsubscribing] = useState(false)
 
   const {
@@ -109,6 +107,7 @@ const AccountNotificationSettings = () => {
     <View style={{ gap: 15 }}>
       {(isLoading || isUpdating || isSavingToken || isUnsubscribing) && (
         <View style={styles.loadingContainer}>
+          <ActivityIndicator />
           <Text style={styles.loadingText}>Saving settings...</Text>
         </View>
       )}

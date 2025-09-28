@@ -1,20 +1,32 @@
 import { useReview } from '@/src/features/reviews/hooks/useReview'
-import { BaseColors } from '@/src/shared/styles/Colors'
-import { MovieDetailsType } from '@/src/shared/types/types'
+import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
+import { BaseColors, Colors } from '@/src/shared/styles/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import Animated, { FadeInDown } from 'react-native-reanimated'
+import { MovieDetailsType } from '../../types/types'
 
 type Props = {
   movie: MovieDetailsType
 }
 
 const MovieInfoCard = ({ movie }: Props) => {
+  const { theme } = useTheme()
   const { reviews } = useReview(movie.id)
 
   return (
-    <Animated.View style={styles.movieInfo} entering={FadeInDown.springify()}>
+    <Animated.View
+      style={[
+        styles.movieInfo,
+        {
+          backgroundColor: Colors[theme].stats,
+          borderColor: Colors[theme].border,
+          borderWidth: theme === 'dark' ? 1 : 0,
+        },
+      ]}
+      entering={FadeInDown.springify()}
+    >
       <Image
         source={{
           uri:
@@ -25,7 +37,9 @@ const MovieInfoCard = ({ movie }: Props) => {
         style={styles.moviePoster}
       />
       <View style={styles.movieDetails}>
-        <Text style={styles.movieTitle}>{movie?.title}</Text>
+        <Text style={[styles.movieTitle, { color: Colors[theme].text }]}>
+          {movie?.title}
+        </Text>
         <View style={styles.ratingSummary}>
           <Ionicons name="star" size={20} color={BaseColors.yellow} />
           <Text style={styles.ratingText}>
@@ -44,11 +58,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#1a1a1a',
     margin: 16,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#2a2a2a',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   moviePoster: {
     width: 60,
@@ -62,7 +81,6 @@ const styles = StyleSheet.create({
   movieTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#ffffff',
     marginBottom: 8,
   },
   ratingSummary: {
