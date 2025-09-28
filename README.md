@@ -84,11 +84,16 @@ This project showcases my skills in creating full-fledged React Native apps for 
 
 ### Search screen
 
-<p align="center">
-  <img src="./screenshots/search-page.png" width="30%" alt="Search screen" />
-  <img src="./screenshots/search-page_discover.png" width="30%" alt="Search screen" />
-</p>
+<img src="./screenshots/search-page_discover.png" width="30%" alt="Search screen" />
 
 ### Movie Details Screen
 
 <img src="./screenshots/movie-details.png" width="30%" alt="Movie-details"/>
+
+### Bookmarks Screen
+
+<img src="./screenshots/bookmarks.png" width="30%" alt="Bookmarks screen"/>
+
+### Profile Screen
+
+<img src="./screenshots/profile.png" width="30%" alt="Profile screen"/>
