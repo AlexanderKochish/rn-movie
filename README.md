@@ -76,20 +76,19 @@ This project showcases my skills in creating full-fledged React Native apps for 
 - Optimize API interactions: Use techniques to reduce the number of requests (e.g. debouncing for searches) and efficient data caching.
 
 - Write clean, maintainable, and structured code across the entire project stack.
-
-<!-- ### Home
-
-![Home Screen](./screenshots/main.png)
-
-### Search
-
-![Search Screen](./screenshots/search-page.png)
-![Tab Search](./screenshots/search.png)
-![Tab Discover](./screenshots/search-page_discover.png) -->
-
 <!-- markdownlint-disable MD033 -->
+
+### Home screen
+
+<img src="./screenshots/main-page.png" width="30%" alt="Home"/>
+
+### Search screen
+
 <p align="center">
-  <img src="./screenshots/main.png" width="30%" alt="Home screen" />
   <img src="./screenshots/search-page.png" width="30%" alt="Search screen" />
   <img src="./screenshots/search-page_discover.png" width="30%" alt="Search screen" />
 </p>
+
+### Movie Details Screen
+
+<img src="./screenshots/movie-details.png" width="30%" alt="Movie-details"/>
