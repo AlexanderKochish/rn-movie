@@ -81,6 +81,6 @@ This project showcases my skills in creating full-fledged React Native apps for 
 | ------------------------------------ | ------------------------------------------------- | ------------------------------------------------- |
 | ![Home](./screenshots/main-page.png) | ![Search](./screenshots/search-page_discover.png) | ![Movie Details](./screenshots/movie-details.png) |
 
-| Bookmarks                                 | Profile                               |
-| ----------------------------------------- | ------------------------------------- |
-| ![Bookmarks](./screenshots/bookmarks.png) | ![Profile](./screenshots/profile.png) |
+| Bookmarks                                 | Profile                               | Welcome                               |
+| ----------------------------------------- | ------------------------------------- | ------------------------------------- |
+| ![Bookmarks](./screenshots/bookmarks.png) | ![Profile](./screenshots/profile.png) | ![Welcome](./screenshots/welcome.png) |
