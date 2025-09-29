@@ -3,14 +3,15 @@
 # dependencies
 node_modules/
 ./android
-/android
+android
 # Expo
 .expo/
 dist/
 web-build/
 expo-env.d.ts
 eas.json
-
+credentials
+credentials/
 # Native
 .kotlin/
 *.orig.*

@@ -1,3 +1,4 @@
+import { useProfile } from '@/src/features/profile/hooks/useProfile'
 import RatingResult from '@/src/features/rating/components/RatingResult/RatingResult'
 import { useTheme } from '@/src/providers/ThemeProvider/useTheme'
 import { BaseColors, Colors } from '@/src/shared/styles/Colors'
@@ -28,20 +29,20 @@ type Props = {
 }
 
 const ReviewCard = ({ review, removeReview }: Props) => {
+  const { profile } = useProfile()
   const { theme } = useTheme()
   const translateX = useSharedValue(0)
-
+  const isOwner = profile?.id === review.user_id
   const pan = Gesture.Pan()
     .onUpdate((e) => {
-      if (e.translationX < 0) {
-        translateX.value = e.translationX
-      }
-
+      if (!isOwner) return
+      if (e.translationX < 0) translateX.value = e.translationX
       if (e.translationX > 0 && translateX.value < 0) {
         translateX.value = withSpring(0)
       }
     })
     .onEnd(() => {
+      if (!isOwner) return
       if (translateX.value > -40) {
         translateX.value = withSpring(0)
       } else {
@@ -65,6 +66,8 @@ const ReviewCard = ({ review, removeReview }: Props) => {
     })
     removeReview(review.id)
   }
+
+  const gesture = isOwner ? pan : Gesture.Tap()
   return (
     <GestureHandlerRootView>
       <View style={styles.swipeContainer}>
@@ -81,7 +84,7 @@ const ReviewCard = ({ review, removeReview }: Props) => {
           />
         </Animated.View>
 
-        <GestureDetector gesture={pan}>
+        <GestureDetector gesture={gesture}>
           <Animated.View
             style={[
               styles.reviewCard,
